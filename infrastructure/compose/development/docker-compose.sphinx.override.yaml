@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  sphinx:
+    build:
+      context: ./
+      dockerfile: ./docs/nginx/Dockerfile
+    hostname: sphinx
+    environment:
+      - SPHINX_PORT=${SPHINX_PORT}
+    ports:
+      - 7777:${SPHINX_PORT}
+    healthcheck:
+      test: ["CMD-SHELL", "curl localhost:${SPHINX_PORT}/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      back-dev:
+        ipv4_address: 192.168.10.5
+    volumes:
+      - ./certs/development:/etc/nginx/certs:ro/
+    restart: always

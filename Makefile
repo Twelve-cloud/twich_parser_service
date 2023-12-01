@@ -3,31 +3,33 @@ export
 
 .RECIPEPREFIX := $() $()
 
-# ------------------------------------- PROD -------------------------------------------
+# ------------------------------------- PRD -------------------------------------------
 
-COMPOSE_PROD :=                 \
+COMPOSE_PRD :=                  \
     -f docker-compose.yaml      \
-    -f ${COMPOSE_PROD_DB}       \
-    -f ${COMPOSE_PROD_REDIS}    \
-    -f ${COMPOSE_PROD_WEB}      \
+    -f ${COMPOSE_PRD_MONGO}     \
+    -f ${COMPOSE_PRD_REDIS}     \
+    -f ${COMPOSE_PRD_WEB}       \
+    -f ${COMPOSE_PRD_SPHINX}    \
 
-COMPOSE_PROD_ENV :=                             \
+COMPOSE_PRD_ENV :=                              \
     --env-file=.env                             \
-    --env-file=env/production/.env.prod.compose \
+    --env-file=env/production/.env.prd.compose  \
 
-prodstart: docker-compose.yaml
-    sudo docker compose -p prod ${COMPOSE_PROD_ENV} ${COMPOSE_PROD} up --build --force-recreate
+prdstart: docker-compose.yaml
+    sudo docker compose -p prd ${COMPOSE_PRD_ENV} ${COMPOSE_PRD} up --build --force-recreate
 
-prodstop: docker-compose.yaml
-    sudo docker compose -p prod ${COMPOSE_PROD_ENV} ${COMPOSE_PROD} down
+prdstop: docker-compose.yaml
+    sudo docker compose -p prd ${COMPOSE_PRD_ENV} ${COMPOSE_PRD} down
 
 # ------------------------------------- DEV -------------------------------------------
 
 COMPOSE_DEV :=                  \
     -f docker-compose.yaml      \
-    -f ${COMPOSE_DEV_DB}        \
+    -f ${COMPOSE_DEV_MONGO}     \
     -f ${COMPOSE_DEV_REDIS}     \
     -f ${COMPOSE_DEV_WEB}       \
+    -f ${COMPOSE_DEV_SPHINX}    \
 
 COMPOSE_DEV_ENV :=                              \
     --env-file=.env                             \
@@ -43,13 +45,13 @@ devstop: docker-compose.yaml
 
 COMPOSE_TESTS :=                \
     -f docker-compose.yaml      \
-    -f ${COMPOSE_TESTS_DB}      \
+    -f ${COMPOSE_TESTS_MONGO}   \
     -f ${COMPOSE_TESTS_REDIS}   \
     -f ${COMPOSE_TESTS_WEB}     \
 
-COMPOSE_TESTS_ENV :=                        \
-    --env-file=.env                         \
-    --env-file=env/tests/.env.tests.compose \
+COMPOSE_TESTS_ENV :=                           \
+    --env-file=.env                            \
+    --env-file=env/tests/.env.tests.compose    \
 
 GREEN := \033[0;32m
 RED := \033[0;31m

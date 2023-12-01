@@ -28,3 +28,17 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
+
+      - id: ut
+        name: unit tests
+        entry: poetry run pytest tests/unit/
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: it
+        name: integration tests
+        entry: make itests
+        language: system
+        types: [python]
+        pass_filenames: false

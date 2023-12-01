@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  mongo:
+    env_file:
+      - ./env/tests/.env.tests.mongo
+    networks:
+      back-tests:
+        ipv4_address: 182.168.10.2

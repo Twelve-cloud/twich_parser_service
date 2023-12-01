@@ -2,13 +2,16 @@ name: CI
 
 on: [push, pull_request]
 
+env:
+  ENV POETRY_VIRTUALENVS_CREATE: 0
+
 jobs:
   static:
     runs-on: [ubuntu-latest]
 
     defaults:
       run:
-        working-directory: ./src
+        working-directory: ./
 
     steps:
       - name: clone github repository
@@ -20,20 +23,45 @@ jobs:
           python-version: '3.10'
           architecture: 'x64'
 
-      - name: install pipenv
-        run: pip install pipenv
+      - name: install poetry
+        run: pip install poetry
 
       - name: create venv and install dependencies
-        run: pipenv install --categories=test-packages --system --deploy --ignore-pipfile
+        run: poetry install --with tests
 
       - name: run flake8
-        run: pipenv run flake8 .
+        run: flake8 .
 
       - name: run black
-        run: pipenv run black --check .
+        run: black --check .
 
       - name: run isort
-        run: pipenv run isort --check-only .
+        run: isort --check-only .
 
       - name: run mypy
-        run: pipenv run mypy .
+        run: mypy .
+
+      - name: run unit tests
+        run: pytest tests/unit/
+
+  it:
+    runs-on: [ubuntu-latest]
+
+    defaults:
+      run:
+        working-directory: ./
+
+    steps:
+      - name: clone github repository
+        uses: actions/checkout@v3
+
+      - name: create envs files
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+          echo "${{ secrets.ENV_FILE_COMPOSE }}" > ./env/tests/.env.tests.compose
+          echo "${{ secrets.ENV_FILE_REDIS }}" > ./env/tests/.env.tests.redis
+          echo "${{ secrets.ENV_FILE_WEB }}" > ./env/tests/.env.tests.web
+          echo "${{ secrets.ENV_FILE_MONGO }}" > ./env/tests/.env.tests.mongo
+
+      - name: run integration tests
+        run: make itests

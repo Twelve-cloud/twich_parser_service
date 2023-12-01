@@ -1,0 +1,61 @@
+version: '3.7'
+
+x-env: &default-env
+  env_file:
+    - ./env/production/.env.prd.web
+
+services:
+  nginx:
+    <<: *default-env
+    build:
+      context: ./tlparser/nginx
+      dockerfile: ./Dockerfile
+    hostname: nginx
+    ports:
+      - 1337:${WEB_NGINX_PORT}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -k https://localhost:${WEB_NGINX_PORT}/docs/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      back-prod:
+        ipv4_address: 172.168.10.5
+    volumes:
+      - ./certs/production:/etc/nginx/certs:ro/
+    links:
+      - uvicorn
+    depends_on:
+      uvicorn:
+        condition: service_healthy
+    restart: always
+
+  uvicorn:
+    <<: *default-env
+    build:
+      context: ./
+      dockerfile: ./tlparser/Dockerfile.prd
+    entrypoint:
+      - ./entrypoint-web.prd.sh
+    hostname: uvicorn
+    expose:
+      - ${WEB_UVICORN_PORT}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/docs/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      back-prod:
+        ipv4_address: 172.168.10.4
+    volumes:
+      - ./certs/production:/code/certs:ro/
+    links:
+      - redis
+      - mongo
+    depends_on:
+      redis:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    restart: always

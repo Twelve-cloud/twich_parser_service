@@ -12,17 +12,19 @@ black = "23.9.1"
 isort = "5.12.0"
 mypy = "1.5.1"
 Flake8-pyproject = "1.2.3"
+fastapi = "0.104.1"
+uvicorn = "0.24.0"
 
-[tool.poetry.group.production]
+[tool.poetry.group.prd]
 optional = true
 
-[tool.poetry.group.production.dependencies]
+[tool.poetry.group.prd.dependencies]
 flake8 = "6.1.0"
 
-[tool.poetry.group.development]
+[tool.poetry.group.dev]
 optional = true
 
-[tool.poetry.group.development.dependencies]
+[tool.poetry.group.dev.dependencies]
 flake8 = "6.1.0"
 
 [tool.poetry.group.tests]
@@ -64,7 +66,7 @@ warn_redundant_casts = "True"
 no_implicit_optional = "True"
 strict_optional = "True"
 exclude = '''(?x)(
-    ^data/$
+    data/$
     | migrations/$
     | tests/$
 )'''

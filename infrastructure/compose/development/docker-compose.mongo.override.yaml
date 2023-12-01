@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  mongo:
+    env_file:
+      - ./env/development/.env.dev.mongo
+    volumes:
+      - ./tlparser/data/dev/mongo:/data/db
+    networks:
+      back-dev:
+        ipv4_address: 192.168.10.2

@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+  mongo:
+    extends:
+      file: ${COMPOSE_COMMON_MONGO}
+      service: mongo
+
+  redis:
+    extends:
+      file: ${COMPOSE_COMMON_REDIS}
+      service: redis
+
+networks:
+  back-prod:
+    driver: bridge
+    internal: false
+    ipam:
+     config:
+       - subnet: 172.168.10.0/24
+
+  back-dev:
+    driver: bridge
+    internal: false
+    ipam:
+     config:
+       - subnet: 192.168.10.0/24
+
+  back-tests:
+    driver: bridge
+    internal: false
+    ipam:
+     config:
+       - subnet: 182.168.10.0/24

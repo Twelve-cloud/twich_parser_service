@@ -1,0 +1,36 @@
+version: '3.7'
+
+x-env: &default-env
+  env_file:
+    - ./env/development/.env.dev.web
+
+services:
+  uvicorn:
+    <<: *default-env
+    build:
+      context: ./
+      dockerfile: ./tlparser/Dockerfile.dev
+    entrypoint:
+      - ./entrypoint-web.dev.sh
+    hostname: uvicorn
+    ports:
+      - 8000:${WEB_UVICORN_PORT}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/docs/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      back-dev:
+        ipv4_address: 192.168.10.4
+    volumes:
+      - ./certs/development:/code/certs:ro/
+    links:
+      - redis
+      - mongo
+    depends_on:
+      redis:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    restart: always

@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  redis:
+    env_file:
+      - ./env/development/.env.dev.redis
+    volumes:
+      - ./tlparser/data/dev/redis:/root/redis
+    networks:
+      back-dev:
+        ipv4_address: 192.168.10.3

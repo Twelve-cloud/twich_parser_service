@@ -1,0 +1,26 @@
+version: '3.7'
+
+x-env: &default-env
+  env_file:
+    - ./env/tests/.env.tests.web
+
+services:
+  tests:
+    <<: *default-env
+    build:
+      context: ./
+      dockerfile: ./tlparser/Dockerfile.tests
+    entrypoint:
+      - ./entrypoint-tests.sh
+    networks:
+      back-tests:
+        ipv4_address: 182.168.10.4
+    links:
+      - redis
+      - mongo
+    depends_on:
+      redis:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    restart: no

@@ -14,13 +14,10 @@ WORKDIR /code
 COPY pyproject.toml ./
 
 # 4 layer
-RUN poetry install --with tests
+RUN poetry install --with dev
 
 # 5 layer
 COPY tlparser  ./
 
 # 6 layer
-COPY tests  ./tests
-
-# 7 layer
-RUN chmod +x entrypoint-tests.sh
+RUN chmod +x entrypoint-web.dev.sh
