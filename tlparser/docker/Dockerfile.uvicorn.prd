@@ -14,10 +14,10 @@ WORKDIR /code
 COPY pyproject.toml ./
 
 # 4 layer
-RUN poetry install --with dev
+RUN poetry install --with prd
 
 # 5 layer
-COPY tlparser  ./
+COPY tlparser/src tlparser/scripts/entrypoint-uvicorn.prd.sh ./
 
 # 6 layer
-RUN chmod +x entrypoint-web.dev.sh
+RUN chmod +x entrypoint-uvicorn.prd.sh

@@ -9,9 +9,9 @@ services:
     <<: *default-env
     build:
       context: ./
-      dockerfile: ./tlparser/Dockerfile.tests
+      dockerfile: ./tlparser/docker/Dockerfile.pytest.tests
     entrypoint:
-      - ./entrypoint-tests.sh
+      - ./entrypoint-pytest.tests.sh
     networks:
       back-tests:
         ipv4_address: 182.168.10.4

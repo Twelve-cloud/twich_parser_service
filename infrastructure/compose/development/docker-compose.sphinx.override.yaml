@@ -11,7 +11,7 @@ services:
     ports:
       - 7777:${SPHINX_PORT}
     healthcheck:
-      test: ["CMD-SHELL", "curl localhost:${SPHINX_PORT}/"]
+      test: ["CMD-SHELL", "curl https://localhost:${SPHINX_PORT}"]
       interval: 10s
       timeout: 5s
       retries: 10

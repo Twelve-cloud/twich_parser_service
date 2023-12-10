@@ -9,14 +9,14 @@ services:
     <<: *default-env
     build:
       context: ./
-      dockerfile: ./tlparser/Dockerfile.dev
+      dockerfile: ./tlparser/docker/Dockerfile.uvicorn.dev
     entrypoint:
-      - ./entrypoint-web.dev.sh
+      - ./entrypoint-uvicorn.dev.sh
     hostname: uvicorn
     ports:
       - 8000:${WEB_UVICORN_PORT}
     healthcheck:
-      test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/docs/"]
+      test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/docs"]
       interval: 10s
       timeout: 5s
       retries: 10

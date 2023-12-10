@@ -8,13 +8,13 @@ services:
   nginx:
     <<: *default-env
     build:
-      context: ./tlparser/nginx
-      dockerfile: ./Dockerfile
+      context: ./
+      dockerfile: ./tlparser/docker/Dockerfile.nginx.prd
     hostname: nginx
     ports:
       - 1337:${WEB_NGINX_PORT}
     healthcheck:
-      test: ["CMD-SHELL", "curl -k https://localhost:${WEB_NGINX_PORT}/docs/"]
+      test: ["CMD-SHELL", "curl -k https://localhost:${WEB_NGINX_PORT}/docs"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -34,14 +34,14 @@ services:
     <<: *default-env
     build:
       context: ./
-      dockerfile: ./tlparser/Dockerfile.prd
+      dockerfile: ./tlparser/docker/Dockerfile.uvicorn.prd
     entrypoint:
-      - ./entrypoint-web.prd.sh
+      - ./entrypoint-uvicorn.prd.sh
     hostname: uvicorn
     expose:
       - ${WEB_UVICORN_PORT}
     healthcheck:
-      test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/docs/"]
+      test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/docs"]
       interval: 10s
       timeout: 5s
       retries: 10

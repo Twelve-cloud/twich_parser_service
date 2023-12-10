@@ -17,10 +17,10 @@ COPY pyproject.toml ./
 RUN poetry install --with tests
 
 # 5 layer
-COPY tlparser  ./
+COPY tlparser/src tlparser/scripts/entrypoint-pytest.tests.sh  ./
 
 # 6 layer
 COPY tests  ./tests
 
 # 7 layer
-RUN chmod +x entrypoint-tests.sh
+RUN chmod +x entrypoint-pytest.tests.sh
