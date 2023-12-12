@@ -4,8 +4,8 @@ lamoda.py: File, containing endpoinds for a lamoda app.
 
 
 from fastapi import Depends, APIRouter, status
-from config.metadata import parse_products_metadata
 from core.containers import Container
+from config.lamoda_metadata import parse_products_metadata
 from schemas.lamoda_schemas import LamodaProductSchema
 from dependency_injector.wiring import Provide, inject
 from controllers.lamoda_controllers import LamodaController
@@ -30,7 +30,7 @@ async def parse_products(
         controller (LamodaController): Lamoda controller.
 
     Returns:
-        LamodaProductSchema: Response as LamodaProductSchema instance.
+        list[LamodaProductSchema]: Response as list of LamodaProductSchema instances.
     """
 
-    return await controller.parse_products(cat)
+    return controller.parse_products(cat)

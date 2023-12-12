@@ -15,4 +15,4 @@ class BaseROSchema(BaseModel):
         BaseModel (_type_): Base superclass for BaseROSchema.
     """
 
-    model_config: ClassVar[ConfigDict] = ConfigDict(strict=True, frozen=True, extra='forbid')
+    model_config: ClassVar[ConfigDict] = ConfigDict(strict=False, frozen=True, extra='ignore')

@@ -6,6 +6,7 @@ twich_schemas.py: File, containing schemas related to twich parsing.
 from typing import Optional, Annotated
 from datetime import datetime
 from pydantic import Field, ValidationError, field_validator
+from fields.twich_fields import TwichUserType, TwichStreamStatusType, TwichUserBroadcasterType
 from schemas.base_schemas import BaseROSchema
 
 
@@ -17,32 +18,10 @@ class TwichGameSchema(BaseROSchema):
         BaseROSchema (_type_): Base superclass for TwichGameSchema.
     """
 
-    game_id: Annotated[str, Field(min_length=1)]
-    description: Annotated[str, Field(min_length=1)]
-    viewers: Annotated[int, Field(ge=0)]
-    followers: Annotated[int, Field(ge=0)]
-    labels: Annotated[list[str], Field()]
-
-    @field_validator('labels')
-    @classmethod
-    def validate_labels(cls, labels: list[str]) -> list[str]:
-        """
-        validate_labels: Validate label for being non-empty.
-
-        Args:
-            labels (list[str]): Game label.
-
-        Raises:
-            ValidationError: Raised if any of labels are empty.
-
-        Returns:
-            list[str]: Validated labels.
-        """
-
-        if not all(labels):
-            raise ValidationError('label must not be empty')
-
-        return labels
+    id: Annotated[str, Field(min_length=1, max_length=128)]
+    name: Annotated[str, Field(min_length=1, max_length=128)]
+    igdb_id: Annotated[str, Field(min_length=0, max_length=128)]
+    box_art_url: Annotated[str, Field(min_length=0, max_length=128)]
 
 
 class TwichUserSchema(BaseROSchema):
@@ -53,10 +32,41 @@ class TwichUserSchema(BaseROSchema):
         BaseROSchema (_type_): Base superclass for TwichStreamSchema.
     """
 
-    user_id: Annotated[str, Field(min_length=1)]
-    description: Annotated[str, Field(min_length=1)]
-    followers: Annotated[int, Field(ge=0)]
-    is_live: Annotated[bool, Field()]
+    id: Annotated[str, Field(min_length=1, max_length=128)]
+    login: Annotated[str, Field(min_length=1, max_length=128)]
+    description: Annotated[str, Field(min_length=0, max_length=256)]
+    display_name: Annotated[str, Field(min_length=0, max_length=128)]
+
+    type: Annotated[TwichUserType, Field()]
+    broadcaster_type: Annotated[TwichUserBroadcasterType, Field()]
+
+    profile_image_url: Annotated[str, Field(min_length=0, max_length=256)]
+    offline_image_url: Annotated[str, Field(min_length=0, max_length=256)]
+
+    created_at: Annotated[datetime, Field()]
+
+    @field_validator('created_at', mode='before')
+    @classmethod
+    def validate_created_at(cls, raw_created: str) -> datetime:
+        """
+        validate_created_at: Validate created date for being in range.
+
+        Args:
+            raw_created (str): Created date of the stream or None.
+
+        Raises:
+            ValidationError: Raised if created date is not vald.
+
+        Returns:
+            datetime: Validated created date or None.
+        """
+
+        created: datetime = datetime.strptime(raw_created, '%Y-%m-%dT%H:%M:%SZ')
+
+        if not datetime(year=2000, month=1, day=1) <= created < datetime(year=2030, month=1, day=1):
+            raise ValidationError('Create date must be in range')
+
+        return created
 
 
 class TwichStreamSchema(BaseROSchema):
@@ -67,18 +77,31 @@ class TwichStreamSchema(BaseROSchema):
         BaseROSchema (_type_): Base superclass for TwichStreamSchema.
     """
 
-    user_id: Annotated[str, Field(min_length=1)]
-    viewers: Annotated[int, Field(ge=0)]
-    started_at: Annotated[datetime, Field()]
+    id: Annotated[str, Field(min_length=1, max_length=128)]
 
-    @field_validator('started_at')
+    user_id: Annotated[str, Field(min_length=1, max_length=128)]
+    user_name: Annotated[str, Field(min_length=1, max_length=128)]
+    user_login: Annotated[str, Field(min_length=1, max_length=128)]
+
+    game_id: Annotated[str, Field(min_length=1, max_length=128)]
+    game_name: Annotated[str, Field(min_length=1, max_length=128)]
+
+    language: Annotated[str, Field(min_length=0, max_length=128)]
+    title: Annotated[Optional[str], Field(min_length=0, max_length=128)]
+
+    tags: Annotated[list[str], Field()]
+    started_at: Annotated[datetime, Field()]
+    viewer_count: Annotated[int, Field(ge=0)]
+    type: Annotated[TwichStreamStatusType, Field()]
+
+    @field_validator('started_at', mode='before')
     @classmethod
-    def validate_started_at(cls, started: Optional[datetime]) -> Optional[datetime]:
+    def validate_started_at(cls, raw_started: str) -> datetime:
         """
         validate_started_at: Validate started date for being in range.
 
         Args:
-            started (datetime): Started date of the stream or None.
+            raw_started (str): Started date of the stream or None.
 
         Raises:
             ValidationError: Raised if started date is not vald.
@@ -87,10 +110,30 @@ class TwichStreamSchema(BaseROSchema):
             datetime: Validated started date or None.
         """
 
-        if started is None:
-            return started
+        started: datetime = datetime.strptime(raw_started, '%Y-%m-%dT%H:%M:%SZ')
 
-        if datetime(year=2020, month=1, day=1) <= started < datetime(year=2030, month=1, day=1):
+        if not datetime(year=2000, month=1, day=1) <= started < datetime(year=2030, month=1, day=1):
             raise ValidationError('Start date must be in range')
 
         return started
+
+    @field_validator('tags')
+    @classmethod
+    def validate_tags(cls, tags: list[str]) -> list[str]:
+        """
+        validate_tags: Validate tags for being in range.
+
+        Args:
+            tags (list[str]): List of tags.
+
+        Raises:
+            ValidationError: Raised if tag length is not in range.
+
+        Returns:
+            list[str]: Validated list of tags.
+        """
+
+        if list(filter(lambda tag: 1 > len(tag) or len(tag) > 128, tags)):
+            raise ValidationError('tag length must be in range 1...128')
+
+        return tags
