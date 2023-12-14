@@ -15,6 +15,9 @@ class LamodaSettings(BaseSettings):
         BaseSettings (_type_): Superclass for a Settings class.
     """
 
+    LAMODA_BASE_URL: str = 'https://www.lamoda.by'
+    LAMODA_CATEGORY_BASE_URL: str = 'https://www.lamoda.by/c'
+
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(case_sensitive=True)
 
 

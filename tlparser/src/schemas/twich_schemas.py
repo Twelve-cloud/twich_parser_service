@@ -21,7 +21,7 @@ class TwichGameSchema(BaseROSchema):
     id: Annotated[str, Field(min_length=1, max_length=128)]
     name: Annotated[str, Field(min_length=1, max_length=128)]
     igdb_id: Annotated[str, Field(min_length=0, max_length=128)]
-    box_art_url: Annotated[str, Field(min_length=0, max_length=128)]
+    box_art_url: Annotated[str, Field(min_length=0, max_length=256)]
 
 
 class TwichUserSchema(BaseROSchema):
@@ -34,7 +34,7 @@ class TwichUserSchema(BaseROSchema):
 
     id: Annotated[str, Field(min_length=1, max_length=128)]
     login: Annotated[str, Field(min_length=1, max_length=128)]
-    description: Annotated[str, Field(min_length=0, max_length=256)]
+    description: Annotated[str, Field(min_length=0, max_length=4096)]
     display_name: Annotated[str, Field(min_length=0, max_length=128)]
 
     type: Annotated[TwichUserType, Field()]
@@ -52,13 +52,13 @@ class TwichUserSchema(BaseROSchema):
         validate_created_at: Validate created date for being in range.
 
         Args:
-            raw_created (str): Created date of the stream or None.
+            raw_created (str): Raw created date of the stream.
 
         Raises:
             ValidationError: Raised if created date is not vald.
 
         Returns:
-            datetime: Validated created date or None.
+            datetime: Validated created date.
         """
 
         created: datetime = datetime.strptime(raw_created, '%Y-%m-%dT%H:%M:%SZ')
@@ -101,13 +101,13 @@ class TwichStreamSchema(BaseROSchema):
         validate_started_at: Validate started date for being in range.
 
         Args:
-            raw_started (str): Started date of the stream or None.
+            raw_started (str): Raw started date of the stream.
 
         Raises:
             ValidationError: Raised if started date is not vald.
 
         Returns:
-            datetime: Validated started date or None.
+            datetime: Validated started date.
         """
 
         started: datetime = datetime.strptime(raw_started, '%Y-%m-%dT%H:%M:%SZ')

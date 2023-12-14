@@ -3,7 +3,8 @@ twich.py: File, containing endpoinds for a twich app.
 """
 
 
-from fastapi import Depends, APIRouter, status
+from typing import Annotated
+from fastapi import Path, Depends, APIRouter, status
 from core.containers import Container
 from config.twich_metadata import parse_game_metadata, parse_user_metadata, parse_stream_metadata
 from schemas.twich_schemas import TwichGameSchema, TwichUserSchema, TwichStreamSchema
@@ -20,7 +21,8 @@ router: APIRouter = APIRouter(
 @router.post('/parse/game/{game_name}', status_code=status.HTTP_200_OK, **parse_game_metadata)
 @inject
 async def parse_game(
-    game_name: str, controller: TwichController = Depends(Provide[Container.twich_controller])
+    game_name: Annotated[str, Path(min_length=1, max_length=128)],
+    controller: TwichController = Depends(Provide[Container.twich_controller]),
 ) -> TwichGameSchema:
     """
     parse_game: Parse twich game and return result as TwichGameSchema.
@@ -39,7 +41,8 @@ async def parse_game(
 @router.post('/parse/user/{user_login}', status_code=status.HTTP_200_OK, **parse_user_metadata)
 @inject
 async def parse_user(
-    user_login: str, controller: TwichController = Depends(Provide[Container.twich_controller])
+    user_login: Annotated[str, Path(min_length=1, max_length=128)],
+    controller: TwichController = Depends(Provide[Container.twich_controller]),
 ) -> TwichUserSchema:
     """
     parse_user: Parse twich user and return result as TwichUserSchema.
@@ -58,7 +61,8 @@ async def parse_user(
 @router.post('/parse/stream/{user_login}', status_code=status.HTTP_200_OK, **parse_stream_metadata)
 @inject
 async def parse_stream(
-    user_login: str, controller: TwichController = Depends(Provide[Container.twich_controller])
+    user_login: Annotated[str, Path(min_length=1, max_length=128)],
+    controller: TwichController = Depends(Provide[Container.twich_controller]),
 ) -> TwichStreamSchema:
     """
     parse_stream: Parse twich stream and return result as TwichStreamSchema.
