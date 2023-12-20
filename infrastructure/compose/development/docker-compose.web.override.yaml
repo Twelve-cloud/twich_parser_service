@@ -16,7 +16,7 @@ services:
     ports:
       - 8000:${WEB_UVICORN_PORT}
     healthcheck:
-      test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/docs"]
+      test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/api/v1/docs"]
       interval: 10s
       timeout: 5s
       retries: 10

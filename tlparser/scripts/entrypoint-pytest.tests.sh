@@ -1,2 +1,2 @@
 #! /bin/bash
-pytest tests/integration/
+pytest tests/e2e/

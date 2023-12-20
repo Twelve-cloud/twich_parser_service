@@ -3,12 +3,12 @@ main.py: File, containing fast api application.
 """
 
 
+from common.config.base.settings import settings
+from common.utils.decorators import singleton
+from container import Container
 from fastapi import FastAPI
-from api.v1.routes import routers as rest_v1_routers
-from config.metadata import project_metadata
-from config.settings import settings
-from core.containers import Container
-from core.decorators import singleton
+from metadata import ProjectMetadata
+from presentation.api.v1.routes import routers as rest_v1_routers
 from starlette.middleware.cors import CORSMiddleware
 
 
@@ -29,7 +29,7 @@ class Application:
             openapi_url=f'/{settings.API_NAME}/{settings.API_VERSION}/openapi.json',
             docs_url=f'/{settings.API_NAME}/{settings.API_VERSION}/docs',
             redoc_url=f'/{settings.API_NAME}/{settings.API_VERSION}/redoc',
-            **project_metadata,
+            **ProjectMetadata.metadata,
         )
 
         self.container: Container = Container()
