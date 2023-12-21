@@ -122,12 +122,12 @@ celerybeat.pid
 # Environments
 .env
 .venv
-env/production/*
-env/development/*
-env/tests/*
-!env/production/*example*
-!env/development/*example*
-!env/tests/*example*
+tlparser/env/production/*
+tlparser/env/development/*
+tlparser/env/tests/*
+!tlparser/env/production/*example*
+!tlparser/env/development/*example*
+!tlparser/env/tests/*example*
 venv/
 ENV/
 env.bak/

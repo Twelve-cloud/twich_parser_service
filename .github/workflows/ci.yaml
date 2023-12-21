@@ -59,8 +59,8 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
           echo "${{ secrets.ENV_FILE_COMPOSE }}" > ./tlparser/env/tests/.env.tests.compose
-          echo "${{ secrets.ENV_FILE_REDIS }}" > ./tlpraser/env/tests/.env.tests.redis
-          echo "${{ secrets.ENV_FILE_WEB }}" > ./tlpraser/env/tests/.env.tests.web
+          echo "${{ secrets.ENV_FILE_REDIS }}" > ./tlparser/env/tests/.env.tests.redis
+          echo "${{ secrets.ENV_FILE_WEB }}" > ./tlparser/env/tests/.env.tests.web
           echo "${{ secrets.ENV_FILE_MONGO }}" > ./tlparser/env/tests/.env.tests.mongo
 
       - name: run e2e tests
