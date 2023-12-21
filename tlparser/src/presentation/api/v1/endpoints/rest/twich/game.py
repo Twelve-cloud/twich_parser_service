@@ -7,6 +7,7 @@ from typing import Annotated
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
+from fastapi_cache.decorator import cache
 from application.schemas.twich.game_schema import TwichGameReadSchema
 from container import Container
 from presentation.api.v1.endpoints.metadata.twich.game_metadata import TwichGameMetadata
@@ -63,8 +64,6 @@ async def private_parse_game(
         TwichGameReadSchema: Response as TwichGameReadSchema instance.
     """
 
-    # add cache
-
     return controller.parse_game(game_name)
 
 
@@ -99,6 +98,7 @@ async def delete_game_by_name(
     status_code=status.HTTP_200_OK,
     **TwichGameMetadata.get_all_games,
 )
+@cache(expire=60)
 @inject
 async def get_all_games(
     controller: TwichGameController = Depends(Provide[Container.twich_game_r_controller]),
@@ -113,8 +113,6 @@ async def get_all_games(
         list[TwichGameReadSchema]: List of twich games.
     """
 
-    # add cache
-
     return controller.get_all_games()
 
 
@@ -123,6 +121,7 @@ async def get_all_games(
     status_code=status.HTTP_200_OK,
     **TwichGameMetadata.get_game_by_name,
 )
+@cache(expire=60)
 @inject
 async def get_game_by_name(
     game_name: Annotated[str, Path(min_length=1, max_length=128)],
@@ -138,7 +137,5 @@ async def get_game_by_name(
     Returns:
         TwichGameReadSchema: TwichGameReadSchema instance.
     """
-
-    # add cache
 
     return controller.get_game_by_name(game_name)

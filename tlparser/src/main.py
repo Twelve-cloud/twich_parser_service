@@ -4,6 +4,9 @@ main.py: File, containing fast api application.
 
 
 from fastapi import FastAPI
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from redis import asyncio as aioredis
 from starlette.middleware.cors import CORSMiddleware
 from common.config.base.settings import settings
 from common.utils.decorators import singleton
@@ -47,3 +50,12 @@ class Application:
 
 application: Application = Application()
 app: FastAPI = application.app
+
+
+@app.on_event("startup")
+async def startup() -> None:
+    redis = aioredis.from_url(
+        f'{settings.REDIS_PROTOCOL}://{settings.REDIS_USERNAME}:{settings.REDIS_PASSWORD}'
+        f'@{settings.REDIS_HOST}:{settings.REDIS_PORT}/{settings.REDIS_DB_NUMBER}'
+    )
+    FastAPICache.init(RedisBackend(redis), prefix='fastapi-cache')

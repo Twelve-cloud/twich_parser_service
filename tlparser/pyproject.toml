@@ -22,6 +22,9 @@ types-requests = "2.31.0.10"
 beautifulsoup4 = "4.12.2"
 pymongo = "4.6.1"
 mongoengine = "0.27.0"
+redis = "5.0.1"
+types-redis = "4.6.0.11"
+fastapi-cache2 = "0.2.1"
 
 [tool.poetry.group.prd]
 optional = true

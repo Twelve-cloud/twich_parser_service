@@ -7,6 +7,7 @@ from typing import Annotated
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
+from fastapi_cache.decorator import cache
 from application.schemas.twich.user_schema import TwichUserReadSchema
 from container import Container
 from presentation.api.v1.endpoints.metadata.twich.user_metadata import TwichUserMetadata
@@ -63,8 +64,6 @@ async def private_parse_user(
         TwichUserReadSchema: Response as TwichUserReadSchema instance.
     """
 
-    # add cache
-
     return controller.parse_user(user_login)
 
 
@@ -99,6 +98,7 @@ async def delete_user_by_login(
     status_code=status.HTTP_200_OK,
     **TwichUserMetadata.get_all_users,
 )
+@cache(expire=60)
 @inject
 async def get_all_users(
     controller: TwichUserController = Depends(Provide[Container.twich_user_r_controller]),
@@ -113,8 +113,6 @@ async def get_all_users(
         list[TwichUserReadSchema]: List of twich users.
     """
 
-    # add cache
-
     return controller.get_all_users()
 
 
@@ -123,6 +121,7 @@ async def get_all_users(
     status_code=status.HTTP_200_OK,
     **TwichUserMetadata.get_user_by_login,
 )
+@cache(expire=60)
 @inject
 async def get_user_by_login(
     user_login: Annotated[str, Path(min_length=1, max_length=128)],
@@ -138,7 +137,5 @@ async def get_user_by_login(
     Returns:
         TwichUserReadSchema: TwichUserReadSchema instance.
     """
-
-    # add cache
 
     return controller.get_user_by_login(user_login)

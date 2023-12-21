@@ -7,6 +7,7 @@ from typing import Annotated
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
+from fastapi_cache.decorator import cache
 from application.schemas.twich.stream_schema import TwichStreamReadSchema
 from container import Container
 from presentation.api.v1.endpoints.metadata.twich.stream_metadata import TwichStreamMetadata
@@ -63,8 +64,6 @@ async def private_parse_stream(
         TwichStreamReadSchema: Response as TwichStreamReadSchema instance.
     """
 
-    # add cache
-
     return controller.parse_stream(user_login)
 
 
@@ -99,6 +98,7 @@ async def delete_stream_by_user_login(
     status_code=status.HTTP_200_OK,
     **TwichStreamMetadata.get_all_streams,
 )
+@cache(expire=60)
 @inject
 async def get_all_streams(
     controller: TwichStreamController = Depends(Provide[Container.twich_stream_r_controller]),
@@ -113,8 +113,6 @@ async def get_all_streams(
         list[TwichStreamReadSchema]: List of twich streams.
     """
 
-    # add cache
-
     return controller.get_all_streams()
 
 
@@ -123,6 +121,7 @@ async def get_all_streams(
     status_code=status.HTTP_200_OK,
     **TwichStreamMetadata.get_stream_by_user_login,
 )
+@cache(expire=60)
 @inject
 async def get_stream_by_user_login(
     user_login: Annotated[str, Path(min_length=1, max_length=128)],
@@ -138,7 +137,5 @@ async def get_stream_by_user_login(
     Returns:
         TwichStreamReadSchema: TwichStreamReadSchema instance.
     """
-
-    # add cache
 
     return controller.get_stream_by_user_login(user_login)

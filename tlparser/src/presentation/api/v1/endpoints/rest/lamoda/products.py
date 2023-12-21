@@ -7,6 +7,7 @@ from typing import Annotated
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
+from fastapi_cache.decorator import cache
 from application.schemas.lamoda.product_schema import LamodaProductReadSchema
 from container import Container
 from presentation.api.v1.endpoints.metadata.lamoda.products_metadata import LamodaProductsMetadata
@@ -24,7 +25,6 @@ router: APIRouter = APIRouter(
     status_code=status.HTTP_200_OK,
     **LamodaProductsMetadata.parse_products,
 )
-@inject
 async def parse_products(
     category: Annotated[str, Path(min_length=1, max_length=128)],
 ) -> Response:
@@ -64,8 +64,6 @@ async def private_parse_products(
         list[LamodaProductReadSchema]: Response as list of LamodaProductReadSchema instances.
     """
 
-    # add cache
-
     return controller.parse_products(category)
 
 
@@ -100,6 +98,7 @@ async def delete_products_by_category(
     status_code=status.HTTP_200_OK,
     **LamodaProductsMetadata.get_all_products,
 )
+@cache(expire=60)
 @inject
 async def get_all_products(
     controller: LamodaProductsController = Depends(Provide[Container.lamoda_products_r_controller]),
@@ -114,8 +113,6 @@ async def get_all_products(
         list[LamodaProductReadSchema]: List of lamoda products.
     """
 
-    # add cache
-
     return controller.get_all_products()
 
 
@@ -124,6 +121,7 @@ async def get_all_products(
     status_code=status.HTTP_200_OK,
     **LamodaProductsMetadata.get_products_by_category,
 )
+@cache(expire=60)
 @inject
 async def get_products_by_category(
     category: Annotated[str, Path(min_length=1, max_length=128)],
@@ -139,7 +137,5 @@ async def get_products_by_category(
     Returns:
         list[LamodaProductReadSchema]: List of lamoda products with the same category.
     """
-
-    # add cache
 
     return controller.get_products_by_category(category)

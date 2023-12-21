@@ -27,6 +27,12 @@ class Settings(BaseSettings):
     DB_MONGO_HOST: str = os.environ['DB_MONGO_HOST']
     DB_MONGO_PORT: int = cast(int, os.environ['DB_MONGO_PORT'])
     DB_MONGO_AUTH_SOURCE: str = os.environ['DB_MONGO_AUTH_SOURCE']
+    REDIS_PROTOCOL: str = os.environ['REDIS_PROTOCOL']
+    REDIS_USERNAME: str = os.environ['REDIS_USERNAME']
+    REDIS_PASSWORD: str = os.environ['REDIS_PASSWORD']
+    REDIS_HOST: str = os.environ['REDIS_HOST']
+    REDIS_PORT: int = cast(int, os.environ['REDIS_PORT'])
+    REDIS_DB_NUMBER: int = cast(int, os.environ['REDIS_DB_NUMBER'])
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(case_sensitive=True)
 
