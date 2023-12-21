@@ -43,11 +43,12 @@ async def parse_products(
     return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
 
-@router.post(
+@router.get(
     path='/private/products/{category:path}',
     status_code=status.HTTP_200_OK,
     **LamodaProductsMetadata.private_parse_products,
 )
+@cache(expire=60)
 @inject
 async def private_parse_products(
     category: Annotated[str, Path(min_length=1, max_length=128)],

@@ -43,11 +43,12 @@ async def parse_stream(
     return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
 
-@router.post(
+@router.get(
     path='/private/stream/{user_login}',
     status_code=status.HTTP_200_OK,
     **TwichStreamMetadata.private_parse_stream,
 )
+@cache(60)
 @inject
 async def private_parse_stream(
     user_login: Annotated[str, Path(min_length=1, max_length=128)],

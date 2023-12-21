@@ -43,11 +43,12 @@ async def parse_game(
     return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
 
-@router.post(
+@router.get(
     path='/private/game/{game_name}',
     status_code=status.HTTP_200_OK,
     **TwichGameMetadata.private_parse_game,
 )
+@cache(60)
 @inject
 async def private_parse_game(
     game_name: Annotated[str, Path(min_length=1, max_length=128)],
