@@ -2,14 +2,14 @@ version: '3.7'
 
 x-env: &default-env
   env_file:
-    - ./env/tests/.env.tests.web
+    - ./tlparser/env/tests/.env.tests.web
 
 services:
   tests:
     <<: *default-env
     build:
-      context: ./
-      dockerfile: ./tlparser/docker/Dockerfile.pytest.tests
+      context: ./tlparser
+      dockerfile: ./docker/Dockerfile.pytest.tests
     entrypoint:
       - ./entrypoint-pytest.tests.sh
     networks:

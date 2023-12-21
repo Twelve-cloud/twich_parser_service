@@ -5,8 +5,8 @@ game_schema.py: File, containing twich game schema.TwichGameReadSchema
 
 from datetime import datetime
 from typing import Annotated
-from application.schemas.base.base_schema import BaseROSchema
 from pydantic import Field
+from application.schemas.base.base_schema import BaseROSchema
 
 
 class TwichGameCreateSchema(BaseROSchema):

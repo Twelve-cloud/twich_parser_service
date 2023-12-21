@@ -2,14 +2,14 @@ version: '3.7'
 
 x-env: &default-env
   env_file:
-    - ./env/development/.env.dev.web
+    - ./tlparser/env/development/.env.dev.web
 
 services:
   uvicorn:
     <<: *default-env
     build:
-      context: ./
-      dockerfile: ./tlparser/docker/Dockerfile.uvicorn.dev
+      context: ./tlparser
+      dockerfile: ./docker/Dockerfile.uvicorn.dev
     entrypoint:
       - ./entrypoint-uvicorn.dev.sh
     hostname: uvicorn
@@ -24,7 +24,7 @@ services:
       back-dev:
         ipv4_address: 192.168.10.4
     volumes:
-      - ./certs/development:/code/certs:ro/
+      - ./tlparser/certs/development:/code/certs:ro/
     links:
       - redis
       - mongo
@@ -33,4 +33,25 @@ services:
         condition: service_healthy
       mongo:
         condition: service_healthy
+    restart: always
+
+  sphinx:
+    build:
+      context: ./tlparser
+      dockerfile: ./docs/nginx/Dockerfile
+    hostname: sphinx
+    environment:
+      - SPHINX_PORT=${SPHINX_PORT}
+    ports:
+      - 7777:${SPHINX_PORT}
+    healthcheck:
+      test: ["CMD-SHELL", "curl https://localhost:${SPHINX_PORT}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      back-dev:
+        ipv4_address: 192.168.10.5
+    volumes:
+      - ./tlparser/certs/development:/etc/nginx/certs:ro/
     restart: always

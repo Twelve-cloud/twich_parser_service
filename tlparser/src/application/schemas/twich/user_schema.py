@@ -5,9 +5,9 @@ user_schema.py: File, containing twich user schema.
 
 from datetime import datetime
 from typing import Annotated
+from pydantic import Field, ValidationError, field_validator
 from application.fields.twich.user_fields import TwichUserBroadcasterType, TwichUserType
 from application.schemas.base.base_schema import BaseROSchema
-from pydantic import Field, ValidationError, field_validator
 
 
 class TwichUserCreateSchema(BaseROSchema):

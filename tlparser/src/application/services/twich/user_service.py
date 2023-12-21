@@ -3,6 +3,8 @@ user_service.py: File, containing service for a twich user.
 """
 
 
+from fastapi import status
+from requests import Response, get
 from application.dependencies.twich.token_dependency import TwichAPIToken
 from application.exceptions.twich.user_exceptions import (
     GetUserBadRequestException,
@@ -14,8 +16,6 @@ from application.schemas.twich.user_schema import TwichUserCreateSchema, TwichUs
 from common.config.twich.settings import settings
 from domain.entities.twich.user_entity import TwichUserEntity
 from domain.repositories.twich.user_repository import TwichUserRepository
-from fastapi import status
-from requests import Response, get
 
 
 class TwichUserService:

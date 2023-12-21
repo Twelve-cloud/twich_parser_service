@@ -3,6 +3,8 @@ stream_service.py: File, containing service for a twich stream.
 """
 
 
+from fastapi import status
+from requests import Response, get
 from application.dependencies.twich.token_dependency import TwichAPIToken
 from application.exceptions.twich.stream_exceptions import (
     GetStreamBadRequestException,
@@ -14,8 +16,6 @@ from application.schemas.twich.stream_schema import TwichStreamCreateSchema, Twi
 from common.config.twich.settings import settings
 from domain.entities.twich.stream_entity import TwichStreamEntity
 from domain.repositories.twich.stream_repository import TwichStreamRepository
-from fastapi import status
-from requests import Response, get
 
 
 class TwichStreamService:

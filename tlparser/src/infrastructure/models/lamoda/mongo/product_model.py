@@ -4,8 +4,8 @@ product_model: File, containing lamoda product model for mongo.
 
 
 from datetime import datetime
-from application.fields.lamoda.product_fields import CurrencyType
 from mongoengine import DateTimeField, Document, FloatField, StringField
+from application.fields.lamoda.product_fields import CurrencyType
 
 
 class LamodaProduct(Document):

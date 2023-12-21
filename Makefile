@@ -10,11 +10,10 @@ COMPOSE_PRD :=                  \
     -f ${COMPOSE_PRD_MONGO}     \
     -f ${COMPOSE_PRD_REDIS}     \
     -f ${COMPOSE_PRD_WEB}       \
-    -f ${COMPOSE_PRD_SPHINX}    \
 
-COMPOSE_PRD_ENV :=                              \
-    --env-file=.env                             \
-    --env-file=env/production/.env.prd.compose  \
+COMPOSE_PRD_ENV :=                                       \
+    --env-file=.env                                      \
+    --env-file=tlparser/env/production/.env.prd.compose  \
 
 prdstart: docker-compose.yaml
     sudo docker compose -p prd ${COMPOSE_PRD_ENV} ${COMPOSE_PRD} up --build --force-recreate
@@ -29,11 +28,10 @@ COMPOSE_DEV :=                  \
     -f ${COMPOSE_DEV_MONGO}     \
     -f ${COMPOSE_DEV_REDIS}     \
     -f ${COMPOSE_DEV_WEB}       \
-    -f ${COMPOSE_DEV_SPHINX}    \
 
-COMPOSE_DEV_ENV :=                              \
-    --env-file=.env                             \
-    --env-file=env/development/.env.dev.compose \
+COMPOSE_DEV_ENV :=                                       \
+    --env-file=.env                                      \
+    --env-file=tlparser/env/development/.env.dev.compose \
 
 devstart: docker-compose.yaml
     sudo docker compose -p dev ${COMPOSE_DEV_ENV} ${COMPOSE_DEV} up --build --force-recreate
@@ -49,15 +47,15 @@ COMPOSE_TESTS :=                \
     -f ${COMPOSE_TESTS_REDIS}   \
     -f ${COMPOSE_TESTS_WEB}     \
 
-COMPOSE_TESTS_ENV :=                           \
-    --env-file=.env                            \
-    --env-file=env/tests/.env.tests.compose    \
+COMPOSE_TESTS_ENV :=                                    \
+    --env-file=.env                                     \
+    --env-file=tlparser/env/tests/.env.tests.compose    \
 
 GREEN := \033[0;32m
 RED := \033[0;31m
 NC := \033[0m
 
-itests: docker-compose.yaml
+e2e: docker-compose.yaml
     sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_TESTS} up -d --build
     @if [ `sudo docker wait tests-tests-1` -ne 0 ] ; then                                   \
         sudo docker logs tests-tests-1;                                                     \

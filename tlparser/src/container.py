@@ -3,14 +3,14 @@ container.py: File, containing container that describe all dependencies in the p
 """
 
 
+from dependency_injector.containers import DeclarativeContainer, WiringConfiguration
+from dependency_injector.providers import Factory, Singleton
 from application.dependencies.twich.token_dependency import TwichAPIToken
 from application.services.lamoda.products_service import LamodaProductsService
 from application.services.twich.game_service import TwichGameService
 from application.services.twich.stream_service import TwichStreamService
 from application.services.twich.user_service import TwichUserService
 from common.config.base.settings import settings
-from dependency_injector.containers import DeclarativeContainer, WiringConfiguration
-from dependency_injector.providers import Factory, Singleton
 from infrastructure.connections.elastic.database import ElasticSearchDatabase
 from infrastructure.connections.mongo.database import MongoDatabase
 from infrastructure.repositories.lamoda.elastic.products_repository import (

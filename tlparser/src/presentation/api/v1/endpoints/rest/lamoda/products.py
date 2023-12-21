@@ -4,11 +4,11 @@ products.py: File, containing endpoinds for lamoda products.
 
 
 from typing import Annotated
-from application.schemas.lamoda.product_schema import LamodaProductReadSchema
-from container import Container
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
+from application.schemas.lamoda.product_schema import LamodaProductReadSchema
+from container import Container
 from presentation.api.v1.endpoints.metadata.lamoda.products_metadata import LamodaProductsMetadata
 from presentation.controllers.lamoda.products_controller import LamodaProductsController
 

@@ -3,7 +3,7 @@ version: '3.7'
 services:
   mongo:
     env_file:
-      - ./env/development/.env.dev.mongo
+      - ./tlparser/env/development/.env.dev.mongo
     volumes:
       - ./tlparser/data/dev/mongo:/data/db
     networks:

@@ -13,7 +13,7 @@ RUN pip install typing-extensions sphinx sphinx-material
 
 # 4 layer
 WORKDIR /code
-COPY tlparser/src ./
+COPY src ./
 
 # 5 layer
 COPY docs/ ./docs

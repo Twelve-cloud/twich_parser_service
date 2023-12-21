@@ -3,7 +3,7 @@ version: '3.7'
 services:
   redis:
     env_file:
-      - ./env/development/.env.dev.redis
+      - ./tlparser/env/development/.env.dev.redis
     volumes:
       - ./tlparser/data/dev/redis:/root/redis
     networks:

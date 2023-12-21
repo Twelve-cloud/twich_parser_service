@@ -5,6 +5,8 @@ products_service.py: File, containing service for lamoda products.
 
 from json import JSONDecodeError, loads
 from re import compile
+from bs4 import BeautifulSoup
+from requests import Response, session
 from application.exceptions.lamoda.products_exceptions import WrongCategoryUrlException
 from application.mappers.lamoda.product_mapper import (
     LamodaProductCreateMapper,
@@ -14,11 +16,9 @@ from application.schemas.lamoda.product_schema import (
     LamodaProductCreateSchema,
     LamodaProductReadSchema,
 )
-from bs4 import BeautifulSoup
 from common.config.lamoda.settings import settings
 from domain.entities.lamoda.product_entity import LamodaProductEntity
 from domain.repositories.lamoda.products_repository import LamodaProductsRepository
-from requests import Response, session
 
 
 class LamodaProductsService:

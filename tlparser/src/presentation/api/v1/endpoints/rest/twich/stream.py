@@ -4,11 +4,11 @@ stream.py: File, containing endpoinds for a twich stream.
 
 
 from typing import Annotated
-from application.schemas.twich.stream_schema import TwichStreamReadSchema
-from container import Container
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
+from application.schemas.twich.stream_schema import TwichStreamReadSchema
+from container import Container
 from presentation.api.v1.endpoints.metadata.twich.stream_metadata import TwichStreamMetadata
 from presentation.controllers.twich.stream_controller import TwichStreamController
 

@@ -3,13 +3,13 @@ main.py: File, containing fast api application.
 """
 
 
+from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 from common.config.base.settings import settings
 from common.utils.decorators import singleton
 from container import Container
-from fastapi import FastAPI
 from metadata import ProjectMetadata
 from presentation.api.v1.routes import routers as rest_v1_routers
-from starlette.middleware.cors import CORSMiddleware
 
 
 @singleton

@@ -5,9 +5,9 @@ stream_schema.py: File, containing twich stream schema.
 
 from datetime import datetime
 from typing import Annotated
+from pydantic import Field, ValidationError, field_validator
 from application.fields.twich.stream_fields import TwichStreamStatusType
 from application.schemas.base.base_schema import BaseROSchema
-from pydantic import Field, ValidationError, field_validator
 
 
 class TwichStreamCreateSchema(BaseROSchema):

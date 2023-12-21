@@ -3,6 +3,8 @@ game_service.py: File, containing service for a twich game.
 """
 
 
+from fastapi import status
+from requests import Response, get
 from application.dependencies.twich.token_dependency import TwichAPIToken
 from application.exceptions.twich.game_exceptions import (
     GameNotFoundException,
@@ -14,8 +16,6 @@ from application.schemas.twich.game_schema import TwichGameCreateSchema, TwichGa
 from common.config.twich.settings import settings
 from domain.entities.twich.game_entity import TwichGameEntity
 from domain.repositories.twich.game_repository import TwichGameRepository
-from fastapi import status
-from requests import Response, get
 
 
 class TwichGameService:

@@ -1,44 +1,44 @@
 repos:
   - repo: local
     hooks:
-      - id: isort
-        name: isort
-        entry: poetry run isort --check-only .
+      - id: parser_isort
+        name: parser isort
+        entry: bash -c "cd tlparser && poetry run isort --check-only ."
         language: system
         types: [python]
         pass_filenames: false
 
-      - id: black
-        name: black
-        entry: poetry run black --check .
+      - id: parser_black
+        name: parser black
+        entry: bash -c "cd tlparser && poetry run black --check ."
         language: system
         types: [python]
         pass_filenames: false
 
-      - id: flake8
-        name: flake8
-        entry: poetry run flake8 .
+      - id: parser_flake8
+        name: parser flake8
+        entry: bash -c "cd tlparser && poetry run flake8 ."
         language: system
         types: [python]
         pass_filenames: false
 
-      - id: mypy
-        name: mypy
-        entry: poetry run mypy .
+      - id: parser_mypy
+        name: parser mypy
+        entry: bash -c "cd tlparser && poetry run mypy ."
         language: system
         types: [python]
         pass_filenames: false
 
-      - id: ut
-        name: unit tests
-        entry: poetry run pytest tests/unit/
+      - id: parser_ut
+        name: parser unit tests
+        entry: bash -c "cd tlparser && poetry run pytest tests/unit/"
         language: system
         types: [python]
         pass_filenames: false
 
-      - id: it
-        name: integration tests
-        entry: make itests
+      - id: e2e
+        name: e2e tests
+        entry: make e2e
         language: system
         types: [python]
         pass_filenames: false

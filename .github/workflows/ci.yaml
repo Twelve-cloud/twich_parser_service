@@ -6,12 +6,12 @@ env:
   POETRY_VIRTUALENVS_CREATE: 0
 
 jobs:
-  static:
+  parser_static:
     runs-on: [ubuntu-latest]
 
     defaults:
       run:
-        working-directory: ./
+        working-directory: ./tlparser
 
     steps:
       - name: clone github repository
@@ -44,7 +44,7 @@ jobs:
       - name: run unit tests
         run: pytest tests/unit/
 
-  it:
+  e2e:
     runs-on: [ubuntu-latest]
 
     defaults:
@@ -58,10 +58,10 @@ jobs:
       - name: create envs files
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
-          echo "${{ secrets.ENV_FILE_COMPOSE }}" > ./env/tests/.env.tests.compose
-          echo "${{ secrets.ENV_FILE_REDIS }}" > ./env/tests/.env.tests.redis
-          echo "${{ secrets.ENV_FILE_WEB }}" > ./env/tests/.env.tests.web
-          echo "${{ secrets.ENV_FILE_MONGO }}" > ./env/tests/.env.tests.mongo
+          echo "${{ secrets.ENV_FILE_COMPOSE }}" > ./tlparser/env/tests/.env.tests.compose
+          echo "${{ secrets.ENV_FILE_REDIS }}" > ./tlpraser/env/tests/.env.tests.redis
+          echo "${{ secrets.ENV_FILE_WEB }}" > ./tlpraser/env/tests/.env.tests.web
+          echo "${{ secrets.ENV_FILE_MONGO }}" > ./tlparser/env/tests/.env.tests.mongo
 
-      - name: run integration tests
-        run: make itests
+      - name: run e2e tests
+        run: make e2e

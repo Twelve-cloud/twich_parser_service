@@ -4,8 +4,8 @@ stream_model: File, containing twich stream model for mongo.
 
 
 from datetime import datetime
-from application.fields.twich.stream_fields import TwichStreamStatusType
 from mongoengine import DateTimeField, Document, IntField, ListField, StringField
+from application.fields.twich.stream_fields import TwichStreamStatusType
 
 
 class TwichStream(Document):

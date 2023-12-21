@@ -3,8 +3,8 @@ token_dependency.py: File, containing token dependency for a twich app.
 """
 
 
-from common.config.twich.settings import settings
 from requests import Response, post
+from common.config.twich.settings import settings
 
 
 class TwichAPIToken:

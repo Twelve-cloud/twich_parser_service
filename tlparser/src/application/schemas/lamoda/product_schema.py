@@ -5,9 +5,9 @@ product_schema.py: File, containing lamoda product schema.
 
 from datetime import datetime
 from typing import Annotated
+from pydantic import Field, ValidationError, field_validator
 from application.fields.lamoda.product_fields import CurrencyType
 from application.schemas.base.base_schema import BaseROSchema
-from pydantic import Field, ValidationError, field_validator
 
 
 class LamodaProductCreateSchema(BaseROSchema):

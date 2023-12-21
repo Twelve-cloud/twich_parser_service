@@ -4,8 +4,8 @@ user_model: File, containing twich user model for mongo.
 
 
 from datetime import datetime
-from application.fields.twich.user_fields import TwichUserBroadcasterType, TwichUserType
 from mongoengine import DateTimeField, Document, IntField, StringField
+from application.fields.twich.user_fields import TwichUserBroadcasterType, TwichUserType
 
 
 class TwichUser(Document):

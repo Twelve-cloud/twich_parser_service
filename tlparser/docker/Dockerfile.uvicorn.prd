@@ -17,7 +17,7 @@ COPY pyproject.toml ./
 RUN poetry install --with prd
 
 # 5 layer
-COPY tlparser/src tlparser/scripts/entrypoint-uvicorn.prd.sh ./
+COPY src scripts/entrypoint-uvicorn.prd.sh ./
 
 # 6 layer
 RUN chmod +x entrypoint-uvicorn.prd.sh

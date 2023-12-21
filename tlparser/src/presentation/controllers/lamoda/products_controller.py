@@ -3,12 +3,12 @@ products_controller.py: File, containing lamoda products controller.
 """
 
 
-from application.exceptions.lamoda.products_exceptions import WrongCategoryUrlException
-from application.schemas.lamoda.product_schema import LamodaProductReadSchema
-from application.services.lamoda.products_service import LamodaProductsService
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
+from application.exceptions.lamoda.products_exceptions import WrongCategoryUrlException
+from application.schemas.lamoda.product_schema import LamodaProductReadSchema
+from application.services.lamoda.products_service import LamodaProductsService
 
 
 class LamodaProductsController:
