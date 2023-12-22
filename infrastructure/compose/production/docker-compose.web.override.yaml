@@ -13,6 +13,8 @@ services:
     hostname: nginx
     ports:
       - 1337:${WEB_NGINX_PORT}
+    volumes:
+      - ./tlparser/certs/production:/etc/nginx/certs:ro/
     healthcheck:
       test: ["CMD-SHELL", "curl -k https://localhost:${WEB_NGINX_PORT}/api/v1/docs"]
       interval: 10s
@@ -21,8 +23,6 @@ services:
     networks:
       back-prod:
         ipv4_address: 172.168.10.5
-    volumes:
-      - ./tlparser/certs/production:/etc/nginx/certs:ro/
     links:
       - uvicorn
     depends_on:
@@ -40,6 +40,8 @@ services:
     hostname: uvicorn
     expose:
       - ${WEB_UVICORN_PORT}
+    volumes:
+      - ./tlparser/certs/production:/code/certs:ro/
     healthcheck:
       test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/api/v1/docs"]
       interval: 10s
@@ -48,8 +50,6 @@ services:
     networks:
       back-prod:
         ipv4_address: 172.168.10.4
-    volumes:
-      - ./tlparser/certs/production:/code/certs:ro/
     links:
       - redis
       - mongo
@@ -65,10 +65,12 @@ services:
       context: ./tlparser
       dockerfile: ./docs/nginx/Dockerfile
     hostname: sphinx
-    environment:
-      - SPHINX_PORT=${SPHINX_PORT}
     ports:
       - 7777:${SPHINX_PORT}
+    environment:
+      - SPHINX_PORT=${SPHINX_PORT}
+    volumes:
+      - ./tlparser/certs/production:/etc/nginx/certs:ro/
     healthcheck:
       test: ["CMD-SHELL", "curl https://localhost:${SPHINX_PORT}"]
       interval: 10s
@@ -77,6 +79,4 @@ services:
     networks:
       back-prod:
         ipv4_address: 172.168.10.6
-    volumes:
-      - ./tlparser/certs/production:/etc/nginx/certs:ro/
     restart: always

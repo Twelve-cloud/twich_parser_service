@@ -2,10 +2,21 @@ version: '3.7'
 
 services:
   redis:
+    image: redis:7.2.1-alpine3.18
+    command: redis-server --user ${REDIS_USERNAME} on >${REDIS_PASSWORD} ~* allcommands --requirepass ${REDIS_PASSWORD} --port ${REDIS_PORT}
+    hostname: redis
+    ports:
+      - 6379:${REDIS_PORT}
     env_file:
       - ./tlparser/env/development/.env.dev.redis
     volumes:
       - ./tlparser/data/dev/redis:/root/redis
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     networks:
       back-dev:
         ipv4_address: 192.168.10.3
+    restart: always

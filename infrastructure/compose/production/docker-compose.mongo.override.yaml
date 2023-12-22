@@ -2,10 +2,20 @@ version: '3.7'
 
 services:
   mongo:
+    image: mongo
+    hostname: mongo
+    ports:
+      - 8081:${MONGO_PORT}
     env_file:
       - ./tlparser/env/production/.env.prd.mongo
     volumes:
       - ./tlparser/data/prd/mongo:/data/db
+    healthcheck:
+      test: ["CMD","mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     networks:
       back-prod:
         ipv4_address: 172.168.10.2
+    restart: always

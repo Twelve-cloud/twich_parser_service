@@ -1,16 +1,5 @@
 version: '3.7'
 
-services:
-  mongo:
-    extends:
-      file: ${COMPOSE_COMMON_MONGO}
-      service: mongo
-
-  redis:
-    extends:
-      file: ${COMPOSE_COMMON_REDIS}
-      service: redis
-
 networks:
   back-prod:
     driver: bridge
