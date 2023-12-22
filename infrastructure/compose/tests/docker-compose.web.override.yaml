@@ -1,26 +1,28 @@
 version: '3.7'
 
-x-env: &default-env
-  env_file:
-    - ./tlparser/env/tests/.env.tests.web
-
 services:
   tests:
-    <<: *default-env
     build:
       context: ./tlparser
       dockerfile: ./docker/Dockerfile.pytest.tests
     entrypoint:
       - ./entrypoint-pytest.tests.sh
+    hostname: tests
+    container_name: tests
+    env_file:
+    - ./tlparser/env/tests/.env.tests.web
     networks:
       back-tests:
-        ipv4_address: 182.168.10.4
+        ipv4_address: 182.168.10.6
     links:
-      - redis
+      - kafka
       - mongo
+      - redis
     depends_on:
-      redis:
+      kafka:
         condition: service_healthy
       mongo:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     restart: no

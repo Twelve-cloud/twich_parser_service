@@ -7,6 +7,7 @@ export
 
 COMPOSE_PRD :=                  \
     -f docker-compose.yaml      \
+    -f ${COMPOSE_PRD_KAFKA}     \
     -f ${COMPOSE_PRD_MONGO}     \
     -f ${COMPOSE_PRD_REDIS}     \
     -f ${COMPOSE_PRD_WEB}       \
@@ -25,6 +26,7 @@ prdstop: docker-compose.yaml
 
 COMPOSE_DEV :=                  \
     -f docker-compose.yaml      \
+    -f ${COMPOSE_DEV_KAFKA}     \
     -f ${COMPOSE_DEV_MONGO}     \
     -f ${COMPOSE_DEV_REDIS}     \
     -f ${COMPOSE_DEV_WEB}       \
@@ -43,6 +45,7 @@ devstop: docker-compose.yaml
 
 COMPOSE_TESTS :=                \
     -f docker-compose.yaml      \
+    -f ${COMPOSE_TESTS_KAFKA}   \
     -f ${COMPOSE_TESTS_MONGO}   \
     -f ${COMPOSE_TESTS_REDIS}   \
     -f ${COMPOSE_TESTS_WEB}     \
@@ -57,12 +60,12 @@ NC := \033[0m
 
 e2e: docker-compose.yaml
     sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_TESTS} up -d --build
-    @if [ `sudo docker wait tests-tests-1` -ne 0 ] ; then                                   \
-        sudo docker logs tests-tests-1;                                                     \
+    @if [ `sudo docker wait tests` -ne 0 ] ; then                                           \
+        sudo docker logs tests;                                                             \
         printf "${RED}Tests Failed${NC}\n";                                                 \
         sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_TESTS} down;            \
     else                                                                                    \
-        sudo docker logs tests-tests-1;                                                     \
+        sudo docker logs tests;                                                             \
         printf "${GREEN}Tests Passed${NC}\n";                                               \
         sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_TESTS} down;            \
     fi                                                                                      \

@@ -1,0 +1,68 @@
+version: '3.7'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.3
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - 22181:${ZOOKEEPER_CLIENT_PORT}
+    env_file:
+      - ./tlparser/env/development/.env.dev.kafka
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z zookeeper ${ZOOKEEPER_CLIENT_PORT} || exit -1"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    networks:
+      back-dev:
+        ipv4_address: 192.168.10.2
+    restart: always
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.3
+    hostname: kafka
+    container_name: kafka
+    ports:
+      - 29092:${KAFKA_PORT}
+    env_file:
+      - ./tlparser/env/development/.env.dev.kafka
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z kafka ${KAFKA_PORT} || exit -1"]
+      start_period: 15s
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    networks:
+      back-dev:
+        ipv4_address: 192.168.10.3
+    links:
+      - zookeeper
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    restart: always
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:master
+    hostname: kafka-ui
+    container_name: kafka-ui
+    ports:
+      - 8080:${KAFKA_UI_PORT}
+    env_file:
+      - ./tlparser/env/development/.env.dev.kafka
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z kafka-ui ${KAFKA_UI_PORT} || exit -1"]
+      start_period: 15s
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    networks:
+      back-dev:
+        ipv4_address: 192.168.10.4
+    links:
+      - kafka
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: always

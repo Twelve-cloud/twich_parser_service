@@ -2,10 +2,11 @@ version: '3.7'
 
 services:
   mongo:
-    image: mongo
+    image: mongo:7.0-rc-jammy
     hostname: mongo
+    container_name: mongo
     ports:
-      - 8081:${MONGO_PORT}
+      - 27017:${MONGO_PORT}
     env_file:
       - ./tlparser/env/development/.env.dev.mongo
     volumes:
@@ -17,5 +18,28 @@ services:
       retries: 10
     networks:
       back-dev:
-        ipv4_address: 192.168.10.2
+        ipv4_address: 192.168.10.5
+    restart: always
+
+  mongo-express:
+    image: mongo-express:1.0-18-alpine3.18
+    hostname: mongo-express
+    container_name: mongo-express
+    ports:
+      - 8081:${MONGO_EXPRESS_PORT}
+    env_file:
+      - ./tlparser/env/development/.env.dev.mongo
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z mongo-express ${MONGO_EXPRESS_PORT} || exit -1"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    networks:
+      back-dev:
+        ipv4_address: 192.168.10.6
+    links:
+      - mongo
+    depends_on:
+      mongo:
+        condition: service_healthy
     restart: always

@@ -1,18 +1,16 @@
 version: '3.7'
 
-x-env: &default-env
-  env_file:
-    - ./tlparser/env/production/.env.prd.web
-
 services:
   nginx:
-    <<: *default-env
     build:
       context: ./tlparser
       dockerfile: ./docker/Dockerfile.nginx.prd
     hostname: nginx
+    container_name: nginx
     ports:
       - 1337:${WEB_NGINX_PORT}
+    env_file:
+    - ./tlparser/env/production/.env.prd.web
     volumes:
       - ./tlparser/certs/production:/etc/nginx/certs:ro/
     healthcheck:
@@ -22,7 +20,7 @@ services:
       retries: 10
     networks:
       back-prod:
-        ipv4_address: 172.168.10.5
+        ipv4_address: 172.168.10.8
     links:
       - uvicorn
     depends_on:
@@ -31,15 +29,17 @@ services:
     restart: always
 
   uvicorn:
-    <<: *default-env
     build:
       context: ./tlparser
       dockerfile: ./docker/Dockerfile.uvicorn.prd
     entrypoint:
       - ./entrypoint-uvicorn.prd.sh
     hostname: uvicorn
+    container_name: uvicorn
     expose:
       - ${WEB_UVICORN_PORT}
+    env_file:
+    - ./tlparser/env/production/.env.prd.web
     volumes:
       - ./tlparser/certs/production:/code/certs:ro/
     healthcheck:
@@ -49,14 +49,17 @@ services:
       retries: 10
     networks:
       back-prod:
-        ipv4_address: 172.168.10.4
+        ipv4_address: 172.168.10.9
     links:
-      - redis
+      - kafka
       - mongo
+      - redis
     depends_on:
-      redis:
+      kafka:
         condition: service_healthy
       mongo:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     restart: always
 
@@ -65,6 +68,7 @@ services:
       context: ./tlparser
       dockerfile: ./docs/nginx/Dockerfile
     hostname: sphinx
+    container_name: sphinx
     ports:
       - 7777:${SPHINX_PORT}
     environment:
@@ -72,11 +76,11 @@ services:
     volumes:
       - ./tlparser/certs/production:/etc/nginx/certs:ro/
     healthcheck:
-      test: ["CMD-SHELL", "curl https://localhost:${SPHINX_PORT}"]
+      test: ["CMD-SHELL", "curl -k https://localhost:${SPHINX_PORT}"]
       interval: 10s
       timeout: 5s
       retries: 10
     networks:
       back-prod:
-        ipv4_address: 172.168.10.6
+        ipv4_address: 172.168.10.10
     restart: always
