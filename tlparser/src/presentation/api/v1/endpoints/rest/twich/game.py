@@ -25,8 +25,10 @@ router: APIRouter = APIRouter(
     status_code=status.HTTP_200_OK,
     **TwichGameMetadata.parse_game,
 )
+@inject
 async def parse_game(
     game_name: Annotated[str, Path(min_length=1, max_length=128)],
+    controller: TwichGameController = Depends(Provide[Container.twich_game_w_controller]),
 ) -> Response:
     """
     parse_game: Produce message to kafka to parse games.
@@ -38,7 +40,7 @@ async def parse_game(
         Response: HTTP status code 200.
     """
 
-    # produce message to kafka
+    controller.parse_game(game_name)
 
     return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
@@ -55,7 +57,7 @@ async def private_parse_game(
     controller: TwichGameController = Depends(Provide[Container.twich_game_w_controller]),
 ) -> TwichGameReadSchema:
     """
-    parse_game: Parse twich game and return result as TwichGameReadSchema.
+    private_parse_game: Parse twich game and return result as TwichGameReadSchema.
 
     Args:
         game_name (str): Identifier of the game.
@@ -65,7 +67,7 @@ async def private_parse_game(
         TwichGameReadSchema: Response as TwichGameReadSchema instance.
     """
 
-    return controller.parse_game(game_name)
+    return controller.private_parse_game(game_name)
 
 
 @router.delete(

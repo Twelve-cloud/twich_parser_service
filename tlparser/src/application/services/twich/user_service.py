@@ -15,6 +15,13 @@ from application.mappers.twich.user_mapper import TwichUserCreateMapper, TwichUs
 from application.schemas.twich.user_schema import TwichUserCreateSchema, TwichUserReadSchema
 from common.config.twich.settings import settings
 from domain.entities.twich.user_entity import TwichUserEntity
+from domain.events.twich.user_events import (
+    PublicParseUserCalledEvent,
+    TwichUserCreatedOrUpdatedEvent,
+    TwichUserDeletedByLoginEvent,
+)
+from domain.publishers.twich.user_publisher import TwichUserPublisher
+from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.twich.user_repository import TwichUserRepository
 
 
@@ -23,7 +30,12 @@ class TwichUserService:
     TwichUserService: Class, that contains business logic for twich users.
     """
 
-    def __init__(self, repository: TwichUserRepository, token: TwichAPIToken) -> None:
+    def __init__(
+        self,
+        repository: TwichUserRepository,
+        publisher: TwichUserPublisher,
+        token: TwichAPIToken,
+    ) -> None:
         """
         __init__: Do some initialization for TwichUserService class.
 
@@ -32,12 +44,27 @@ class TwichUserService:
         """
 
         self.repository = repository
+        self.publisher = publisher
         self.access_token = token.access_token
         self.headers = token.headers
 
-    def parse_user(self, user_login: str) -> TwichUserReadSchema:
+    def parse_user(self, user_login: str) -> None:
         """
-        parse_user: Parse user data from the Twich.
+        parse_user: Called twich user publisher to publish event about parsing.
+
+        Args:
+            user_login (str): Login of the user.
+        """
+
+        event: PublicParseUserCalledEvent = self.repository.parse_user(user_login)
+
+        self.publisher.publish_parse_user_called_event(event)
+
+        return
+
+    def private_parse_user(self, user_login: str) -> TwichUserReadSchema:
+        """
+        private_parse_user: Parse user data from the Twich.
 
         Args:
             user_login (str): Login of the user.
@@ -69,9 +96,17 @@ class TwichUserService:
 
         user_schema: TwichUserCreateSchema = TwichUserCreateSchema(**user_data[0])
 
-        user_entity: TwichUserEntity = self.repository.create_or_update(
-            TwichUserCreateMapper.to_domain(user_schema),
+        user: ResultWithEvent[TwichUserEntity, TwichUserCreatedOrUpdatedEvent] = (
+            self.repository.create_or_update(
+                TwichUserCreateMapper.to_domain(user_schema),
+            )
         )
+
+        user_event: TwichUserCreatedOrUpdatedEvent = user.event
+
+        self.publisher.publish_created_or_updated_event(user_event)
+
+        user_entity: TwichUserEntity = user.result
 
         return TwichUserReadMapper.to_schema(user_entity)
 
@@ -83,7 +118,9 @@ class TwichUserService:
             user_login (str): Login of the user.
         """
 
-        self.repository.delete_user_by_login(user_login)
+        event: TwichUserDeletedByLoginEvent = self.repository.delete_user_by_login(user_login)
+
+        self.publisher.publish_user_deleted_by_login_event(event)
 
         return
 

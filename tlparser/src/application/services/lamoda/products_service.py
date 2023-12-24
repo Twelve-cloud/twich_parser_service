@@ -18,6 +18,13 @@ from application.schemas.lamoda.product_schema import (
 )
 from common.config.lamoda.settings import settings
 from domain.entities.lamoda.product_entity import LamodaProductEntity
+from domain.events.lamoda.products_events import (
+    LamodaProductCreatedOrUpdatedEvent,
+    LamodaProductsDeletedByCategoryEvent,
+    PublicParseProductsCalledEvent,
+)
+from domain.publishers.lamoda.products_publisher import LamodaProductsPublisher
+from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.lamoda.products_repository import LamodaProductsRepository
 
 
@@ -26,7 +33,11 @@ class LamodaProductsService:
     LamodaProductsService: Class, that contains business logic for lamoda products.
     """
 
-    def __init__(self, repository: LamodaProductsRepository) -> None:
+    def __init__(
+        self,
+        publisher: LamodaProductsPublisher,
+        repository: LamodaProductsRepository,
+    ) -> None:
         """
         __init__: Do some initialization for LamodaProductsService class.
 
@@ -35,6 +46,7 @@ class LamodaProductsService:
         """
 
         self.repository = repository
+        self.publisher = publisher
 
     def _prepare_product_links(self, category: str) -> list[str]:
         """
@@ -72,9 +84,23 @@ class LamodaProductsService:
 
         return product_links
 
-    def parse_products(self, category: str) -> list[LamodaProductReadSchema]:
+    def parse_products(self, category: str) -> None:
         """
-        parse_products: Parse lamoda products by category.
+        parse_products: Called lamoda products publisher to publish event about parsing.
+
+        Args:
+            category (str): Category lamoda url.
+        """
+
+        event: PublicParseProductsCalledEvent = self.repository.parse_products(category)
+
+        self.publisher.publish_parse_products_called_event(event)
+
+        return
+
+    def private_parse_products(self, category: str) -> list[LamodaProductReadSchema]:
+        """
+        private_parse_products: Parse lamoda products by category.
 
         Args:
             category (str): Category lamoda url.
@@ -94,7 +120,7 @@ class LamodaProductsService:
 
                 try:
                     product_data_json: dict = loads(product_data_text)[0]
-                    product: dict = {
+                    product_dict: dict = {
                         'sku': product_data_json['sku'],
                         'url': settings.LAMODA_BASE_URL + product_link,
                         'category': product_data_json['category'],
@@ -104,11 +130,21 @@ class LamodaProductsService:
                         'price_valid_until': product_data_json['offers']['priceValidUntil'],
                     }
 
-                    product_schema: LamodaProductCreateSchema = LamodaProductCreateSchema(**product)
+                    product_schema: LamodaProductCreateSchema = LamodaProductCreateSchema(
+                        **product_dict
+                    )
 
-                    product_entity: LamodaProductEntity = self.repository.create_or_update(
+                    product: ResultWithEvent[
+                        LamodaProductEntity, LamodaProductCreatedOrUpdatedEvent
+                    ] = self.repository.create_or_update(
                         LamodaProductCreateMapper.to_domain(product_schema),
                     )
+
+                    product_event: LamodaProductCreatedOrUpdatedEvent = product.event
+
+                    self.publisher.publish_created_or_updated_event(product_event)
+
+                    product_entity: LamodaProductEntity = product.result
 
                     products.append(LamodaProductReadMapper.to_schema(product_entity))
                 except (JSONDecodeError, KeyError):
@@ -124,7 +160,11 @@ class LamodaProductsService:
             category (str): Category lamoda url.
         """
 
-        self.repository.delete_products_by_category(category)
+        event: LamodaProductsDeletedByCategoryEvent = self.repository.delete_products_by_category(
+            category,
+        )
+
+        self.publisher.publish_products_deleted_by_category_event(event)
 
         return
 

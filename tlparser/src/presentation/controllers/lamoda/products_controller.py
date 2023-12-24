@@ -26,9 +26,19 @@ class LamodaProductsController:
 
         self.service = service
 
-    def parse_products(self, category: str) -> list[LamodaProductReadSchema]:
+    def parse_products(self, category: str) -> None:
         """
-        parse_products: Delegate parsing to LamodaProductsService, handle all exceptions.
+        parse_products: Called lamoda products service to send event about parsing.
+
+        Args:
+            category (str): Category lamoda url.
+        """
+
+        self.service.parse_products(category)
+
+    def private_parse_products(self, category: str) -> list[LamodaProductReadSchema]:
+        """
+        private_parse_products: Delegate parsing to LamodaProductsService, handle all exceptions.
 
         Args:
             category (str): Category lamoda url.
@@ -47,7 +57,7 @@ class LamodaProductsController:
         """
 
         try:
-            return self.service.parse_products(category)
+            return self.service.private_parse_products(category)
         except WrongCategoryUrlException:
             raise HTTPException(status_code=400, detail='Wrong category url')
         except ConnectionError:

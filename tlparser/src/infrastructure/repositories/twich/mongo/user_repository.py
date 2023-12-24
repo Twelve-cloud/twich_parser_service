@@ -6,6 +6,12 @@ user_repository.py: File, containing twich user mongo repository implementation.
 from typing import Optional
 from application.exceptions.twich.user_exceptions import UserNotFoundException
 from domain.entities.twich.user_entity import TwichUserEntity
+from domain.events.twich.user_events import (
+    PublicParseUserCalledEvent,
+    TwichUserCreatedOrUpdatedEvent,
+    TwichUserDeletedByLoginEvent,
+)
+from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.twich.user_repository import TwichUserRepository
 from infrastructure.connections.mongo.database import MongoDatabase
 from infrastructure.mappers.twich.mongo.user_mapper import TwichUserMapper
@@ -30,7 +36,22 @@ class TwichUserMongoRepository(TwichUserRepository):
 
         self.db = db
 
-    def create_or_update(self, user_entity: TwichUserEntity) -> TwichUserEntity:
+    def parse_user(self, login: str) -> PublicParseUserCalledEvent:
+        """
+        parse_user: Return event about parsing twich user.
+
+        Args:
+            login (str): Login of the user.
+
+        Returns:
+            PublicParseUserCalledEvent: Event about parsing user.
+        """
+
+        return PublicParseUserCalledEvent(type='twich_user', login=login)
+
+    def create_or_update(
+        self, user_entity: TwichUserEntity
+    ) -> ResultWithEvent[TwichUserEntity, TwichUserCreatedOrUpdatedEvent]:
         """
         create_or_update: Create or update twich user.
 
@@ -38,13 +59,30 @@ class TwichUserMongoRepository(TwichUserRepository):
             user_entity (TwichUserEntity): Twich user entity.
 
         Returns:
-            TwichUserEntity: Created/Updated twich user entity.
+            ResultWithEvent[Result, Event]:: Created/Updated twich user entity.
         """
 
         user_persistence = TwichUserMapper.to_persistence(user_entity)
         user_persistence.save()
 
-        return TwichUserMapper.to_domain(user_persistence)
+        event: TwichUserCreatedOrUpdatedEvent = TwichUserCreatedOrUpdatedEvent(
+            id=user_persistence.id,
+            login=user_persistence.login,
+            description=user_persistence.description,
+            display_name=user_persistence.display_name,
+            type=user_persistence.type,
+            broadcaster_type=user_persistence.broadcaster_type,
+            profile_image_url=user_persistence.profile_image_url,
+            offline_image_url=user_persistence.offline_image_url,
+            created_at=user_persistence.created_at,
+            parsed_at=user_persistence.parsed_at,
+        )
+        entity: TwichUserEntity = TwichUserMapper.to_domain(user_persistence)
+
+        return ResultWithEvent[TwichUserEntity, TwichUserCreatedOrUpdatedEvent](
+            result=entity,
+            event=event,
+        )
 
     def all(self) -> list[TwichUserEntity]:
         """
@@ -58,18 +96,21 @@ class TwichUserMongoRepository(TwichUserRepository):
             TwichUserMapper.to_domain(user_persistence) for user_persistence in TwichUser.objects
         ]
 
-    def delete_user_by_login(self, login: str) -> None:
+    def delete_user_by_login(self, login: str) -> TwichUserDeletedByLoginEvent:
         """
         delete_user_by_login: Delete user by login.
 
         Args:
             user_login (str): Login of the user.
+
+        Returns:
+            TwichUserDeletedByLoginEvent: Twich user deleted event.
         """
 
         for user_persistence in TwichUser.objects(login=login):
             user_persistence.delete()
 
-        return
+        return TwichUserDeletedByLoginEvent(login=login)
 
     def get_user_by_login(self, login: str) -> TwichUserEntity:
         """

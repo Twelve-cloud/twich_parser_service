@@ -30,9 +30,19 @@ class TwichStreamController:
 
         self.service = service
 
-    def parse_stream(self, user_login: str) -> TwichStreamReadSchema:
+    def parse_stream(self, user_login: str) -> None:
         """
-        parse_stream: Delegate parsing to TwichStreamService, catch and handle exceptions.
+        parse_stream: Called twich stream service to send event about parsing.
+
+        Args:
+            user_login (str): Login of the user.
+        """
+
+        self.service.parse_stream(user_login)
+
+    def private_parse_stream(self, user_login: str) -> TwichStreamReadSchema:
+        """
+        private_parse_stream: Delegate parsing to TwichStreamService, catch and handle exceptions.
 
         Args:
             user_login (str): Login of the user.
@@ -52,7 +62,7 @@ class TwichStreamController:
         """
 
         try:
-            return self.service.parse_stream(user_login)
+            return self.service.private_parse_stream(user_login)
         except (GetStreamBadRequestException, GetStreamUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except StreamNotFoundException:

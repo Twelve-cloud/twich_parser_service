@@ -25,8 +25,10 @@ router: APIRouter = APIRouter(
     status_code=status.HTTP_200_OK,
     **TwichUserMetadata.parse_user,
 )
+@inject
 async def parse_user(
     user_login: Annotated[str, Path(min_length=1, max_length=128)],
+    controller: TwichUserController = Depends(Provide[Container.twich_user_w_controller]),
 ) -> Response:
     """
     parse_user: Produce message to kafka to parse user.
@@ -38,7 +40,7 @@ async def parse_user(
         Response: HTTP status code 200.
     """
 
-    # produce message to kafka
+    controller.parse_user(user_login)
 
     return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
@@ -55,7 +57,7 @@ async def private_parse_user(
     controller: TwichUserController = Depends(Provide[Container.twich_user_w_controller]),
 ) -> TwichUserReadSchema:
     """
-    parse_user: Parse twich user and return result as TwichUserReadSchema.
+    private_parse_user: Parse twich user and return result as TwichUserReadSchema.
 
     Args:
         user_login (str): Login of the user.
@@ -65,7 +67,7 @@ async def private_parse_user(
         TwichUserReadSchema: Response as TwichUserReadSchema instance.
     """
 
-    return controller.parse_user(user_login)
+    return controller.private_parse_user(user_login)
 
 
 @router.delete(

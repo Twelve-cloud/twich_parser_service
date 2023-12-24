@@ -15,6 +15,13 @@ from application.mappers.twich.game_mapper import TwichGameCreateMapper, TwichGa
 from application.schemas.twich.game_schema import TwichGameCreateSchema, TwichGameReadSchema
 from common.config.twich.settings import settings
 from domain.entities.twich.game_entity import TwichGameEntity
+from domain.events.twich.game_events import (
+    PublicParseGameCalledEvent,
+    TwichGameCreatedOrUpdatedEvent,
+    TwichGameDeletedByNameEvent,
+)
+from domain.publishers.twich.game_publisher import TwichGamePublisher
+from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.twich.game_repository import TwichGameRepository
 
 
@@ -23,7 +30,12 @@ class TwichGameService:
     TwichGameService: Class, that contains business logic for twich games.
     """
 
-    def __init__(self, repository: TwichGameRepository, token: TwichAPIToken) -> None:
+    def __init__(
+        self,
+        repository: TwichGameRepository,
+        publisher: TwichGamePublisher,
+        token: TwichAPIToken,
+    ) -> None:
         """
         __init__: Do some initialization for TwichGameService class.
 
@@ -32,12 +44,27 @@ class TwichGameService:
         """
 
         self.repository = repository
+        self.publisher = publisher
         self.access_token = token.access_token
         self.headers = token.headers
 
-    def parse_game(self, game_name: str) -> TwichGameReadSchema:
+    def parse_game(self, game_name: str) -> None:
         """
-        parse_game: Parse game data from the Twich.
+        parse_game: Called twich game publisher to publish event about parsing.
+
+        Args:
+            game_name (str): Name of the game.
+        """
+
+        event: PublicParseGameCalledEvent = self.repository.parse_game(game_name)
+
+        self.publisher.publish_parse_game_called_event(event)
+
+        return
+
+    def private_parse_game(self, game_name: str) -> TwichGameReadSchema:
+        """
+        private_parse_game: Parse game data from the Twich.
 
         Args:
             game_name (str): Name of the game.
@@ -69,9 +96,17 @@ class TwichGameService:
 
         game_schema: TwichGameCreateSchema = TwichGameCreateSchema(**game_data[0])
 
-        game_entity: TwichGameEntity = self.repository.create_or_update(
-            TwichGameCreateMapper.to_domain(game_schema),
+        game: ResultWithEvent[TwichGameEntity, TwichGameCreatedOrUpdatedEvent] = (
+            self.repository.create_or_update(
+                TwichGameCreateMapper.to_domain(game_schema),
+            )
         )
+
+        game_event: TwichGameCreatedOrUpdatedEvent = game.event
+
+        self.publisher.publish_created_or_updated_event(game_event)
+
+        game_entity: TwichGameEntity = game.result
 
         return TwichGameReadMapper.to_schema(game_entity)
 
@@ -83,7 +118,9 @@ class TwichGameService:
             game_name (str): Name of the game.
         """
 
-        self.repository.delete_game_by_name(game_name)
+        event: TwichGameDeletedByNameEvent = self.repository.delete_game_by_name(game_name)
+
+        self.publisher.publish_game_deleted_by_name_event(event)
 
         return
 

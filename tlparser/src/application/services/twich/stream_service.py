@@ -15,6 +15,13 @@ from application.mappers.twich.stream_mapper import TwichStreamCreateMapper, Twi
 from application.schemas.twich.stream_schema import TwichStreamCreateSchema, TwichStreamReadSchema
 from common.config.twich.settings import settings
 from domain.entities.twich.stream_entity import TwichStreamEntity
+from domain.events.twich.stream_events import (
+    PublicParseStreamCalledEvent,
+    TwichStreamCreatedOrUpdatedEvent,
+    TwichStreamDeletedByUserLoginEvent,
+)
+from domain.publishers.twich.stream_publisher import TwichStreamPublisher
+from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.twich.stream_repository import TwichStreamRepository
 
 
@@ -23,7 +30,12 @@ class TwichStreamService:
     TwichStreamService: Class, that contains business logic for twich streams.
     """
 
-    def __init__(self, repository: TwichStreamRepository, token: TwichAPIToken) -> None:
+    def __init__(
+        self,
+        repository: TwichStreamRepository,
+        publisher: TwichStreamPublisher,
+        token: TwichAPIToken,
+    ) -> None:
         """
         __init__: Do some initialization for TwichStreamService class.
 
@@ -32,12 +44,27 @@ class TwichStreamService:
         """
 
         self.repository = repository
+        self.publisher = publisher
         self.access_token = token.access_token
         self.headers = token.headers
 
-    def parse_stream(self, user_login: str) -> TwichStreamReadSchema:
+    def parse_stream(self, user_login: str) -> None:
         """
-        parse_stream: Parse stream data from the Twich.
+        parse_stream: Called twich stream publisher to publish event about parsing.
+
+        Args:
+            user_login (str): Login of the user.
+        """
+
+        event: PublicParseStreamCalledEvent = self.repository.parse_stream(user_login)
+
+        self.publisher.publish_parse_stream_called_event(event)
+
+        return
+
+    def private_parse_stream(self, user_login: str) -> TwichStreamReadSchema:
+        """
+        private_parse_stream: Parse stream data from the Twich.
 
         Args:
             user_login (str): Login of the user.
@@ -69,9 +96,17 @@ class TwichStreamService:
 
         stream_schema: TwichStreamCreateSchema = TwichStreamCreateSchema(**stream_data[0])
 
-        stream_entity: TwichStreamEntity = self.repository.create_or_update(
-            TwichStreamCreateMapper.to_domain(stream_schema),
+        stream: ResultWithEvent[TwichStreamEntity, TwichStreamCreatedOrUpdatedEvent] = (
+            self.repository.create_or_update(
+                TwichStreamCreateMapper.to_domain(stream_schema),
+            )
         )
+
+        stream_event: TwichStreamCreatedOrUpdatedEvent = stream.event
+
+        self.publisher.publish_created_or_updated_event(stream_event)
+
+        stream_entity: TwichStreamEntity = stream.result
 
         return TwichStreamReadMapper.to_schema(stream_entity)
 
@@ -83,7 +118,11 @@ class TwichStreamService:
             user_login (str): Login of the user.
         """
 
-        self.repository.delete_stream_by_user_login(user_login)
+        event: TwichStreamDeletedByUserLoginEvent = self.repository.delete_stream_by_user_login(
+            user_login
+        )
+
+        self.publisher.publish_stream_deleted_by_user_login_event(event)
 
         return
 

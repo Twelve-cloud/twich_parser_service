@@ -30,9 +30,19 @@ class TwichUserController:
 
         self.service = service
 
-    def parse_user(self, user_login: str) -> TwichUserReadSchema:
+    def parse_user(self, user_login: str) -> None:
         """
-        parse_user: Delegate parsing to TwichUserService, handle exceptions.
+        parse_user: Called twich user service to send event about parsing.
+
+        Args:
+            user_login (str): Login of the user.
+        """
+
+        self.service.parse_user(user_login)
+
+    def private_parse_user(self, user_login: str) -> TwichUserReadSchema:
+        """
+        private_parse_user: Delegate parsing to TwichUserService, handle exceptions.
 
         Args:
             user_login (str): Login of the user.
@@ -52,7 +62,7 @@ class TwichUserController:
         """
 
         try:
-            return self.service.parse_user(user_login)
+            return self.service.private_parse_user(user_login)
         except (GetUserBadRequestException, GetUserUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except UserNotFoundException:

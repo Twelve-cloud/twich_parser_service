@@ -30,9 +30,19 @@ class TwichGameController:
 
         self.service = service
 
-    def parse_game(self, game_name: str) -> TwichGameReadSchema:
+    def parse_game(self, game_name: str) -> None:
         """
-        parse_game: Delegate parsing to TwichGameService, handle exceptions.
+        parse_game: Called twich game service to send event about parsing.
+
+        Args:
+            game_name (str): Name of the game.
+        """
+
+        self.service.parse_game(game_name)
+
+    def private_parse_game(self, game_name: str) -> TwichGameReadSchema:
+        """
+        private_parse_game: Delegate parsing to TwichGameService, handle exceptions.
 
         Args:
             game_name (str): Name of the game.
@@ -52,7 +62,7 @@ class TwichGameController:
         """
 
         try:
-            return self.service.parse_game(game_name)
+            return self.service.private_parse_game(game_name)
         except (GetGameBadRequestException, GetGameUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except GameNotFoundException:

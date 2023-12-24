@@ -25,8 +25,10 @@ router: APIRouter = APIRouter(
     status_code=status.HTTP_200_OK,
     **LamodaProductsMetadata.parse_products,
 )
+@inject
 async def parse_products(
     category: Annotated[str, Path(min_length=1, max_length=128)],
+    controller: LamodaProductsController = Depends(Provide[Container.lamoda_products_w_controller]),
 ) -> Response:
     """
     parse_products: Produce message of parsing products to kafka.
@@ -38,7 +40,7 @@ async def parse_products(
         Response: HTTP status code 200.
     """
 
-    # produce message to kafka
+    controller.parse_products(category)
 
     return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
@@ -55,7 +57,7 @@ async def private_parse_products(
     controller: LamodaProductsController = Depends(Provide[Container.lamoda_products_w_controller]),
 ) -> list[LamodaProductReadSchema]:
     """
-    parse_products: Parse lamoda products and return result as LamodaProductReadSchema.
+    private_parse_products: Parse lamoda products and return result as LamodaProductReadSchema.
 
     Args:
         category (str): Category of the products.
@@ -65,7 +67,7 @@ async def private_parse_products(
         list[LamodaProductReadSchema]: Response as list of LamodaProductReadSchema instances.
     """
 
-    return controller.parse_products(category)
+    return controller.private_parse_products(category)
 
 
 @router.delete(
