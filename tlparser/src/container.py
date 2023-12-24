@@ -12,6 +12,7 @@ from application.services.twich.stream_service import TwichStreamService
 from application.services.twich.user_service import TwichUserService
 from common.config.base.settings import settings
 from infrastructure.connections.elastic.database import ElasticSearchDatabase
+from infrastructure.connections.kafka.producer import KafkaProducerConnection
 from infrastructure.connections.mongo.database import MongoDatabase
 from infrastructure.publishers.lamoda.kafka.products_publisher import KafkaLamodaProductsPublisher
 from infrastructure.publishers.twich.kafka.game_publisher import KafkaTwichGamePublisher
@@ -50,6 +51,13 @@ class Container(DeclarativeContainer):
             'presentation.api.v1.endpoints.rest.twich.user',
             'presentation.api.v1.endpoints.rest.twich.stream',
         ],
+    )
+
+    # ------------------------------------- Kafka -------------------------------------------------
+
+    kafka_producer: Singleton = Singleton(
+        KafkaProducerConnection,
+        bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
     )
 
     # ------------------------------------ Databases ----------------------------------------------
@@ -120,23 +128,23 @@ class Container(DeclarativeContainer):
     # ---------------------------------- Publishers ------------------------------------------------
 
     lamoda_products_kafka_publisher: Factory = Factory(
-        # add kafka publisher
         KafkaLamodaProductsPublisher,
+        kafka_producer=kafka_producer,
     )
 
     twich_game_kafka_publisher: Factory = Factory(
-        # add kafka publisher
         KafkaTwichGamePublisher,
+        kafka_producer=kafka_producer,
     )
 
     twich_stream_kafka_publisher: Factory = Factory(
-        # add kafka publisher
-        KafkaTwichStreamPublisher
+        KafkaTwichStreamPublisher,
+        kafka_producer=kafka_producer,
     )
 
     twich_user_kafka_publisher: Factory = Factory(
-        # add kafka publisher
         KafkaTwichUserPublisher,
+        kafka_producer=kafka_producer,
     )
 
     # ----------------------------------- Services -------------------------------------------------

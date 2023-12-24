@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     REDIS_HOST: str = os.environ['REDIS_HOST']
     REDIS_PORT: int = cast(int, os.environ['REDIS_PORT'])
     REDIS_DB_NUMBER: int = cast(int, os.environ['REDIS_DB_NUMBER'])
+    KAFKA_BOOTSTRAP_SERVERS: str = os.environ['KAFKA_BOOTSTRAP_SERVERS']
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(case_sensitive=True)
 

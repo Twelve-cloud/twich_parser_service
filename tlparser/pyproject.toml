@@ -3,7 +3,7 @@ name = "src"
 version = "0.1.0"
 description = "Parser for Twich streamers and games and Lamoda products"
 authors = ["Twelve <kana.suzucki@gmail.com>"]
-readme = "../README.md"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "3.10.*"
@@ -25,6 +25,7 @@ mongoengine = "0.27.0"
 redis = "5.0.1"
 types-redis = "4.6.0.11"
 fastapi-cache2 = "0.2.1"
+kafka-python = "2.0.2"
 
 [tool.poetry.group.prd]
 optional = true

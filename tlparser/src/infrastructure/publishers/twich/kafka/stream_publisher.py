@@ -3,12 +3,14 @@ stream_publisher.py: File, containing kafka publisher class for twich stream.
 """
 
 
+from threading import Thread
 from domain.events.twich.stream_events import (
     PublicParseStreamCalledEvent,
     TwichStreamCreatedOrUpdatedEvent,
     TwichStreamDeletedByUserLoginEvent,
 )
 from domain.publishers.twich.stream_publisher import TwichStreamPublisher
+from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 
 class KafkaTwichStreamPublisher(TwichStreamPublisher):
@@ -18,6 +20,16 @@ class KafkaTwichStreamPublisher(TwichStreamPublisher):
     Args:
         BasePublisher (_type_): Base publisher for KafkaTwichStreamPublisher.
     """
+
+    def __init__(self, kafka_producer: KafkaProducerConnection) -> None:
+        """
+        __init__: Initialize kafka twich game publisher.
+
+        Args:
+            kafka_producer (KafkaProducerConnection): Kafka producer connection.
+        """
+
+        self.producer = kafka_producer.producer
 
     def publish_parse_stream_called_event(
         self,
@@ -30,7 +42,7 @@ class KafkaTwichStreamPublisher(TwichStreamPublisher):
             event (PublicParseStreamCalledEvent): Public parse stream called event.
         """
 
-        print('publish_parse_stream_called_event')
+        Thread(target=self.producer.send, args=('parsing', event)).start()
 
     def publish_created_or_updated_event(
         self,
@@ -43,7 +55,7 @@ class KafkaTwichStreamPublisher(TwichStreamPublisher):
             event (TwichStreamCreatedOrUpdatedEvent): Twich stream created/updated event.
         """
 
-        print('publish_created_or_updated_event')
+        Thread(target=self.producer.send, args=('twich_stream', event)).start()
 
     def publish_stream_deleted_by_user_login_event(
         self,
@@ -56,4 +68,4 @@ class KafkaTwichStreamPublisher(TwichStreamPublisher):
             event (TwichStreamDeletedByUserLoginEvent): Twich stream deleted by user login event.
         """
 
-        print('publish_stream_deleted_by_user_login_event')
+        Thread(target=self.producer.send, args=('twich_stream', event)).start()

@@ -3,12 +3,14 @@ products_publisher.py: File, containing kafka publisher class for lamoda product
 """
 
 
+from threading import Thread
 from domain.events.lamoda.products_events import (
     LamodaProductCreatedOrUpdatedEvent,
     LamodaProductsDeletedByCategoryEvent,
     PublicParseProductsCalledEvent,
 )
 from domain.publishers.lamoda.products_publisher import LamodaProductsPublisher
+from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 
 class KafkaLamodaProductsPublisher(LamodaProductsPublisher):
@@ -18,6 +20,16 @@ class KafkaLamodaProductsPublisher(LamodaProductsPublisher):
     Args:
         BasePublisher (_type_): Base publisher for KafkaLamodaProductsPublisher.
     """
+
+    def __init__(self, kafka_producer: KafkaProducerConnection) -> None:
+        """
+        __init__: Initialize kafka twich game publisher.
+
+        Args:
+            kafka_producer (KafkaProducerConnection): Kafka producer connection.
+        """
+
+        self.producer = kafka_producer.producer
 
     def publish_parse_products_called_event(
         self,
@@ -30,7 +42,7 @@ class KafkaLamodaProductsPublisher(LamodaProductsPublisher):
             event (PublicParseProductsCalledEvent): Public parse products called event.
         """
 
-        print('publish_parse_products_called_event')
+        Thread(target=self.producer.send, args=('parsing', event)).start()
 
     def publish_created_or_updated_event(
         self,
@@ -43,7 +55,7 @@ class KafkaLamodaProductsPublisher(LamodaProductsPublisher):
             event (LamodaProductCreatedOrUpdatedEvent): Lamoda products created/updated event.
         """
 
-        print('publish_created_or_updated_event')
+        Thread(target=self.producer.send, args=('lamoda_product', event)).start()
 
     def publish_products_deleted_by_category_event(
         self,
@@ -56,4 +68,4 @@ class KafkaLamodaProductsPublisher(LamodaProductsPublisher):
             event (LamodaProductsDeletedByCategoryEvent): Lamoda products deleted by category event.
         """
 
-        print('publish_products_deleted_by_category_event')
+        Thread(target=self.producer.send, args=('lamoda_product', event)).start()
