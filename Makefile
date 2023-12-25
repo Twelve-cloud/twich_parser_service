@@ -11,6 +11,7 @@ COMPOSE_PRD :=                  \
     -f ${COMPOSE_PRD_MONGO}     \
     -f ${COMPOSE_PRD_REDIS}     \
     -f ${COMPOSE_PRD_WEB}       \
+    -f ${COMPOSE_PRD_CALLER}    \
 
 COMPOSE_PRD_ENV :=                                       \
     --env-file=.env                                      \
@@ -30,6 +31,7 @@ COMPOSE_DEV :=                  \
     -f ${COMPOSE_DEV_MONGO}     \
     -f ${COMPOSE_DEV_REDIS}     \
     -f ${COMPOSE_DEV_WEB}       \
+    -f ${COMPOSE_DEV_CALLER}    \
 
 COMPOSE_DEV_ENV :=                                       \
     --env-file=.env                                      \
@@ -49,6 +51,7 @@ COMPOSE_TESTS :=                \
     -f ${COMPOSE_TESTS_MONGO}   \
     -f ${COMPOSE_TESTS_REDIS}   \
     -f ${COMPOSE_TESTS_WEB}     \
+    -f ${COMPOSE_TESTS_CALLER}  \
 
 COMPOSE_TESTS_ENV :=                                    \
     --env-file=.env                                     \

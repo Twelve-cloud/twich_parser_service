@@ -34,6 +34,15 @@ class Settings(BaseSettings):
     REDIS_PORT: int = cast(int, os.environ['REDIS_PORT'])
     REDIS_DB_NUMBER: int = cast(int, os.environ['REDIS_DB_NUMBER'])
     KAFKA_BOOTSTRAP_SERVERS: str = os.environ['KAFKA_BOOTSTRAP_SERVERS']
+    KAFKA_PRODUCER_API_VERSION: tuple[int, ...] = cast(
+        tuple[int, ...],
+        os.environ['KAFKA_PRODUCER_API_VERSION'],
+    )
+    KAFKA_CONSUMER_API_VERSION: tuple[int, ...] = cast(
+        tuple[int, ...],
+        os.environ['KAFKA_CONSUMER_API_VERSION'],
+    )
+    KAFKA_PARSING_TOPIC: str = os.environ['KAFKA_PARSING_TOPIC']
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(case_sensitive=True)
 

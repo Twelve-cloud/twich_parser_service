@@ -3,7 +3,7 @@ producer.py, File, containing kafka producer.
 """
 
 
-import pickle
+from pickle import dumps
 from kafka import KafkaProducer
 
 
@@ -12,7 +12,7 @@ class KafkaProducerConnection:
     KafkaProducer: Class, that represents connection to kafka cluster.
     """
 
-    def __init__(self, bootstrap_servers: str):
+    def __init__(self, bootstrap_servers: str, api_version: str):
         """
         __init__: Initialize kafka producer.
 
@@ -22,5 +22,6 @@ class KafkaProducerConnection:
 
         self.producer = KafkaProducer(
             bootstrap_servers=bootstrap_servers,
-            value_serializer=lambda v: pickle.dumps(v),
+            api_version=api_version,
+            value_serializer=lambda v: dumps(v),
         )

@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  caller:
+    build:
+      context: ./caller
+      dockerfile: ./docker/Dockerfile.caller.tests
+    entrypoint:
+      - ./entrypoint-caller.tests.sh
+    hostname: caller
+    container_name: caller
+    env_file:
+    - ./caller/env/tests/.env.tests.caller
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep python"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      back-tests:
+        ipv4_address: 182.168.10.7
+    links:
+      - kafka
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: always

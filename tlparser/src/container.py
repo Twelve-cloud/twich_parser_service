@@ -58,6 +58,7 @@ class Container(DeclarativeContainer):
     kafka_producer: Singleton = Singleton(
         KafkaProducerConnection,
         bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
+        api_version=settings.KAFKA_PRODUCER_API_VERSION,
     )
 
     # ------------------------------------ Databases ----------------------------------------------

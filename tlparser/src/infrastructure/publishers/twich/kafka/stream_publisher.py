@@ -4,6 +4,8 @@ stream_publisher.py: File, containing kafka publisher class for twich stream.
 
 
 from threading import Thread
+from common.config.base.settings import settings as base_settings
+from common.config.twich.settings import settings as twich_settings
 from domain.events.twich.stream_events import (
     PublicParseStreamCalledEvent,
     TwichStreamCreatedOrUpdatedEvent,
@@ -42,7 +44,7 @@ class KafkaTwichStreamPublisher(TwichStreamPublisher):
             event (PublicParseStreamCalledEvent): Public parse stream called event.
         """
 
-        Thread(target=self.producer.send, args=('parsing', event)).start()
+        Thread(target=self.producer.send, args=(base_settings.KAFKA_PARSING_TOPIC, event)).start()
 
     def publish_created_or_updated_event(
         self,
@@ -55,7 +57,7 @@ class KafkaTwichStreamPublisher(TwichStreamPublisher):
             event (TwichStreamCreatedOrUpdatedEvent): Twich stream created/updated event.
         """
 
-        Thread(target=self.producer.send, args=('twich_stream', event)).start()
+        Thread(target=self.producer.send, args=(twich_settings.KAFKA_STREAM_TOPIC, event)).start()
 
     def publish_stream_deleted_by_user_login_event(
         self,
@@ -68,4 +70,4 @@ class KafkaTwichStreamPublisher(TwichStreamPublisher):
             event (TwichStreamDeletedByUserLoginEvent): Twich stream deleted by user login event.
         """
 
-        Thread(target=self.producer.send, args=('twich_stream', event)).start()
+        Thread(target=self.producer.send, args=(twich_settings.KAFKA_STREAM_TOPIC, event)).start()

@@ -4,6 +4,8 @@ game_publisher.py: File, containing kafka publisher class for twich game.
 
 
 from threading import Thread
+from common.config.base.settings import settings as base_settings
+from common.config.twich.settings import settings as twich_settings
 from domain.events.twich.game_events import (
     PublicParseGameCalledEvent,
     TwichGameCreatedOrUpdatedEvent,
@@ -42,7 +44,7 @@ class KafkaTwichGamePublisher(TwichGamePublisher):
             event (PublicParseGameCalledEvent): Public parse game called event.
         """
 
-        Thread(target=self.producer.send, args=('parsing', event)).start()
+        Thread(target=self.producer.send, args=(base_settings.KAFKA_PARSING_TOPIC, event)).start()
 
     def publish_created_or_updated_event(
         self,
@@ -55,7 +57,7 @@ class KafkaTwichGamePublisher(TwichGamePublisher):
             event (TwichGameCreatedOrUpdatedEvent): Twich game created/updated event.
         """
 
-        Thread(target=self.producer.send, args=('twich_game', event)).start()
+        Thread(target=self.producer.send, args=(twich_settings.KAFKA_GAME_TOPIC, event)).start()
 
     def publish_game_deleted_by_name_event(
         self,
@@ -68,4 +70,4 @@ class KafkaTwichGamePublisher(TwichGamePublisher):
             event (TwichGameDeletedByNameEvent): Twich game deleted by name event.
         """
 
-        Thread(target=self.producer.send, args=('twich_game', event)).start()
+        Thread(target=self.producer.send, args=(twich_settings.KAFKA_GAME_TOPIC, event)).start()

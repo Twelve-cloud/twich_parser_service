@@ -24,12 +24,15 @@ services:
       back-dev:
         ipv4_address: 192.168.10.8
     links:
-      - redis
+      - kafka
       - mongo
+      - redis
     depends_on:
-      redis:
+      kafka:
         condition: service_healthy
       mongo:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     restart: always
 

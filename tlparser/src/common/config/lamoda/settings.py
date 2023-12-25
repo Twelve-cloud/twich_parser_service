@@ -18,6 +18,7 @@ class LamodaSettings(BaseSettings):
 
     LAMODA_BASE_URL: str = os.environ['LAMODA_BASE_URL']
     LAMODA_CATEGORY_BASE_URL: str = os.environ['LAMODA_CATEGORY_BASE_URL']
+    KAFKA_PRODUCT_TOPIC: str = os.environ['KAFKA_PRODUCT_TOPIC']
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(case_sensitive=True)
 

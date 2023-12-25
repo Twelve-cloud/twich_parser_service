@@ -4,6 +4,8 @@ products_publisher.py: File, containing kafka publisher class for lamoda product
 
 
 from threading import Thread
+from common.config.base.settings import settings as base_settings
+from common.config.lamoda.settings import settings as lamoda_settings
 from domain.events.lamoda.products_events import (
     LamodaProductCreatedOrUpdatedEvent,
     LamodaProductsDeletedByCategoryEvent,
@@ -42,7 +44,7 @@ class KafkaLamodaProductsPublisher(LamodaProductsPublisher):
             event (PublicParseProductsCalledEvent): Public parse products called event.
         """
 
-        Thread(target=self.producer.send, args=('parsing', event)).start()
+        Thread(target=self.producer.send, args=(base_settings.KAFKA_PARSING_TOPIC, event)).start()
 
     def publish_created_or_updated_event(
         self,
@@ -55,7 +57,7 @@ class KafkaLamodaProductsPublisher(LamodaProductsPublisher):
             event (LamodaProductCreatedOrUpdatedEvent): Lamoda products created/updated event.
         """
 
-        Thread(target=self.producer.send, args=('lamoda_product', event)).start()
+        Thread(target=self.producer.send, args=(lamoda_settings.KAFKA_PRODUCT_TOPIC, event)).start()
 
     def publish_products_deleted_by_category_event(
         self,
@@ -68,4 +70,4 @@ class KafkaLamodaProductsPublisher(LamodaProductsPublisher):
             event (LamodaProductsDeletedByCategoryEvent): Lamoda products deleted by category event.
         """
 
-        Thread(target=self.producer.send, args=('lamoda_product', event)).start()
+        Thread(target=self.producer.send, args=(lamoda_settings.KAFKA_PRODUCT_TOPIC, event)).start()

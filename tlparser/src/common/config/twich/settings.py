@@ -22,6 +22,9 @@ class TwichSettings(BaseSettings):
     TWICH_GET_GAME_BASE_URL: str = os.environ['TWICH_GET_GAME_BASE_URL']
     TWICH_GET_USER_BASE_URL: str = os.environ['TWICH_GET_USER_BASE_URL']
     TWICH_GET_STREAM_BASE_URL: str = os.environ['TWICH_GET_STREAM_BASE_URL']
+    KAFKA_GAME_TOPIC: str = os.environ['KAFKA_GAME_TOPIC']
+    KAFKA_STREAM_TOPIC: str = os.environ['KAFKA_STREAM_TOPIC']
+    KAFKA_USER_TOPIC: str = os.environ['KAFKA_USER_TOPIC']
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(case_sensitive=True)
 
