@@ -13,13 +13,16 @@ services:
     - ./tlparser/env/tests/.env.tests.web
     networks:
       back-tests:
-        ipv4_address: 182.168.10.6
+        ipv4_address: 182.168.10.7
     links:
       - kafka
       - mongo
+      - elastic
     depends_on:
       kafka:
         condition: service_healthy
       mongo:
+        condition: service_healthy
+      elastic:
         condition: service_healthy
     restart: no

@@ -9,6 +9,7 @@ COMPOSE_PRD :=                             \
     -f docker-compose.yaml                 \
     -f ${COMPOSE_PRD_KAFKA}                \
     -f ${COMPOSE_PRD_MONGO}                \
+    -f ${COMPOSE_PRD_ELASTIC}              \
     -f ${COMPOSE_PRD_REDIS}                \
     -f ${COMPOSE_PRD_WEB}                  \
     -f ${COMPOSE_PRD_CALLER}               \
@@ -29,6 +30,7 @@ COMPOSE_DEV :=                             \
     -f docker-compose.yaml                 \
     -f ${COMPOSE_DEV_KAFKA}                \
     -f ${COMPOSE_DEV_MONGO}                \
+    -f ${COMPOSE_DEV_ELASTIC}              \
     -f ${COMPOSE_DEV_REDIS}                \
     -f ${COMPOSE_DEV_WEB}                  \
     -f ${COMPOSE_DEV_CALLER}               \
@@ -57,6 +59,7 @@ COMPOSE_WEB_INTEGRATION :=                 \
     -f docker-compose.yaml                 \
     -f ${COMPOSE_TESTS_KAFKA}              \
     -f ${COMPOSE_TESTS_MONGO}              \
+    -f ${COMPOSE_TESTS_ELASTIC}            \
     -f ${COMPOSE_TESTS_WEB_INTEGRATION}    \
 
 parser_it: docker-compose.yaml
@@ -92,6 +95,7 @@ COMPOSE_WEB_COMPONENT :=                   \
     -f docker-compose.yaml                 \
     -f ${COMPOSE_TESTS_KAFKA}              \
     -f ${COMPOSE_TESTS_MONGO}              \
+    -f ${COMPOSE_TESTS_ELASTIC}            \
     -f ${COMPOSE_TESTS_REDIS}              \
     -f ${COMPOSE_TESTS_WEB_COMPONENT}      \
 

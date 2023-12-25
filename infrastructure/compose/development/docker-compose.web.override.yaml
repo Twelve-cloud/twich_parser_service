@@ -22,15 +22,18 @@ services:
       retries: 10
     networks:
       back-dev:
-        ipv4_address: 192.168.10.8
+        ipv4_address: 192.168.10.10
     links:
       - kafka
       - mongo
+      - elastic
       - redis
     depends_on:
       kafka:
         condition: service_healthy
       mongo:
+        condition: service_healthy
+      elastic:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -55,5 +58,5 @@ services:
       retries: 10
     networks:
       back-dev:
-        ipv4_address: 192.168.10.9
+        ipv4_address: 192.168.10.11
     restart: always

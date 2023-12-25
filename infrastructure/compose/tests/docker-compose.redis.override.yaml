@@ -19,5 +19,5 @@ services:
       retries: 10
     networks:
       back-tests:
-        ipv4_address: 182.168.10.5
+        ipv4_address: 182.168.10.6
     restart: always

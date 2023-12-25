@@ -36,20 +36,6 @@ repos:
         types: [python]
         pass_filenames: false
 
-      - id: parser_it
-        name: parser_it
-        entry: make parser_it
-        language: system
-        types: [python]
-        pass_filenames: false
-
-      - id: parser_component
-        name: parser_component
-        entry: make parser_component
-        language: system
-        types: [python]
-        pass_filenames: false
-
       - id: caller_isort
         name: caller isort
         entry: bash -c "cd caller && poetry run isort --check-only ."
@@ -78,9 +64,23 @@ repos:
         types: [python]
         pass_filenames: false
 
+      - id: parser_it
+        name: parser_it
+        entry: make parser_it
+        language: system
+        types: [python]
+        pass_filenames: false
+
       - id: caller_it
         name: caller_it
         entry: make caller_it
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: parser_component
+        name: parser_component
+        entry: make parser_component
         language: system
         types: [python]
         pass_filenames: false

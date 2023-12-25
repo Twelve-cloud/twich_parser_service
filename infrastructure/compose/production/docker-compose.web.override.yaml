@@ -20,7 +20,7 @@ services:
       retries: 10
     networks:
       back-prod:
-        ipv4_address: 172.168.10.8
+        ipv4_address: 172.168.10.10
     links:
       - uvicorn
     depends_on:
@@ -49,15 +49,18 @@ services:
       retries: 10
     networks:
       back-prod:
-        ipv4_address: 172.168.10.9
+        ipv4_address: 172.168.10.11
     links:
       - kafka
       - mongo
+      - elastic
       - redis
     depends_on:
       kafka:
         condition: service_healthy
       mongo:
+        condition: service_healthy
+      elastic:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -82,5 +85,5 @@ services:
       retries: 10
     networks:
       back-prod:
-        ipv4_address: 172.168.10.10
+        ipv4_address: 172.168.10.12
     restart: always

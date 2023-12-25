@@ -18,7 +18,7 @@ services:
       retries: 10
     networks:
       back-dev:
-        ipv4_address: 192.168.10.10
+        ipv4_address: 192.168.10.12
     links:
       - kafka
     depends_on:

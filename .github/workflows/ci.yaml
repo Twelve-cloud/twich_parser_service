@@ -96,6 +96,7 @@ jobs:
           echo "${{ secrets.ENV_FILE_COMPOSE }}" > ./tlparser/env/tests/.env.tests.compose
           echo "${{ secrets.ENV_FILE_KAFKA }}" > ./tlparser/env/tests/.env.tests.kafka
           echo "${{ secrets.ENV_FILE_MONGO }}" > ./tlparser/env/tests/.env.tests.mongo
+          echo "${{ secrets.ENV_FILE_ELASTIC }}" > ./tlparser/env/tests/.env.tests.elastic
           echo "${{ secrets.ENV_FILE_WEB }}" > ./tlparser/env/tests/.env.tests.web
 
       - name: run parser integration tests
@@ -139,6 +140,7 @@ jobs:
           echo "${{ secrets.ENV_FILE_COMPOSE }}" > ./tlparser/env/tests/.env.tests.compose
           echo "${{ secrets.ENV_FILE_KAFKA }}" > ./tlparser/env/tests/.env.tests.kafka
           echo "${{ secrets.ENV_FILE_MONGO }}" > ./tlparser/env/tests/.env.tests.mongo
+          echo "${{ secrets.ENV_FILE_ELASTIC }}" > ./tlparser/env/tests/.env.tests.elastic
           echo "${{ secrets.ENV_FILE_REDIS }}" > ./tlparser/env/tests/.env.tests.redis
           echo "${{ secrets.ENV_FILE_WEB }}" > ./tlparser/env/tests/.env.tests.web
 
