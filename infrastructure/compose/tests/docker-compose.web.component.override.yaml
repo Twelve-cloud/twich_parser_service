@@ -4,16 +4,16 @@ services:
   tests:
     build:
       context: ./tlparser
-      dockerfile: ./docker/Dockerfile.pytest.tests
+      dockerfile: ./docker/Dockerfile.pytest.tests.component
     entrypoint:
-      - ./entrypoint-pytest.tests.sh
+      - ./entrypoint-pytest.tests.component.sh
     hostname: tests
     container_name: tests
     env_file:
     - ./tlparser/env/tests/.env.tests.web
     networks:
       back-tests:
-        ipv4_address: 182.168.10.6
+        ipv4_address: 182.168.10.8
     links:
       - kafka
       - mongo

@@ -17,7 +17,10 @@ COPY pyproject.toml ./
 RUN poetry install --with tests
 
 # 5 layer
-COPY src scripts/entrypoint-caller.tests.sh ./
+COPY src scripts/entrypoint-pytest.tests.integration.sh  ./
 
 # 6 layer
-RUN chmod +x entrypoint-caller.tests.sh
+COPY tests  ./tests
+
+# 7 layer
+RUN chmod +x entrypoint-pytest.tests.integration.sh

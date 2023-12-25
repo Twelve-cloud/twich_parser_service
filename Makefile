@@ -5,13 +5,13 @@ export
 
 # ------------------------------------- PRD -------------------------------------------
 
-COMPOSE_PRD :=                  \
-    -f docker-compose.yaml      \
-    -f ${COMPOSE_PRD_KAFKA}     \
-    -f ${COMPOSE_PRD_MONGO}     \
-    -f ${COMPOSE_PRD_REDIS}     \
-    -f ${COMPOSE_PRD_WEB}       \
-    -f ${COMPOSE_PRD_CALLER}    \
+COMPOSE_PRD :=                             \
+    -f docker-compose.yaml                 \
+    -f ${COMPOSE_PRD_KAFKA}                \
+    -f ${COMPOSE_PRD_MONGO}                \
+    -f ${COMPOSE_PRD_REDIS}                \
+    -f ${COMPOSE_PRD_WEB}                  \
+    -f ${COMPOSE_PRD_CALLER}               \
 
 COMPOSE_PRD_ENV :=                                       \
     --env-file=.env                                      \
@@ -25,13 +25,13 @@ prdstop: docker-compose.yaml
 
 # ------------------------------------- DEV -------------------------------------------
 
-COMPOSE_DEV :=                  \
-    -f docker-compose.yaml      \
-    -f ${COMPOSE_DEV_KAFKA}     \
-    -f ${COMPOSE_DEV_MONGO}     \
-    -f ${COMPOSE_DEV_REDIS}     \
-    -f ${COMPOSE_DEV_WEB}       \
-    -f ${COMPOSE_DEV_CALLER}    \
+COMPOSE_DEV :=                             \
+    -f docker-compose.yaml                 \
+    -f ${COMPOSE_DEV_KAFKA}                \
+    -f ${COMPOSE_DEV_MONGO}                \
+    -f ${COMPOSE_DEV_REDIS}                \
+    -f ${COMPOSE_DEV_WEB}                  \
+    -f ${COMPOSE_DEV_CALLER}               \
 
 COMPOSE_DEV_ENV :=                                       \
     --env-file=.env                                      \
@@ -45,30 +45,64 @@ devstop: docker-compose.yaml
 
 # ------------------------------------- TESTS -------------------------------------------
 
-COMPOSE_TESTS :=                \
-    -f docker-compose.yaml      \
-    -f ${COMPOSE_TESTS_KAFKA}   \
-    -f ${COMPOSE_TESTS_MONGO}   \
-    -f ${COMPOSE_TESTS_REDIS}   \
-    -f ${COMPOSE_TESTS_WEB}     \
-    -f ${COMPOSE_TESTS_CALLER}  \
+GREEN := \033[0;32m
+RED := \033[0;31m
+NC := \033[0m
 
 COMPOSE_TESTS_ENV :=                                    \
     --env-file=.env                                     \
     --env-file=tlparser/env/tests/.env.tests.compose    \
 
-GREEN := \033[0;32m
-RED := \033[0;31m
-NC := \033[0m
+COMPOSE_WEB_INTEGRATION :=                 \
+    -f docker-compose.yaml                 \
+    -f ${COMPOSE_TESTS_KAFKA}              \
+    -f ${COMPOSE_TESTS_MONGO}              \
+    -f ${COMPOSE_TESTS_WEB_INTEGRATION}    \
 
-e2e: docker-compose.yaml
-    sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_TESTS} up -d --build
-    @if [ `sudo docker wait tests` -ne 0 ] ; then                                           \
-        sudo docker logs tests;                                                             \
-        printf "${RED}Tests Failed${NC}\n";                                                 \
-        sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_TESTS} down;            \
-    else                                                                                    \
-        sudo docker logs tests;                                                             \
-        printf "${GREEN}Tests Passed${NC}\n";                                               \
-        sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_TESTS} down;            \
-    fi                                                                                      \
+parser_it: docker-compose.yaml
+    sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_WEB_INTEGRATION} up -d --build
+    @if [ `sudo docker wait tests` -ne 0 ] ; then                                                   \
+        sudo docker logs tests;                                                                     \
+        printf "${RED}Tests Failed${NC}\n";                                                         \
+        sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_WEB_INTEGRATION} down;          \
+    else                                                                                            \
+        sudo docker logs tests;                                                                     \
+        printf "${GREEN}Tests Passed${NC}\n";                                                       \
+        sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_WEB_INTEGRATION} down;          \
+    fi                                                                                              \
+
+COMPOSE_CALLER_INTEGRATION :=              \
+    -f docker-compose.yaml                 \
+    -f ${COMPOSE_TESTS_KAFKA}              \
+    -f ${COMPOSE_TESTS_CALLER_INTEGRATION} \
+
+caller_it: docker-compose.yaml
+    sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_CALLER_INTEGRATION} up -d --build
+    @if [ `sudo docker wait tests` -ne 0 ] ; then                                                   \
+        sudo docker logs tests;                                                                     \
+        printf "${RED}Tests Failed${NC}\n";                                                         \
+        sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_CALLER_INTEGRATION} down;       \
+    else                                                                                            \
+        sudo docker logs tests;                                                                     \
+        printf "${GREEN}Tests Passed${NC}\n";                                                       \
+        sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_CALLER_INTEGRATION} down;       \
+    fi
+
+COMPOSE_WEB_COMPONENT :=                   \
+    -f docker-compose.yaml                 \
+    -f ${COMPOSE_TESTS_KAFKA}              \
+    -f ${COMPOSE_TESTS_MONGO}              \
+    -f ${COMPOSE_TESTS_REDIS}              \
+    -f ${COMPOSE_TESTS_WEB_COMPONENT}      \
+
+parser_component: docker-compose.yaml
+    sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_WEB_COMPONENT} up -d --build
+    @if [ `sudo docker wait tests` -ne 0 ] ; then                                                   \
+        sudo docker logs tests;                                                                     \
+        printf "${RED}Tests Failed${NC}\n";                                                         \
+        sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_WEB_COMPONENT} down;            \
+    else                                                                                            \
+        sudo docker logs tests;                                                                     \
+        printf "${GREEN}Tests Passed${NC}\n";                                                       \
+        sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_WEB_COMPONENT} down;            \
+    fi

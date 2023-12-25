@@ -36,9 +36,16 @@ repos:
         types: [python]
         pass_filenames: false
 
-      - id: e2e
-        name: e2e tests
-        entry: make e2e
+      - id: parser_it
+        name: parser_it
+        entry: make parser_it
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: parser_component
+        name: parser_component
+        entry: make parser_component
         language: system
         types: [python]
         pass_filenames: false
@@ -70,3 +77,17 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
+
+      - id: caller_it
+        name: caller_it
+        entry: make caller_it
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      # - id: e2e_tests
+      #   name: e2e tests
+      #   entry: make e2e
+      #   language: system
+      #   types: [python]
+      #   pass_filenames: false

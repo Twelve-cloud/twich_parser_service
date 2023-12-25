@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  tests:
+    build:
+      context: ./tlparser
+      dockerfile: ./docker/Dockerfile.pytest.tests.integration
+    entrypoint:
+      - ./entrypoint-pytest.tests.integration.sh
+    hostname: tests
+    container_name: tests
+    env_file:
+    - ./tlparser/env/tests/.env.tests.web
+    networks:
+      back-tests:
+        ipv4_address: 182.168.10.6
+    links:
+      - kafka
+      - mongo
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    restart: no
