@@ -10,7 +10,7 @@ services:
     env_file:
       - ./tlparser/env/production/.env.prd.elastic
     volumes:
-      - ./tlparser/data/prd/elastic:/var/lib/elasticsearch/data
+      - ./tlparser/data/prd/elastic:/usr/share/elasticsearch/data
     healthcheck:
       test: ["CMD-SHELL", "curl -s http://elastic:${ELASTIC_PORT} >/dev/null || exit 1"]
       interval: 10s

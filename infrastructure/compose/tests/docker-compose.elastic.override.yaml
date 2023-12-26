@@ -9,8 +9,6 @@ services:
       - 9200:${ELASTIC_PORT}
     env_file:
       - ./tlparser/env/tests/.env.tests.elastic
-    volumes:
-      - ./tlparser/data/tests/elastic:/var/lib/elasticsearch/data
     healthcheck:
       test: ["CMD-SHELL", "curl -s http://elastic:${ELASTIC_PORT} >/dev/null || exit 1"]
       interval: 10s

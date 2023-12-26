@@ -70,7 +70,7 @@ class TwichGameMongoRepository(TwichGameRepository):
             name=game_persistence.name,
             igdb_id=game_persistence.igdb_id,
             box_art_url=game_persistence.box_art_url,
-            parsed_at=game_persistence.box_art_url,
+            parsed_at=game_persistence.parsed_at,
         )
         entity: TwichGameEntity = TwichGameMapper.to_domain(game_persistence)
 
