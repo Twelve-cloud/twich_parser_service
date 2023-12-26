@@ -43,6 +43,9 @@ class Settings(BaseSettings):
         os.environ['KAFKA_CONSUMER_API_VERSION'],
     )
     KAFKA_PARSING_TOPIC: str = os.environ['KAFKA_PARSING_TOPIC']
+    ELASTIC_PROTOCOL: str = os.environ['ELASTIC_PROTOCOL']
+    ELASTIC_HOST: str = os.environ['ELASTIC_HOST']
+    ELASTIC_PORT: int = cast(int, os.environ['ELASTIC_PORT'])
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(case_sensitive=True)
 

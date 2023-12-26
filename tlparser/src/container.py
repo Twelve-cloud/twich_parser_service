@@ -75,7 +75,9 @@ class Container(DeclarativeContainer):
 
     elastic: Singleton = Singleton(
         ElasticSearchDatabase,
-        # add config
+        protocol=settings.ELASTIC_PROTOCOL,
+        host=settings.ELASTIC_HOST,
+        port=settings.ELASTIC_PORT,
     )
 
     # ------------------------------------- Other --------------------------------------------------
@@ -152,54 +154,54 @@ class Container(DeclarativeContainer):
 
     lamoda_products_w_service: Factory = Factory(
         LamodaProductsService,
-        repository=lamoda_products_mongo_repository,
+        repository=lamoda_products_elastic_repository,
         publisher=lamoda_products_kafka_publisher,
     )
 
     lamoda_products_r_service: Factory = Factory(
         LamodaProductsService,
-        repository=lamoda_products_mongo_repository,  # change to elastic from mongo
+        repository=lamoda_products_elastic_repository,  # change to elastic from mongo
         publisher=lamoda_products_kafka_publisher,
     )
 
     twich_game_w_service: Factory = Factory(
         TwichGameService,
-        repository=twich_game_mongo_repository,
+        repository=twich_game_elastic_repository,
         publisher=twich_game_kafka_publisher,
         token=twich_api_token,
     )
 
     twich_game_r_service: Factory = Factory(
         TwichGameService,
-        repository=twich_game_mongo_repository,  # change to elastic from mongo
+        repository=twich_game_elastic_repository,  # change to elastic from mongo
         publisher=twich_game_kafka_publisher,
         token=twich_api_token,
     )
 
     twich_user_w_service: Factory = Factory(
         TwichUserService,
-        repository=twich_user_mongo_repository,
+        repository=twich_user_elastic_repository,
         publisher=twich_user_kafka_publisher,
         token=twich_api_token,
     )
 
     twich_user_r_service: Factory = Factory(
         TwichUserService,
-        repository=twich_user_mongo_repository,  # change to elastic from mongo
+        repository=twich_user_elastic_repository,  # change to elastic from mongo
         publisher=twich_user_kafka_publisher,
         token=twich_api_token,
     )
 
     twich_stream_w_service: Factory = Factory(
         TwichStreamService,
-        repository=twich_stream_mongo_repository,
+        repository=twich_stream_elastic_repository,
         publisher=twich_stream_kafka_publisher,
         token=twich_api_token,
     )
 
     twich_stream_r_service: Factory = Factory(
         TwichStreamService,
-        repository=twich_stream_mongo_repository,  # change to elastic from mongo
+        repository=twich_stream_elastic_repository,  # change to elastic from mongo
         publisher=twich_stream_kafka_publisher,
         token=twich_api_token,
     )

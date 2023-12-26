@@ -26,6 +26,8 @@ redis = "5.0.1"
 types-redis = "4.6.0.11"
 fastapi-cache2 = "0.2.1"
 kafka-python = "2.0.2"
+elasticsearch="8.11.0"
+elasticsearch-dsl = "8.11.0"
 
 [tool.poetry.group.prd]
 optional = true
