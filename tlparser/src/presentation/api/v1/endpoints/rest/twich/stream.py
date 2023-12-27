@@ -40,7 +40,7 @@ async def parse_stream(
         Response: HTTP status code 200.
     """
 
-    controller.parse_stream(user_login)
+    await controller.parse_stream(user_login)
 
     return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
@@ -67,7 +67,7 @@ async def private_parse_stream(
         TwichStreamReadSchema: Response as TwichStreamReadSchema instance.
     """
 
-    return controller.private_parse_stream(user_login)
+    return await controller.private_parse_stream(user_login)
 
 
 @router.delete(
@@ -91,7 +91,7 @@ async def delete_stream_by_user_login(
         Response: HTTP status code 204.
     """
 
-    controller.delete_stream_by_user_login(user_login)
+    await controller.delete_stream_by_user_login(user_login)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -116,7 +116,7 @@ async def get_all_streams(
         list[TwichStreamReadSchema]: List of twich streams.
     """
 
-    return controller.get_all_streams()
+    return await controller.get_all_streams()
 
 
 @router.get(
@@ -141,4 +141,4 @@ async def get_stream_by_user_login(
         TwichStreamReadSchema: TwichStreamReadSchema instance.
     """
 
-    return controller.get_stream_by_user_login(user_login)
+    return await controller.get_stream_by_user_login(user_login)

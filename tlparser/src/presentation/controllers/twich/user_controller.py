@@ -30,7 +30,7 @@ class TwichUserController:
 
         self.service: TwichUserService = service
 
-    def parse_user(self, user_login: str) -> None:
+    async def parse_user(self, user_login: str) -> None:
         """
         parse_user: Called twich user service to send event about parsing.
 
@@ -38,9 +38,9 @@ class TwichUserController:
             user_login (str): Login of the user.
         """
 
-        self.service.parse_user(user_login)
+        await self.service.parse_user(user_login)
 
-    def private_parse_user(self, user_login: str) -> TwichUserReadSchema:
+    async def private_parse_user(self, user_login: str) -> TwichUserReadSchema:
         """
         private_parse_user: Delegate parsing to TwichUserService, handle exceptions.
 
@@ -62,7 +62,7 @@ class TwichUserController:
         """
 
         try:
-            return self.service.private_parse_user(user_login)
+            return await self.service.private_parse_user(user_login)
         except (GetUserBadRequestException, GetUserUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except UserNotFoundException:
@@ -80,7 +80,7 @@ class TwichUserController:
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    def delete_user_by_login(self, user_login: str) -> None:
+    async def delete_user_by_login(self, user_login: str) -> None:
         """
         delete_user_by_login: Delegate deleting to TwichUserService, handle exceptions.
 
@@ -92,11 +92,11 @@ class TwichUserController:
         """
 
         try:
-            return self.service.delete_user_by_login(user_login)
+            return await self.service.delete_user_by_login(user_login)
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    def get_all_users(self) -> list[TwichUserReadSchema]:
+    async def get_all_users(self) -> list[TwichUserReadSchema]:
         """
         get_all_users: Delegate access to TwichUserService, handle exceptions.
 
@@ -108,11 +108,11 @@ class TwichUserController:
         """
 
         try:
-            return self.service.get_all_users()
+            return await self.service.get_all_users()
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    def get_user_by_login(self, user_login: str) -> TwichUserReadSchema:
+    async def get_user_by_login(self, user_login: str) -> TwichUserReadSchema:
         """
         get_user_by_login: Delegate access to TwichUserService, handle exceptions.
 
@@ -128,7 +128,7 @@ class TwichUserController:
         """
 
         try:
-            return self.service.get_user_by_login(user_login)
+            return await self.service.get_user_by_login(user_login)
         except UserNotFoundException:
             raise HTTPException(status_code=404, detail='User is not found')
         except Exception:

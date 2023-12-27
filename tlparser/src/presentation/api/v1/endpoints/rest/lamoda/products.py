@@ -40,7 +40,7 @@ async def parse_products(
         Response: HTTP status code 200.
     """
 
-    controller.parse_products(category)
+    await controller.parse_products(category)
 
     return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
@@ -67,7 +67,7 @@ async def private_parse_products(
         list[LamodaProductReadSchema]: Response as list of LamodaProductReadSchema instances.
     """
 
-    return controller.private_parse_products(category)
+    return await controller.private_parse_products(category)
 
 
 @router.delete(
@@ -91,7 +91,7 @@ async def delete_products_by_category(
         Response: HTTP status code 204.
     """
 
-    controller.delete_products_by_category(category)
+    await controller.delete_products_by_category(category)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -116,7 +116,7 @@ async def get_all_products(
         list[LamodaProductReadSchema]: List of lamoda products.
     """
 
-    return controller.get_all_products()
+    return await controller.get_all_products()
 
 
 @router.get(
@@ -141,4 +141,4 @@ async def get_products_by_category(
         list[LamodaProductReadSchema]: List of lamoda products with the same category.
     """
 
-    return controller.get_products_by_category(category)
+    return await controller.get_products_by_category(category)

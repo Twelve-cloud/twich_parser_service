@@ -30,7 +30,7 @@ class TwichStreamController:
 
         self.service: TwichStreamService = service
 
-    def parse_stream(self, user_login: str) -> None:
+    async def parse_stream(self, user_login: str) -> None:
         """
         parse_stream: Called twich stream service to send event about parsing.
 
@@ -38,9 +38,9 @@ class TwichStreamController:
             user_login (str): Login of the user.
         """
 
-        self.service.parse_stream(user_login)
+        await self.service.parse_stream(user_login)
 
-    def private_parse_stream(self, user_login: str) -> TwichStreamReadSchema:
+    async def private_parse_stream(self, user_login: str) -> TwichStreamReadSchema:
         """
         private_parse_stream: Delegate parsing to TwichStreamService, catch and handle exceptions.
 
@@ -62,7 +62,7 @@ class TwichStreamController:
         """
 
         try:
-            return self.service.private_parse_stream(user_login)
+            return await self.service.private_parse_stream(user_login)
         except (GetStreamBadRequestException, GetStreamUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except StreamNotFoundException:
@@ -80,7 +80,7 @@ class TwichStreamController:
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    def delete_stream_by_user_login(self, user_login: str) -> None:
+    async def delete_stream_by_user_login(self, user_login: str) -> None:
         """
         delete_stream_by_user_login: Delegate deleting to TwichStreamService, handle exceptions.
 
@@ -92,11 +92,11 @@ class TwichStreamController:
         """
 
         try:
-            return self.service.delete_stream_by_user_login(user_login)
+            return await self.service.delete_stream_by_user_login(user_login)
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    def get_all_streams(self) -> list[TwichStreamReadSchema]:
+    async def get_all_streams(self) -> list[TwichStreamReadSchema]:
         """
         get_all_streams: Delegate access to TwichStreamService, handle exceptions.
 
@@ -108,11 +108,11 @@ class TwichStreamController:
         """
 
         try:
-            return self.service.get_all_streams()
+            return await self.service.get_all_streams()
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    def get_stream_by_user_login(self, user_login: str) -> TwichStreamReadSchema:
+    async def get_stream_by_user_login(self, user_login: str) -> TwichStreamReadSchema:
         """
         get_stream_by_user_login: Delegate access to TwichStreamService, handle exceptions.
 
@@ -128,7 +128,7 @@ class TwichStreamController:
         """
 
         try:
-            return self.service.get_stream_by_user_login(user_login)
+            return await self.service.get_stream_by_user_login(user_login)
         except StreamNotFoundException:
             raise HTTPException(status_code=404, detail='Stream is not found (stream is off)')
         except Exception:

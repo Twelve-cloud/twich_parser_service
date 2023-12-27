@@ -40,7 +40,7 @@ async def parse_user(
         Response: HTTP status code 200.
     """
 
-    controller.parse_user(user_login)
+    await controller.parse_user(user_login)
 
     return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
@@ -67,7 +67,7 @@ async def private_parse_user(
         TwichUserReadSchema: Response as TwichUserReadSchema instance.
     """
 
-    return controller.private_parse_user(user_login)
+    return await controller.private_parse_user(user_login)
 
 
 @router.delete(
@@ -91,7 +91,7 @@ async def delete_user_by_login(
         Response: HTTP status code 204.
     """
 
-    controller.delete_user_by_login(user_login)
+    await controller.delete_user_by_login(user_login)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -116,7 +116,7 @@ async def get_all_users(
         list[TwichUserReadSchema]: List of twich users.
     """
 
-    return controller.get_all_users()
+    return await controller.get_all_users()
 
 
 @router.get(
@@ -141,4 +141,4 @@ async def get_user_by_login(
         TwichUserReadSchema: TwichUserReadSchema instance.
     """
 
-    return controller.get_user_by_login(user_login)
+    return await controller.get_user_by_login(user_login)

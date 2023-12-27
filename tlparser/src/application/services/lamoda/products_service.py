@@ -84,7 +84,7 @@ class LamodaProductsService:
 
         return product_links
 
-    def parse_products(self, category: str) -> None:
+    async def parse_products(self, category: str) -> None:
         """
         parse_products: Called lamoda products publisher to publish event about parsing.
 
@@ -98,7 +98,7 @@ class LamodaProductsService:
 
         return
 
-    def private_parse_products(self, category: str) -> list[LamodaProductReadSchema]:
+    async def private_parse_products(self, category: str) -> list[LamodaProductReadSchema]:
         """
         private_parse_products: Parse lamoda products by category.
 
@@ -152,7 +152,7 @@ class LamodaProductsService:
 
         return products
 
-    def delete_products_by_category(self, category: str) -> None:
+    async def delete_products_by_category(self, category: str) -> None:
         """
         delete_products_by_category: Delete products by category.
 
@@ -168,7 +168,7 @@ class LamodaProductsService:
 
         return
 
-    def get_all_products(self) -> list[LamodaProductReadSchema]:
+    async def get_all_products(self) -> list[LamodaProductReadSchema]:
         """
         get_all_products: Return all products.
 
@@ -181,7 +181,7 @@ class LamodaProductsService:
             for product_entity in self.repository.all()
         ]
 
-    def get_products_by_category(self, category: str) -> list[LamodaProductReadSchema]:
+    async def get_products_by_category(self, category: str) -> list[LamodaProductReadSchema]:
         """
         get_products_by_category: Return products by category.
 

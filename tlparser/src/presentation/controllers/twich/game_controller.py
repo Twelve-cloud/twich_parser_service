@@ -30,7 +30,7 @@ class TwichGameController:
 
         self.service: TwichGameService = service
 
-    def parse_game(self, game_name: str) -> None:
+    async def parse_game(self, game_name: str) -> None:
         """
         parse_game: Called twich game service to send event about parsing.
 
@@ -38,9 +38,9 @@ class TwichGameController:
             game_name (str): Name of the game.
         """
 
-        self.service.parse_game(game_name)
+        await self.service.parse_game(game_name)
 
-    def private_parse_game(self, game_name: str) -> TwichGameReadSchema:
+    async def private_parse_game(self, game_name: str) -> TwichGameReadSchema:
         """
         private_parse_game: Delegate parsing to TwichGameService, handle exceptions.
 
@@ -62,7 +62,7 @@ class TwichGameController:
         """
 
         try:
-            return self.service.private_parse_game(game_name)
+            return await self.service.private_parse_game(game_name)
         except (GetGameBadRequestException, GetGameUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except GameNotFoundException:
@@ -80,7 +80,7 @@ class TwichGameController:
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    def delete_game_by_name(self, game_name: str) -> None:
+    async def delete_game_by_name(self, game_name: str) -> None:
         """
         delete_game_by_name: Delegate deleting to TwichGameService, handle exceptions.
 
@@ -92,11 +92,11 @@ class TwichGameController:
         """
 
         try:
-            return self.service.delete_game_by_name(game_name)
+            return await self.service.delete_game_by_name(game_name)
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    def get_all_games(self) -> list[TwichGameReadSchema]:
+    async def get_all_games(self) -> list[TwichGameReadSchema]:
         """
         get_all_games: Delegate access to TwichGameService, handle exceptions.
 
@@ -108,11 +108,11 @@ class TwichGameController:
         """
 
         try:
-            return self.service.get_all_games()
+            return await self.service.get_all_games()
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    def get_game_by_name(self, game_name: str) -> TwichGameReadSchema:
+    async def get_game_by_name(self, game_name: str) -> TwichGameReadSchema:
         """
         get_game_by_name: Delegate access to TwichGameService, handle exceptions.
 
@@ -128,7 +128,7 @@ class TwichGameController:
         """
 
         try:
-            return self.service.get_game_by_name(game_name)
+            return await self.service.get_game_by_name(game_name)
         except GameNotFoundException:
             raise HTTPException(status_code=404, detail='Game is not found')
         except Exception:

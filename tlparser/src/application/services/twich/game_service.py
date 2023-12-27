@@ -48,7 +48,7 @@ class TwichGameService:
         self.access_token: str = token.access_token
         self.headers: dict[str, str] = token.headers
 
-    def parse_game(self, game_name: str) -> None:
+    async def parse_game(self, game_name: str) -> None:
         """
         parse_game: Called twich game publisher to publish event about parsing.
 
@@ -62,7 +62,7 @@ class TwichGameService:
 
         return
 
-    def private_parse_game(self, game_name: str) -> TwichGameReadSchema:
+    async def private_parse_game(self, game_name: str) -> TwichGameReadSchema:
         """
         private_parse_game: Parse game data from the Twich.
 
@@ -110,7 +110,7 @@ class TwichGameService:
 
         return TwichGameReadMapper.to_schema(game_entity)
 
-    def delete_game_by_name(self, game_name: str) -> None:
+    async def delete_game_by_name(self, game_name: str) -> None:
         """
         delete_game_by_name: Delete twich game.
 
@@ -124,7 +124,7 @@ class TwichGameService:
 
         return
 
-    def get_all_games(self) -> list[TwichGameReadSchema]:
+    async def get_all_games(self) -> list[TwichGameReadSchema]:
         """
         get_all_games: Return all twich games.
 
@@ -134,7 +134,7 @@ class TwichGameService:
 
         return [TwichGameReadMapper.to_schema(game_entity) for game_entity in self.repository.all()]
 
-    def get_game_by_name(self, game_name: str) -> TwichGameReadSchema:
+    async def get_game_by_name(self, game_name: str) -> TwichGameReadSchema:
         """
         get_game_by_name: Return twich game by name.
 

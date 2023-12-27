@@ -40,7 +40,7 @@ async def parse_game(
         Response: HTTP status code 200.
     """
 
-    controller.parse_game(game_name)
+    await controller.parse_game(game_name)
 
     return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
@@ -67,7 +67,7 @@ async def private_parse_game(
         TwichGameReadSchema: Response as TwichGameReadSchema instance.
     """
 
-    return controller.private_parse_game(game_name)
+    return await controller.private_parse_game(game_name)
 
 
 @router.delete(
@@ -91,7 +91,7 @@ async def delete_game_by_name(
         Response: HTTP status code 204.
     """
 
-    controller.delete_game_by_name(game_name)
+    await controller.delete_game_by_name(game_name)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -116,7 +116,7 @@ async def get_all_games(
         list[TwichGameReadSchema]: List of twich games.
     """
 
-    return controller.get_all_games()
+    return await controller.get_all_games()
 
 
 @router.get(
@@ -141,4 +141,4 @@ async def get_game_by_name(
         TwichGameReadSchema: TwichGameReadSchema instance.
     """
 
-    return controller.get_game_by_name(game_name)
+    return await controller.get_game_by_name(game_name)

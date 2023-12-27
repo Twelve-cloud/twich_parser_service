@@ -48,7 +48,7 @@ class TwichStreamService:
         self.access_token: str = token.access_token
         self.headers: dict[str, str] = token.headers
 
-    def parse_stream(self, user_login: str) -> None:
+    async def parse_stream(self, user_login: str) -> None:
         """
         parse_stream: Called twich stream publisher to publish event about parsing.
 
@@ -62,7 +62,7 @@ class TwichStreamService:
 
         return
 
-    def private_parse_stream(self, user_login: str) -> TwichStreamReadSchema:
+    async def private_parse_stream(self, user_login: str) -> TwichStreamReadSchema:
         """
         private_parse_stream: Parse stream data from the Twich.
 
@@ -110,7 +110,7 @@ class TwichStreamService:
 
         return TwichStreamReadMapper.to_schema(stream_entity)
 
-    def delete_stream_by_user_login(self, user_login: str) -> None:
+    async def delete_stream_by_user_login(self, user_login: str) -> None:
         """
         delete_stream_by_user_login: Delete twich stream.
 
@@ -126,7 +126,7 @@ class TwichStreamService:
 
         return
 
-    def get_all_streams(self) -> list[TwichStreamReadSchema]:
+    async def get_all_streams(self) -> list[TwichStreamReadSchema]:
         """
         get_all_streams: Return all twich streams.
 
@@ -139,7 +139,7 @@ class TwichStreamService:
             for stream_entity in self.repository.all()
         ]
 
-    def get_stream_by_user_login(self, user_login: str) -> TwichStreamReadSchema:
+    async def get_stream_by_user_login(self, user_login: str) -> TwichStreamReadSchema:
         """
         get_stream_by_user_login _summary_
 

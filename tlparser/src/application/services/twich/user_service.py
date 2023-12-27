@@ -48,7 +48,7 @@ class TwichUserService:
         self.access_token: str = token.access_token
         self.headers: dict[str, str] = token.headers
 
-    def parse_user(self, user_login: str) -> None:
+    async def parse_user(self, user_login: str) -> None:
         """
         parse_user: Called twich user publisher to publish event about parsing.
 
@@ -62,7 +62,7 @@ class TwichUserService:
 
         return
 
-    def private_parse_user(self, user_login: str) -> TwichUserReadSchema:
+    async def private_parse_user(self, user_login: str) -> TwichUserReadSchema:
         """
         private_parse_user: Parse user data from the Twich.
 
@@ -110,7 +110,7 @@ class TwichUserService:
 
         return TwichUserReadMapper.to_schema(user_entity)
 
-    def delete_user_by_login(self, user_login: str) -> None:
+    async def delete_user_by_login(self, user_login: str) -> None:
         """
         delete_user_by_login: Delete twich user.
 
@@ -124,7 +124,7 @@ class TwichUserService:
 
         return
 
-    def get_all_users(self) -> list[TwichUserReadSchema]:
+    async def get_all_users(self) -> list[TwichUserReadSchema]:
         """
         get_all_users: Return list of twich users.
 
@@ -134,7 +134,7 @@ class TwichUserService:
 
         return [TwichUserReadMapper.to_schema(user_entity) for user_entity in self.repository.all()]
 
-    def get_user_by_login(self, user_login: str) -> TwichUserReadSchema:
+    async def get_user_by_login(self, user_login: str) -> TwichUserReadSchema:
         """
         get_user_by_login: Return user by login.
 
