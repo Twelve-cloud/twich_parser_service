@@ -6,13 +6,15 @@ user_controller.py: File, containing twich user controller.
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
-from application.schemas.twich.user_schema import TwichUserReadSchema
-from application.services.twich.user_service import TwichUserService
+from domain.entities.twich.user_entity import TwichUserEntity
 from domain.exceptions.twich.user_exceptions import (
     GetUserBadRequestException,
     GetUserUnauthorizedException,
     UserNotFoundException,
 )
+from domain.services.twich.user_service import ITwichUserService
+from presentation.mappers.twich.user_mapper import TwichUserMapper
+from presentation.schemas.twich.user_schema import TwichUserSchema
 
 
 class TwichUserController:
@@ -20,15 +22,15 @@ class TwichUserController:
     TwichUserController: Class, representing twich user controller. It handles all exceptions.
     """
 
-    def __init__(self, service: TwichUserService) -> None:
+    def __init__(self, service: ITwichUserService) -> None:
         """
         __init__: Initialize twich user controller class.
 
         Args:
-            service (TwichUserService): TwichUserService instance.
+            service (ITwichUserService): Twich user service abstract class.
         """
 
-        self.service: TwichUserService = service
+        self.service: ITwichUserService = service
 
     async def parse_user(self, user_login: str) -> None:
         """
@@ -40,7 +42,7 @@ class TwichUserController:
 
         await self.service.parse_user(user_login)
 
-    async def private_parse_user(self, user_login: str) -> TwichUserReadSchema:
+    async def private_parse_user(self, user_login: str) -> TwichUserSchema:
         """
         private_parse_user: Delegate parsing to TwichUserService, handle exceptions.
 
@@ -58,11 +60,12 @@ class TwichUserController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            TwichUserReadSchema: TwichUserReadSchema instance.
+            TwichUserSchema: TwichUserSchema instance.
         """
 
         try:
-            return await self.service.private_parse_user(user_login)
+            user: TwichUserEntity = await self.service.private_parse_user(user_login)
+            return TwichUserMapper.to_schema(user)
         except (GetUserBadRequestException, GetUserUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except UserNotFoundException:
@@ -96,7 +99,7 @@ class TwichUserController:
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    async def get_all_users(self) -> list[TwichUserReadSchema]:
+    async def get_all_users(self) -> list[TwichUserSchema]:
         """
         get_all_users: Delegate access to TwichUserService, handle exceptions.
 
@@ -104,15 +107,16 @@ class TwichUserController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            list[TwichUserReadSchema]: List of twich users.
+            list[TwichUserSchema]: List of twich users.
         """
 
         try:
-            return await self.service.get_all_users()
+            users: list[TwichUserEntity] = await self.service.get_all_users()
+            return [TwichUserMapper.to_schema(user) for user in users]
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    async def get_user_by_login(self, user_login: str) -> TwichUserReadSchema:
+    async def get_user_by_login(self, user_login: str) -> TwichUserSchema:
         """
         get_user_by_login: Delegate access to TwichUserService, handle exceptions.
 
@@ -124,11 +128,12 @@ class TwichUserController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            TwichUserReadSchema: TwichUserReadSchema instance.
+            TwichUserSchema: TwichUserSchema instance.
         """
 
         try:
-            return await self.service.get_user_by_login(user_login)
+            user: TwichUserEntity = await self.service.get_user_by_login(user_login)
+            return TwichUserMapper.to_schema(user)
         except UserNotFoundException:
             raise HTTPException(status_code=404, detail='User is not found')
         except Exception:

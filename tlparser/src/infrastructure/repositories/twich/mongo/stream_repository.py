@@ -12,18 +12,18 @@ from domain.events.twich.stream_events import (
 )
 from domain.exceptions.twich.stream_exceptions import StreamNotFoundException
 from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.twich.stream_repository import TwichStreamRepository
+from domain.repositories.twich.stream_repository import ITwichStreamRepository
 from infrastructure.connections.mongo.database import MongoDatabase
 from infrastructure.mappers.twich.mongo.stream_mapper import TwichStreamMapper
 from infrastructure.models.twich.mongo.stream_model import TwichStream
 
 
-class TwichStreamMongoRepository(TwichStreamRepository):
+class TwichStreamMongoRepository(ITwichStreamRepository):
     """
-    TwichStreamMongoRepository: Mongo implementation of TwichStreamRepository.
+    TwichStreamMongoRepository: Mongo implementation of ITwichStreamRepository.
 
     Args:
-        TwichStreamRepository (_type_): Repository abstract class.
+        ITwichStreamRepository (_type_): Repository abstract class.
     """
 
     def __init__(self, db: MongoDatabase) -> None:

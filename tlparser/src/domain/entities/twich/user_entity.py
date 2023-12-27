@@ -28,6 +28,7 @@ class TwichUserEntity(BaseEntity):
         offline_image_url: Optional[str] = None,
         created_at: Optional[datetime] = None,
         parsed_at: Optional[datetime] = None,
+        **kwargs: dict,
     ) -> None:
         """
         __init__: Initialize twich user entity.

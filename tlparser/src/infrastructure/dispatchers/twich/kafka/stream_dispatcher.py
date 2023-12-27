@@ -11,7 +11,7 @@ from domain.events.twich.stream_events import (
     TwichStreamCreatedOrUpdatedEvent,
     TwichStreamDeletedByUserLoginEvent,
 )
-from domain.repositories.twich.stream_repository import TwichStreamRepository
+from domain.repositories.twich.stream_repository import ITwichStreamRepository
 
 
 class TwichStreamKafkaDispatcher:
@@ -24,7 +24,7 @@ class TwichStreamKafkaDispatcher:
         bootstrap_servers: str,
         api_version: tuple,
         topic: str,
-        repository: TwichStreamRepository,
+        repository: ITwichStreamRepository,
     ) -> None:
         """
         __init__: Initialize twich stream kafka dispatcher.
@@ -41,7 +41,7 @@ class TwichStreamKafkaDispatcher:
             value_deserializer=lambda v: loads(v),
         )
         self.consumer.subscribe([topic])
-        self.repository: TwichStreamRepository = repository
+        self.repository: ITwichStreamRepository = repository
         Thread(target=self.run, args=()).start()
 
     def run(self) -> None:

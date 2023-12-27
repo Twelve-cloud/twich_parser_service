@@ -9,15 +9,15 @@ from domain.events.twich.stream_events import (
     TwichStreamCreatedOrUpdatedEvent,
     TwichStreamDeletedByUserLoginEvent,
 )
-from domain.publishers.base.base_publisher import BasePublisher
+from domain.publishers.base.base_publisher import IBasePublisher
 
 
-class TwichStreamPublisher(BasePublisher[TwichStreamCreatedOrUpdatedEvent]):
+class ITwichStreamPublisher(IBasePublisher[TwichStreamCreatedOrUpdatedEvent]):
     """
-    TwichStreamPublisher: Abstract class for twich stream publishers.
+    ITwichStreamPublisher: Abstract class for twich stream publishers.
 
     Args:
-        BasePublisher (TwichStreamCreatedOrUpdatedEvent): Base publisher for TwichStreamPublisher.
+        IBasePublisher (TwichStreamCreatedOrUpdatedEvent): Base publisher for ITwichStreamPublisher.
     """
 
     @abstractmethod

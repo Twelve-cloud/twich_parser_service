@@ -26,6 +26,7 @@ class LamodaProductEntity(BaseEntity):
         price_currency: Optional[str] = None,
         price_valid_until: Optional[datetime] = None,
         parsed_at: Optional[datetime] = None,
+        **kwargs: dict,
     ) -> None:
         """
         __init__: Initialize lamoda product entity

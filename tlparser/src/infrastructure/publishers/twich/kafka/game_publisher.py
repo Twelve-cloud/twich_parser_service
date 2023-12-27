@@ -11,16 +11,16 @@ from domain.events.twich.game_events import (
     TwichGameCreatedOrUpdatedEvent,
     TwichGameDeletedByNameEvent,
 )
-from domain.publishers.twich.game_publisher import TwichGamePublisher
+from domain.publishers.twich.game_publisher import ITwichGamePublisher
 from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 
-class TwichGameKafkaPublisher(TwichGamePublisher):
+class TwichGameKafkaPublisher(ITwichGamePublisher):
     """
     TwichGameKafkaPublisher: Kafka implementation publisher class for twich game.
 
     Args:
-        BasePublisher (_type_): Base publisher for TwichGameKafkaPublisher.
+        IBasePublisher (_type_): Base publisher for TwichGameKafkaPublisher.
     """
 
     def __init__(self, kafka_producer: KafkaProducerConnection) -> None:

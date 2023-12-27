@@ -6,8 +6,6 @@ user_service.py: File, containing service for a twich user.
 from fastapi import status
 from requests import Response, get
 from application.dependencies.twich.token_dependency import TwichAPIToken
-from application.mappers.twich.user_mapper import TwichUserCreateMapper, TwichUserReadMapper
-from application.schemas.twich.user_schema import TwichUserCreateSchema, TwichUserReadSchema
 from common.config.twich.settings import settings
 from domain.entities.twich.user_entity import TwichUserEntity
 from domain.events.twich.user_events import (
@@ -20,9 +18,9 @@ from domain.exceptions.twich.user_exceptions import (
     GetUserUnauthorizedException,
     UserNotFoundException,
 )
-from domain.publishers.twich.user_publisher import TwichUserPublisher
+from domain.publishers.twich.user_publisher import ITwichUserPublisher
 from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.twich.user_repository import TwichUserRepository
+from domain.repositories.twich.user_repository import ITwichUserRepository
 
 
 class TwichUserService:
@@ -32,19 +30,19 @@ class TwichUserService:
 
     def __init__(
         self,
-        repository: TwichUserRepository,
-        publisher: TwichUserPublisher,
+        repository: ITwichUserRepository,
+        publisher: ITwichUserPublisher,
         token: TwichAPIToken,
     ) -> None:
         """
         __init__: Do some initialization for TwichUserService class.
 
         Args:
-            repository (TwichUserRepository): Twich user repository.
+            repository (ITwichUserRepository): Twich user repository.
         """
 
-        self.repository: TwichUserRepository = repository
-        self.publisher: TwichUserPublisher = publisher
+        self.repository: ITwichUserRepository = repository
+        self.publisher: ITwichUserPublisher = publisher
         self.access_token: str = token.access_token
         self.headers: dict[str, str] = token.headers
 
@@ -62,7 +60,7 @@ class TwichUserService:
 
         return
 
-    async def private_parse_user(self, user_login: str) -> TwichUserReadSchema:
+    async def private_parse_user(self, user_login: str) -> TwichUserEntity:
         """
         private_parse_user: Parse user data from the Twich.
 
@@ -75,7 +73,7 @@ class TwichUserService:
             UserNotFoundException: Raised when TwichAPI return no user.
 
         Returns:
-            TwichUserReadSchema: TwichUserReadSchema instance.
+            TwichUserEntity: TwichUserEntity instance.
         """
 
         response: Response = get(
@@ -94,21 +92,17 @@ class TwichUserService:
         if not user_data:
             raise UserNotFoundException
 
-        user_schema: TwichUserCreateSchema = TwichUserCreateSchema(**user_data[0])
+        user_entity: TwichUserEntity = TwichUserEntity(**user_data[0])
 
         user: ResultWithEvent[TwichUserEntity, TwichUserCreatedOrUpdatedEvent] = (
-            self.repository.create_or_update(
-                TwichUserCreateMapper.to_domain(user_schema),
-            )
+            self.repository.create_or_update(user_entity)
         )
 
         user_event: TwichUserCreatedOrUpdatedEvent = user.event
 
         self.publisher.publish_created_or_updated_event(user_event)
 
-        user_entity: TwichUserEntity = user.result
-
-        return TwichUserReadMapper.to_schema(user_entity)
+        return user.result
 
     async def delete_user_by_login(self, user_login: str) -> None:
         """
@@ -124,17 +118,17 @@ class TwichUserService:
 
         return
 
-    async def get_all_users(self) -> list[TwichUserReadSchema]:
+    async def get_all_users(self) -> list[TwichUserEntity]:
         """
         get_all_users: Return list of twich users.
 
         Returns:
-            list[TwichUserReadSchema]: List of twich users.
+            list[TwichUserEntity]: List of twich users.
         """
 
-        return [TwichUserReadMapper.to_schema(user_entity) for user_entity in self.repository.all()]
+        return self.repository.all()
 
-    async def get_user_by_login(self, user_login: str) -> TwichUserReadSchema:
+    async def get_user_by_login(self, user_login: str) -> TwichUserEntity:
         """
         get_user_by_login: Return user by login.
 
@@ -142,9 +136,9 @@ class TwichUserService:
             user_login (str): Login of the user.
 
         Returns:
-            TwichUserReadSchema: TwichUserReadSchema instance.
+            TwichUserEntity: TwichUserEntity instance.
         """
 
         user_entity: TwichUserEntity = self.repository.get_user_by_login(user_login)
 
-        return TwichUserReadMapper.to_schema(user_entity)
+        return user_entity

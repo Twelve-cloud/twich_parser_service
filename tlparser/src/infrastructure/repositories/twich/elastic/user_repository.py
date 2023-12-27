@@ -12,18 +12,18 @@ from domain.events.twich.user_events import (
 )
 from domain.exceptions.twich.user_exceptions import UserNotFoundException
 from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.twich.user_repository import TwichUserRepository
+from domain.repositories.twich.user_repository import ITwichUserRepository
 from infrastructure.connections.elastic.database import ElasticSearchDatabase
 from infrastructure.mappers.twich.elastic.user_mapper import TwichUserMapper
 from infrastructure.models.twich.elastic.user_model import TwichUser
 
 
-class TwichUserElasticRepository(TwichUserRepository):
+class TwichUserElasticRepository(ITwichUserRepository):
     """
-    TwichUserElasticRepository: Elastic implementation of TwichUserRepository.
+    TwichUserElasticRepository: Elastic implementation of ITwichUserRepository.
 
     Args:
-        TwichUserRepository (_type_): Repository abstract class.
+        ITwichUserRepository (_type_): Repository abstract class.
     """
 
     def __init__(self, db: ElasticSearchDatabase) -> None:

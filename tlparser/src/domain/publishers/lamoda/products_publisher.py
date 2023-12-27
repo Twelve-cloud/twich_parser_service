@@ -9,15 +9,15 @@ from domain.events.lamoda.products_events import (
     LamodaProductsDeletedByCategoryEvent,
     PublicParseProductsCalledEvent,
 )
-from domain.publishers.base.base_publisher import BasePublisher
+from domain.publishers.base.base_publisher import IBasePublisher
 
 
-class LamodaProductsPublisher(BasePublisher[LamodaProductCreatedOrUpdatedEvent]):
+class ILamodaProductsPublisher(IBasePublisher[LamodaProductCreatedOrUpdatedEvent]):
     """
-    LamodaProductsPublisher: Abstract class for lamoda products publishers.
+    ILamodaProductsPublisher: Abstract class for lamoda products publishers.
 
     Args:
-        BasePublisher (_type_): Base publisher for LamodaProductsPublisher.
+        IBasePublisher (_type_): Base publisher for ILamodaProductsPublisher.
     """
 
     @abstractmethod

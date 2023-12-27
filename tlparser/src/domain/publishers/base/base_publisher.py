@@ -11,13 +11,13 @@ from domain.events.base.base_event import BaseDomainEvent
 T = TypeVar('T', bound=BaseDomainEvent)
 
 
-class BasePublisher(Generic[T], metaclass=ABCMeta):
+class IBasePublisher(Generic[T], metaclass=ABCMeta):
     """
-    BasePublisher: Abstract class for every publisher.
+    IBasePublisher: Abstract class for every publisher.
 
     Args:
-        Generic (_type_): Base superclass for BasePublisher.
-        metaclass (_type_): Base metaclass for BasePublisher.
+        Generic (_type_): Base superclass for IBasePublisher.
+        metaclass (_type_): Base metaclass for IBasePublisher.
     """
 
     @abstractmethod

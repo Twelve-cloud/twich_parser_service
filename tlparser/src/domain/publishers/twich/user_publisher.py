@@ -9,15 +9,15 @@ from domain.events.twich.user_events import (
     TwichUserCreatedOrUpdatedEvent,
     TwichUserDeletedByLoginEvent,
 )
-from domain.publishers.base.base_publisher import BasePublisher
+from domain.publishers.base.base_publisher import IBasePublisher
 
 
-class TwichUserPublisher(BasePublisher[TwichUserCreatedOrUpdatedEvent]):
+class ITwichUserPublisher(IBasePublisher[TwichUserCreatedOrUpdatedEvent]):
     """
-    TwichUserPublisher: Abstract class for twich user publishers.
+    ITwichUserPublisher: Abstract class for twich user publishers.
 
     Args:
-        BasePublisher (TwichUserCreatedOrUpdatedEvent): Base publisher for TwichUserPublisher.
+        IBasePublisher (TwichUserCreatedOrUpdatedEvent): Base publisher for ITwichUserPublisher.
     """
 
     @abstractmethod

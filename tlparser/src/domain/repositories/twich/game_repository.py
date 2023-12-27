@@ -10,15 +10,15 @@ from domain.events.twich.game_events import (
     TwichGameCreatedOrUpdatedEvent,
     TwichGameDeletedByNameEvent,
 )
-from domain.repositories.base.base_repository import BaseRepository
+from domain.repositories.base.base_repository import IBaseRepository
 
 
-class TwichGameRepository(BaseRepository[TwichGameEntity, TwichGameCreatedOrUpdatedEvent]):
+class ITwichGameRepository(IBaseRepository[TwichGameEntity, TwichGameCreatedOrUpdatedEvent]):
     """
-    TwichGameRepository: Abstract class for twich game repositories.
+    ITwichGameRepository: Abstract class for twich game repositories.
 
     Args:
-        BaseRepository (TwichGameEntity): BaseRepository for TwichGameRepository.
+        IBaseRepository (TwichGameEntity): IBaseRepository for ITwichGameRepository.
     """
 
     @abstractmethod

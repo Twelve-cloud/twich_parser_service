@@ -11,16 +11,16 @@ from domain.events.lamoda.products_events import (
     LamodaProductsDeletedByCategoryEvent,
     PublicParseProductsCalledEvent,
 )
-from domain.publishers.lamoda.products_publisher import LamodaProductsPublisher
+from domain.publishers.lamoda.products_publisher import ILamodaProductsPublisher
 from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 
-class LamodaProductsKafkaPublisher(LamodaProductsPublisher):
+class LamodaProductsKafkaPublisher(ILamodaProductsPublisher):
     """
     LamodaProductsKafkaPublisher: Kafka implementation publisher class for lamoda products.
 
     Args:
-        BasePublisher (_type_): Base publisher for LamodaProductsKafkaPublisher.
+        IBasePublisher (_type_): Base publisher for LamodaProductsKafkaPublisher.
     """
 
     def __init__(self, kafka_producer: KafkaProducerConnection) -> None:

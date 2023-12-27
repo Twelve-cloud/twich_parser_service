@@ -6,9 +6,11 @@ products_controller.py: File, containing lamoda products controller.
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
-from application.schemas.lamoda.product_schema import LamodaProductReadSchema
-from application.services.lamoda.products_service import LamodaProductsService
+from domain.entities.lamoda.product_entity import LamodaProductEntity
 from domain.exceptions.lamoda.products_exceptions import WrongCategoryUrlException
+from domain.services.lamoda.products_service import ILamodaProductsService
+from presentation.mappers.lamoda.product_mapper import LamodaProductMapper
+from presentation.schemas.lamoda.product_schema import LamodaProductSchema
 
 
 class LamodaProductsController:
@@ -16,15 +18,15 @@ class LamodaProductsController:
     LamodaProductsController: Class, representing lamoda controller. It handles all http exceptions.
     """
 
-    def __init__(self, service: LamodaProductsService) -> None:
+    def __init__(self, service: ILamodaProductsService) -> None:
         """
         __init__: Initialize lamoda controller class.
 
         Args:
-            service (LamodaProductsService): LamodaProductsService instance.
+            service (ILamodaProductsService): Lamoda products service abstract class.
         """
 
-        self.service: LamodaProductsService = service
+        self.service: ILamodaProductsService = service
 
     async def parse_products(self, category: str) -> None:
         """
@@ -36,7 +38,7 @@ class LamodaProductsController:
 
         await self.service.parse_products(category)
 
-    async def private_parse_products(self, category: str) -> list[LamodaProductReadSchema]:
+    async def private_parse_products(self, category: str) -> list[LamodaProductSchema]:
         """
         private_parse_products: Delegate parsing to LamodaProductsService, handle all exceptions.
 
@@ -53,11 +55,14 @@ class LamodaProductsController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            list[LamodaProductReadSchema]: List of LamodaProductReadSchema instances.
+            list[LamodaProductSchema]: List of LamodaProductSchema instances.
         """
 
         try:
-            return await self.service.private_parse_products(category)
+            products: list[LamodaProductEntity] = await self.service.private_parse_products(
+                category
+            )
+            return [LamodaProductMapper.to_schema(product) for product in products]
         except WrongCategoryUrlException:
             raise HTTPException(status_code=400, detail='Wrong category url')
         except ConnectionError:
@@ -89,7 +94,7 @@ class LamodaProductsController:
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    async def get_all_products(self) -> list[LamodaProductReadSchema]:
+    async def get_all_products(self) -> list[LamodaProductSchema]:
         """
         get_all_products: Delegate access to LamodaProductsService, catch and handle exceptions.
 
@@ -97,15 +102,16 @@ class LamodaProductsController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            list[LamodaProductReadSchema]: List of lamoda products.
+            list[LamodaProductSchema]: List of lamoda products.
         """
 
         try:
-            return await self.service.get_all_products()
+            products: list[LamodaProductEntity] = await self.service.get_all_products()
+            return [LamodaProductMapper.to_schema(product) for product in products]
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    async def get_products_by_category(self, category: str) -> list[LamodaProductReadSchema]:
+    async def get_products_by_category(self, category: str) -> list[LamodaProductSchema]:
         """
         get_products_by_category: Delegate access to LamodaProductsService, handle exceptions.
 
@@ -116,10 +122,13 @@ class LamodaProductsController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            list[LamodaProductReadSchema]: List of lamoda products with the same category.
+            list[LamodaProductSchema]: List of lamoda products with the same category.
         """
 
         try:
-            return await self.service.get_products_by_category(category)
+            products: list[LamodaProductEntity] = await self.service.get_products_by_category(
+                category
+            )
+            return [LamodaProductMapper.to_schema(product) for product in products]
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')

@@ -10,18 +10,18 @@ from domain.events.lamoda.products_events import (
     PublicParseProductsCalledEvent,
 )
 from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.lamoda.products_repository import LamodaProductsRepository
+from domain.repositories.lamoda.products_repository import ILamodaProductsRepository
 from infrastructure.connections.mongo.database import MongoDatabase
 from infrastructure.mappers.lamoda.mongo.product_mapper import LamodaProductMapper
 from infrastructure.models.lamoda.mongo.product_model import LamodaProduct
 
 
-class LamodaProductsMongoRepository(LamodaProductsRepository):
+class LamodaProductsMongoRepository(ILamodaProductsRepository):
     """
-    LamodaProductsMongoRepository: Mongo implementation of LamodaProductsRepository.
+    LamodaProductsMongoRepository: Mongo implementation of ILamodaProductsRepository.
 
     Args:
-        LamodaProductsRepository (_type_): Repository abstract class.
+        ILamodaProductsRepository (_type_): Repository abstract class.
     """
 
     def __init__(self, db: MongoDatabase) -> None:

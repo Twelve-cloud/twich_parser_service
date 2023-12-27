@@ -12,18 +12,18 @@ from domain.events.twich.game_events import (
 )
 from domain.exceptions.twich.game_exceptions import GameNotFoundException
 from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.twich.game_repository import TwichGameRepository
+from domain.repositories.twich.game_repository import ITwichGameRepository
 from infrastructure.connections.elastic.database import ElasticSearchDatabase
 from infrastructure.mappers.twich.elastic.game_mapper import TwichGameMapper
 from infrastructure.models.twich.elastic.game_model import TwichGame
 
 
-class TwichGameElasticRepository(TwichGameRepository):
+class TwichGameElasticRepository(ITwichGameRepository):
     """
-    TwichGameElasticRepository: Elastic implementation of TwichGameRepository.
+    TwichGameElasticRepository: Elastic implementation of ITwichGameRepository.
 
     Args:
-        TwichGameRepository (_type_): Repository abstract class.
+        ITwichGameRepository (_type_): Repository abstract class.
     """
 
     def __init__(self, db: ElasticSearchDatabase) -> None:

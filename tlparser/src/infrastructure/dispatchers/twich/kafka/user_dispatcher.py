@@ -11,7 +11,7 @@ from domain.events.twich.user_events import (
     TwichUserCreatedOrUpdatedEvent,
     TwichUserDeletedByLoginEvent,
 )
-from domain.repositories.twich.user_repository import TwichUserRepository
+from domain.repositories.twich.user_repository import ITwichUserRepository
 
 
 class TwichUserKafkaDispatcher:
@@ -24,7 +24,7 @@ class TwichUserKafkaDispatcher:
         bootstrap_servers: str,
         api_version: tuple,
         topic: str,
-        repository: TwichUserRepository,
+        repository: ITwichUserRepository,
     ) -> None:
         """
         __init__: Initialize twich user kafka dispathcer.
@@ -41,7 +41,7 @@ class TwichUserKafkaDispatcher:
             value_deserializer=lambda v: loads(v),
         )
         self.consumer.subscribe([topic])
-        self.repository: TwichUserRepository = repository
+        self.repository: ITwichUserRepository = repository
         Thread(target=self.run, args=()).start()
 
     def run(self) -> None:

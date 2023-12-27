@@ -12,18 +12,18 @@ from domain.events.twich.game_events import (
 )
 from domain.exceptions.twich.game_exceptions import GameNotFoundException
 from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.twich.game_repository import TwichGameRepository
+from domain.repositories.twich.game_repository import ITwichGameRepository
 from infrastructure.connections.mongo.database import MongoDatabase
 from infrastructure.mappers.twich.mongo.game_mapper import TwichGameMapper
 from infrastructure.models.twich.mongo.game_model import TwichGame
 
 
-class TwichGameMongoRepository(TwichGameRepository):
+class TwichGameMongoRepository(ITwichGameRepository):
     """
-    TwichGameMongoRepository: Mongo implementation of TwichGameRepository.
+    TwichGameMongoRepository: Mongo implementation of ITwichGameRepository.
 
     Args:
-        TwichGameRepository (_type_): Repository abstract class.
+        ITwichGameRepository (_type_): Repository abstract class.
     """
 
     def __init__(self, db: MongoDatabase) -> None:

@@ -11,16 +11,16 @@ from domain.events.twich.stream_events import (
     TwichStreamCreatedOrUpdatedEvent,
     TwichStreamDeletedByUserLoginEvent,
 )
-from domain.publishers.twich.stream_publisher import TwichStreamPublisher
+from domain.publishers.twich.stream_publisher import ITwichStreamPublisher
 from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 
-class TwichStreamKafkaPublisher(TwichStreamPublisher):
+class TwichStreamKafkaPublisher(ITwichStreamPublisher):
     """
     TwichStreamKafkaPublisher: Kafka implementation publisher class for twich stream.
 
     Args:
-        BasePublisher (_type_): Base publisher for TwichStreamKafkaPublisher.
+        IBasePublisher (_type_): Base publisher for TwichStreamKafkaPublisher.
     """
 
     def __init__(self, kafka_producer: KafkaProducerConnection) -> None:

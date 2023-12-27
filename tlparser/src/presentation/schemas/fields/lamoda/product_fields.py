@@ -4,7 +4,7 @@ product_fields.py: File, containing types for lamoda product.
 
 
 from enum import Enum
-from application.fields.base.meta_fields import EnumMetaclass
+from presentation.schemas.fields.base.meta_fields import EnumMetaclass
 
 
 class CurrencyType(str, Enum, metaclass=EnumMetaclass):

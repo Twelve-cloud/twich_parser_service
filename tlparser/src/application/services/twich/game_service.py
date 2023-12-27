@@ -6,8 +6,6 @@ game_service.py: File, containing service for a twich game.
 from fastapi import status
 from requests import Response, get
 from application.dependencies.twich.token_dependency import TwichAPIToken
-from application.mappers.twich.game_mapper import TwichGameCreateMapper, TwichGameReadMapper
-from application.schemas.twich.game_schema import TwichGameCreateSchema, TwichGameReadSchema
 from common.config.twich.settings import settings
 from domain.entities.twich.game_entity import TwichGameEntity
 from domain.events.twich.game_events import (
@@ -20,9 +18,9 @@ from domain.exceptions.twich.game_exceptions import (
     GetGameBadRequestException,
     GetGameUnauthorizedException,
 )
-from domain.publishers.twich.game_publisher import TwichGamePublisher
+from domain.publishers.twich.game_publisher import ITwichGamePublisher
 from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.twich.game_repository import TwichGameRepository
+from domain.repositories.twich.game_repository import ITwichGameRepository
 
 
 class TwichGameService:
@@ -32,19 +30,19 @@ class TwichGameService:
 
     def __init__(
         self,
-        repository: TwichGameRepository,
-        publisher: TwichGamePublisher,
+        repository: ITwichGameRepository,
+        publisher: ITwichGamePublisher,
         token: TwichAPIToken,
     ) -> None:
         """
         __init__: Do some initialization for TwichGameService class.
 
         Args:
-            repository (TwichGameRepository): Twich game repository.
+            repository (ITwichGameRepository): Twich game repository.
         """
 
-        self.repository: TwichGameRepository = repository
-        self.publisher: TwichGamePublisher = publisher
+        self.repository: ITwichGameRepository = repository
+        self.publisher: ITwichGamePublisher = publisher
         self.access_token: str = token.access_token
         self.headers: dict[str, str] = token.headers
 
@@ -62,7 +60,7 @@ class TwichGameService:
 
         return
 
-    async def private_parse_game(self, game_name: str) -> TwichGameReadSchema:
+    async def private_parse_game(self, game_name: str) -> TwichGameEntity:
         """
         private_parse_game: Parse game data from the Twich.
 
@@ -75,7 +73,7 @@ class TwichGameService:
             GameNotFoundException: Raised when TwichAPI return no game.
 
         Returns:
-            TwichGameReadSchema: TwichGameReadSchema instance.
+            TwichGameEntity: TwichGameEntity instance.
         """
 
         response: Response = get(
@@ -94,21 +92,17 @@ class TwichGameService:
         if not game_data:
             raise GameNotFoundException
 
-        game_schema: TwichGameCreateSchema = TwichGameCreateSchema(**game_data[0])
+        game_entity: TwichGameEntity = TwichGameEntity(**game_data[0])
 
         game: ResultWithEvent[TwichGameEntity, TwichGameCreatedOrUpdatedEvent] = (
-            self.repository.create_or_update(
-                TwichGameCreateMapper.to_domain(game_schema),
-            )
+            self.repository.create_or_update(game_entity)
         )
 
         game_event: TwichGameCreatedOrUpdatedEvent = game.event
 
         self.publisher.publish_created_or_updated_event(game_event)
 
-        game_entity: TwichGameEntity = game.result
-
-        return TwichGameReadMapper.to_schema(game_entity)
+        return game.result
 
     async def delete_game_by_name(self, game_name: str) -> None:
         """
@@ -124,17 +118,17 @@ class TwichGameService:
 
         return
 
-    async def get_all_games(self) -> list[TwichGameReadSchema]:
+    async def get_all_games(self) -> list[TwichGameEntity]:
         """
         get_all_games: Return all twich games.
 
         Returns:
-            list[TwichGameReadSchema]: List of twich games.
+            list[TwichGameEntity]: List of twich games.
         """
 
-        return [TwichGameReadMapper.to_schema(game_entity) for game_entity in self.repository.all()]
+        return self.repository.all()
 
-    async def get_game_by_name(self, game_name: str) -> TwichGameReadSchema:
+    async def get_game_by_name(self, game_name: str) -> TwichGameEntity:
         """
         get_game_by_name: Return twich game by name.
 
@@ -142,9 +136,9 @@ class TwichGameService:
             game_name (str): Name of the game.
 
         Returns:
-            TwichGameReadSchema: TwichGameReadSchema instance.
+            TwichGameEntity: TwichGameEntity instance.
         """
 
         game_entity: TwichGameEntity = self.repository.get_game_by_name(game_name)
 
-        return TwichGameReadMapper.to_schema(game_entity)
+        return game_entity

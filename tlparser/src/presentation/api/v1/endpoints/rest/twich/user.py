@@ -8,10 +8,10 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
-from application.schemas.twich.user_schema import TwichUserReadSchema
 from container import Container
 from presentation.api.v1.endpoints.metadata.twich.user_metadata import TwichUserMetadata
 from presentation.controllers.twich.user_controller import TwichUserController
+from presentation.schemas.twich.user_schema import TwichUserSchema
 
 
 router: APIRouter = APIRouter(
@@ -55,16 +55,16 @@ async def parse_user(
 async def private_parse_user(
     user_login: Annotated[str, Path(min_length=1, max_length=128)],
     controller: TwichUserController = Depends(Provide[Container.twich_user_w_controller]),
-) -> TwichUserReadSchema:
+) -> TwichUserSchema:
     """
-    private_parse_user: Parse twich user and return result as TwichUserReadSchema.
+    private_parse_user: Parse twich user and return result as TwichUserSchema.
 
     Args:
         user_login (str): Login of the user.
         controller (TwichUserController): Twich user controller.
 
     Returns:
-        TwichUserReadSchema: Response as TwichUserReadSchema instance.
+        TwichUserSchema: Response as TwichUserSchema instance.
     """
 
     return await controller.private_parse_user(user_login)
@@ -105,7 +105,7 @@ async def delete_user_by_login(
 @inject
 async def get_all_users(
     controller: TwichUserController = Depends(Provide[Container.twich_user_r_controller]),
-) -> list[TwichUserReadSchema]:
+) -> list[TwichUserSchema]:
     """
     get_all_users: Return all twich users.
 
@@ -113,7 +113,7 @@ async def get_all_users(
         controller (TwichUserController): Twich user controller.
 
     Returns:
-        list[TwichUserReadSchema]: List of twich users.
+        list[TwichUserSchema]: List of twich users.
     """
 
     return await controller.get_all_users()
@@ -129,7 +129,7 @@ async def get_all_users(
 async def get_user_by_login(
     user_login: Annotated[str, Path(min_length=1, max_length=128)],
     controller: TwichUserController = Depends(Provide[Container.twich_user_r_controller]),
-) -> TwichUserReadSchema:
+) -> TwichUserSchema:
     """
     get_user_by_login: Return twich user by login.
 
@@ -138,7 +138,7 @@ async def get_user_by_login(
         controller (TwichUserController): Twich user controller.
 
     Returns:
-        TwichUserReadSchema: TwichUserReadSchema instance.
+        TwichUserSchema: TwichUserSchema instance.
     """
 
     return await controller.get_user_by_login(user_login)

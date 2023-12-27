@@ -23,6 +23,7 @@ class TwichGameEntity(BaseEntity):
         igdb_id: Optional[str] = None,
         box_art_url: Optional[str] = None,
         parsed_at: Optional[datetime] = None,
+        **kwargs: dict,
     ) -> None:
         """
         __init__: Initialize twich game entity.

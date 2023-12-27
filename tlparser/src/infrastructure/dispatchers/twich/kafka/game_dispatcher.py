@@ -11,7 +11,7 @@ from domain.events.twich.game_events import (
     TwichGameCreatedOrUpdatedEvent,
     TwichGameDeletedByNameEvent,
 )
-from domain.repositories.twich.game_repository import TwichGameRepository
+from domain.repositories.twich.game_repository import ITwichGameRepository
 
 
 class TwichGameKafkaDispatcher:
@@ -24,7 +24,7 @@ class TwichGameKafkaDispatcher:
         bootstrap_servers: str,
         api_version: tuple,
         topic: str,
-        repository: TwichGameRepository,
+        repository: ITwichGameRepository,
     ) -> None:
         """
         __init__: Initialize twich game kafka dispathcer.
@@ -41,7 +41,7 @@ class TwichGameKafkaDispatcher:
             value_deserializer=lambda v: loads(v),
         )
         self.consumer.subscribe([topic])
-        self.repository: TwichGameRepository = repository
+        self.repository: ITwichGameRepository = repository
         Thread(target=self.run, args=()).start()
 
     def run(self) -> None:

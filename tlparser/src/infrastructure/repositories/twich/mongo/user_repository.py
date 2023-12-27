@@ -12,18 +12,18 @@ from domain.events.twich.user_events import (
 )
 from domain.exceptions.twich.user_exceptions import UserNotFoundException
 from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.twich.user_repository import TwichUserRepository
+from domain.repositories.twich.user_repository import ITwichUserRepository
 from infrastructure.connections.mongo.database import MongoDatabase
 from infrastructure.mappers.twich.mongo.user_mapper import TwichUserMapper
 from infrastructure.models.twich.mongo.user_model import TwichUser
 
 
-class TwichUserMongoRepository(TwichUserRepository):
+class TwichUserMongoRepository(ITwichUserRepository):
     """
-    TwichUserMongoRepository: Mongo implementation of TwichUserRepository.
+    TwichUserMongoRepository: Mongo implementation of ITwichUserRepository.
 
     Args:
-        TwichUserRepository (_type_): Repository abstract class.
+        ITwichUserRepository (_type_): Repository abstract class.
     """
 
     def __init__(self, db: MongoDatabase) -> None:

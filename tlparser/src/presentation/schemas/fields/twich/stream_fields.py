@@ -4,7 +4,7 @@ stream_fields.py: File, containing types for twich stream.
 
 
 from enum import Enum
-from application.fields.base.meta_fields import EnumMetaclass
+from presentation.schemas.fields.base.meta_fields import EnumMetaclass
 
 
 class TwichStreamStatusType(str, Enum, metaclass=EnumMetaclass):

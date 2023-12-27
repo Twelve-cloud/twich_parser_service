@@ -8,10 +8,10 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
-from application.schemas.lamoda.product_schema import LamodaProductReadSchema
 from container import Container
 from presentation.api.v1.endpoints.metadata.lamoda.products_metadata import LamodaProductsMetadata
 from presentation.controllers.lamoda.products_controller import LamodaProductsController
+from presentation.schemas.lamoda.product_schema import LamodaProductSchema
 
 
 router: APIRouter = APIRouter(
@@ -55,16 +55,16 @@ async def parse_products(
 async def private_parse_products(
     category: Annotated[str, Path(min_length=1, max_length=128)],
     controller: LamodaProductsController = Depends(Provide[Container.lamoda_products_w_controller]),
-) -> list[LamodaProductReadSchema]:
+) -> list[LamodaProductSchema]:
     """
-    private_parse_products: Parse lamoda products and return result as LamodaProductReadSchema.
+    private_parse_products: Parse lamoda products and return result as LamodaProductSchema.
 
     Args:
         category (str): Category of the products.
         controller (LamodaProductsController): Lamoda controller.
 
     Returns:
-        list[LamodaProductReadSchema]: Response as list of LamodaProductReadSchema instances.
+        list[LamodaProductSchema]: Response as list of LamodaProductSchema instances.
     """
 
     return await controller.private_parse_products(category)
@@ -105,7 +105,7 @@ async def delete_products_by_category(
 @inject
 async def get_all_products(
     controller: LamodaProductsController = Depends(Provide[Container.lamoda_products_r_controller]),
-) -> list[LamodaProductReadSchema]:
+) -> list[LamodaProductSchema]:
     """
     get_all_products: Return all lamoda products.
 
@@ -113,7 +113,7 @@ async def get_all_products(
         controller (LamodaProductsController): Lamoda controller.
 
     Returns:
-        list[LamodaProductReadSchema]: List of lamoda products.
+        list[LamodaProductSchema]: List of lamoda products.
     """
 
     return await controller.get_all_products()
@@ -129,7 +129,7 @@ async def get_all_products(
 async def get_products_by_category(
     category: Annotated[str, Path(min_length=1, max_length=128)],
     controller: LamodaProductsController = Depends(Provide[Container.lamoda_products_r_controller]),
-) -> list[LamodaProductReadSchema]:
+) -> list[LamodaProductSchema]:
     """
     get_products_by_category: Return lamoda products with the same category.
 
@@ -138,7 +138,7 @@ async def get_products_by_category(
         controller (LamodaProductsController): Lamoda controller.
 
     Returns:
-        list[LamodaProductReadSchema]: List of lamoda products with the same category.
+        list[LamodaProductSchema]: List of lamoda products with the same category.
     """
 
     return await controller.get_products_by_category(category)

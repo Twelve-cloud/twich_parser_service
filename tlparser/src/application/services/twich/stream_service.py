@@ -6,8 +6,6 @@ stream_service.py: File, containing service for a twich stream.
 from fastapi import status
 from requests import Response, get
 from application.dependencies.twich.token_dependency import TwichAPIToken
-from application.mappers.twich.stream_mapper import TwichStreamCreateMapper, TwichStreamReadMapper
-from application.schemas.twich.stream_schema import TwichStreamCreateSchema, TwichStreamReadSchema
 from common.config.twich.settings import settings
 from domain.entities.twich.stream_entity import TwichStreamEntity
 from domain.events.twich.stream_events import (
@@ -20,9 +18,9 @@ from domain.exceptions.twich.stream_exceptions import (
     GetStreamUnauthorizedException,
     StreamNotFoundException,
 )
-from domain.publishers.twich.stream_publisher import TwichStreamPublisher
+from domain.publishers.twich.stream_publisher import ITwichStreamPublisher
 from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.twich.stream_repository import TwichStreamRepository
+from domain.repositories.twich.stream_repository import ITwichStreamRepository
 
 
 class TwichStreamService:
@@ -32,19 +30,19 @@ class TwichStreamService:
 
     def __init__(
         self,
-        repository: TwichStreamRepository,
-        publisher: TwichStreamPublisher,
+        repository: ITwichStreamRepository,
+        publisher: ITwichStreamPublisher,
         token: TwichAPIToken,
     ) -> None:
         """
         __init__: Do some initialization for TwichStreamService class.
 
         Args:
-            repository (TwichStreamRepository): Twich stream repository.
+            repository (ITwichStreamRepository): Twich stream repository.
         """
 
-        self.repository: TwichStreamRepository = repository
-        self.publisher: TwichStreamPublisher = publisher
+        self.repository: ITwichStreamRepository = repository
+        self.publisher: ITwichStreamPublisher = publisher
         self.access_token: str = token.access_token
         self.headers: dict[str, str] = token.headers
 
@@ -62,7 +60,7 @@ class TwichStreamService:
 
         return
 
-    async def private_parse_stream(self, user_login: str) -> TwichStreamReadSchema:
+    async def private_parse_stream(self, user_login: str) -> TwichStreamEntity:
         """
         private_parse_stream: Parse stream data from the Twich.
 
@@ -75,7 +73,7 @@ class TwichStreamService:
             StreamNotFoundException: Raised when TwichAPI return no stream.
 
         Returns:
-            TwichStreamReadSchema: TwichStreamReadSchema instance.
+            TwichStreamEntity: TwichStreamEntity instance.
         """
 
         response: Response = get(
@@ -94,21 +92,17 @@ class TwichStreamService:
         if not stream_data:
             raise StreamNotFoundException
 
-        stream_schema: TwichStreamCreateSchema = TwichStreamCreateSchema(**stream_data[0])
+        stream_entity: TwichStreamEntity = TwichStreamEntity(**stream_data[0])
 
         stream: ResultWithEvent[TwichStreamEntity, TwichStreamCreatedOrUpdatedEvent] = (
-            self.repository.create_or_update(
-                TwichStreamCreateMapper.to_domain(stream_schema),
-            )
+            self.repository.create_or_update(stream_entity)
         )
 
         stream_event: TwichStreamCreatedOrUpdatedEvent = stream.event
 
         self.publisher.publish_created_or_updated_event(stream_event)
 
-        stream_entity: TwichStreamEntity = stream.result
-
-        return TwichStreamReadMapper.to_schema(stream_entity)
+        return stream.result
 
     async def delete_stream_by_user_login(self, user_login: str) -> None:
         """
@@ -126,20 +120,17 @@ class TwichStreamService:
 
         return
 
-    async def get_all_streams(self) -> list[TwichStreamReadSchema]:
+    async def get_all_streams(self) -> list[TwichStreamEntity]:
         """
         get_all_streams: Return all twich streams.
 
         Returns:
-            list[TwichStreamReadSchema]: List of twich streams.
+            list[TwichStreamEntity]: List of twich streams.
         """
 
-        return [
-            TwichStreamReadMapper.to_schema(stream_entity)
-            for stream_entity in self.repository.all()
-        ]
+        return self.repository.all()
 
-    async def get_stream_by_user_login(self, user_login: str) -> TwichStreamReadSchema:
+    async def get_stream_by_user_login(self, user_login: str) -> TwichStreamEntity:
         """
         get_stream_by_user_login _summary_
 
@@ -147,9 +138,9 @@ class TwichStreamService:
             user_login (str): _description_
 
         Returns:
-            TwichStreamReadSchema: TwichStreamReadSchema instance.
+            TwichStreamEntity: TwichStreamEntity instance.
         """
 
         stream_entity: TwichStreamEntity = self.repository.get_stream_by_user_login(user_login)
 
-        return TwichStreamReadMapper.to_schema(stream_entity)
+        return stream_entity

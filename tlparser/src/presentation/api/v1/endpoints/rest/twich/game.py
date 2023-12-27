@@ -8,10 +8,10 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
-from application.schemas.twich.game_schema import TwichGameReadSchema
 from container import Container
 from presentation.api.v1.endpoints.metadata.twich.game_metadata import TwichGameMetadata
 from presentation.controllers.twich.game_controller import TwichGameController
+from presentation.schemas.twich.game_schema import TwichGameSchema
 
 
 router: APIRouter = APIRouter(
@@ -55,16 +55,16 @@ async def parse_game(
 async def private_parse_game(
     game_name: Annotated[str, Path(min_length=1, max_length=128)],
     controller: TwichGameController = Depends(Provide[Container.twich_game_w_controller]),
-) -> TwichGameReadSchema:
+) -> TwichGameSchema:
     """
-    private_parse_game: Parse twich game and return result as TwichGameReadSchema.
+    private_parse_game: Parse twich game and return result as TwichGameSchema.
 
     Args:
         game_name (str): Identifier of the game.
         controller (TwichGameController): Twich game controller.
 
     Returns:
-        TwichGameReadSchema: Response as TwichGameReadSchema instance.
+        TwichGameSchema: Response as TwichGameSchema instance.
     """
 
     return await controller.private_parse_game(game_name)
@@ -105,7 +105,7 @@ async def delete_game_by_name(
 @inject
 async def get_all_games(
     controller: TwichGameController = Depends(Provide[Container.twich_game_r_controller]),
-) -> list[TwichGameReadSchema]:
+) -> list[TwichGameSchema]:
     """
     get_all_games: Return all twich games.
 
@@ -113,7 +113,7 @@ async def get_all_games(
         controller (TwichGameController): Twich game controller.
 
     Returns:
-        list[TwichGameReadSchema]: List of twich games.
+        list[TwichGameSchema]: List of twich games.
     """
 
     return await controller.get_all_games()
@@ -129,7 +129,7 @@ async def get_all_games(
 async def get_game_by_name(
     game_name: Annotated[str, Path(min_length=1, max_length=128)],
     controller: TwichGameController = Depends(Provide[Container.twich_game_r_controller]),
-) -> TwichGameReadSchema:
+) -> TwichGameSchema:
     """
     get_game_by_name: Return game by name.
 
@@ -138,7 +138,7 @@ async def get_game_by_name(
         controller (TwichGameController): Twich game controller.
 
     Returns:
-        TwichGameReadSchema: TwichGameReadSchema instance.
+        TwichGameSchema: TwichGameSchema instance.
     """
 
     return await controller.get_game_by_name(game_name)

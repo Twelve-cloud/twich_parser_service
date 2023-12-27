@@ -5,7 +5,6 @@ user_model: File, containing twich user model for mongo.
 
 from datetime import datetime
 from mongoengine import DateTimeField, Document, IntField, StringField
-from application.fields.twich.user_fields import TwichUserBroadcasterType, TwichUserType
 
 
 class TwichUser(Document):
@@ -39,11 +38,13 @@ class TwichUser(Document):
     )
 
     type: StringField = StringField(
-        choices=TwichUserType.choices,
+        min_length=0,
+        max_length=128,
     )
 
     broadcaster_type: StringField = StringField(
-        choices=TwichUserBroadcasterType.choices,
+        min_length=0,
+        max_length=128,
     )
 
     profile_image_url: StringField = StringField(

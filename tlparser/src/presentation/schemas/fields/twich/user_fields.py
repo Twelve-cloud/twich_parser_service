@@ -4,7 +4,7 @@ user_fields.py: File, containing types for twich user.
 
 
 from enum import Enum
-from application.fields.base.meta_fields import EnumMetaclass
+from presentation.schemas.fields.base.meta_fields import EnumMetaclass
 
 
 class TwichUserType(str, Enum, metaclass=EnumMetaclass):

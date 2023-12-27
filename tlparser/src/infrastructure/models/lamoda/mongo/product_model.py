@@ -5,7 +5,6 @@ product_model: File, containing lamoda product model for mongo.
 
 from datetime import datetime
 from mongoengine import DateTimeField, Document, FloatField, StringField
-from application.fields.lamoda.product_fields import CurrencyType
 
 
 class LamodaProduct(Document):
@@ -45,7 +44,8 @@ class LamodaProduct(Document):
     )
 
     price_currency: StringField = StringField(
-        choices=CurrencyType.choices,
+        min_length=0,
+        max_length=128,
     )
 
     price_valid_until: DateTimeField = DateTimeField()

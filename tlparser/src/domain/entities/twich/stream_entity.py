@@ -31,6 +31,7 @@ class TwichStreamEntity(BaseEntity):
         viewer_count: Optional[int] = None,
         type: Optional[str] = None,
         parsed_at: Optional[datetime] = None,
+        **kwargs: dict,
     ) -> None:
         """
         __init__: Initialize twich stream entity.

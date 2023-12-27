@@ -8,10 +8,10 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
-from application.schemas.twich.stream_schema import TwichStreamReadSchema
 from container import Container
 from presentation.api.v1.endpoints.metadata.twich.stream_metadata import TwichStreamMetadata
 from presentation.controllers.twich.stream_controller import TwichStreamController
+from presentation.schemas.twich.stream_schema import TwichStreamSchema
 
 
 router: APIRouter = APIRouter(
@@ -55,16 +55,16 @@ async def parse_stream(
 async def private_parse_stream(
     user_login: Annotated[str, Path(min_length=1, max_length=128)],
     controller: TwichStreamController = Depends(Provide[Container.twich_stream_w_controller]),
-) -> TwichStreamReadSchema:
+) -> TwichStreamSchema:
     """
-    private_parse_stream: Parse twich stream and return result as TwichStreamReadSchema.
+    private_parse_stream: Parse twich stream and return result as TwichStreamSchema.
 
     Args:
         user_login (str): Login of the user.
         controller (TwichStreamController): Twich stream controller.
 
     Returns:
-        TwichStreamReadSchema: Response as TwichStreamReadSchema instance.
+        TwichStreamSchema: Response as TwichStreamSchema instance.
     """
 
     return await controller.private_parse_stream(user_login)
@@ -105,7 +105,7 @@ async def delete_stream_by_user_login(
 @inject
 async def get_all_streams(
     controller: TwichStreamController = Depends(Provide[Container.twich_stream_r_controller]),
-) -> list[TwichStreamReadSchema]:
+) -> list[TwichStreamSchema]:
     """
     get_all_streams: Return all streams.
 
@@ -113,7 +113,7 @@ async def get_all_streams(
         controller (TwichStreamController): Twich stream controller.
 
     Returns:
-        list[TwichStreamReadSchema]: List of twich streams.
+        list[TwichStreamSchema]: List of twich streams.
     """
 
     return await controller.get_all_streams()
@@ -129,7 +129,7 @@ async def get_all_streams(
 async def get_stream_by_user_login(
     user_login: Annotated[str, Path(min_length=1, max_length=128)],
     controller: TwichStreamController = Depends(Provide[Container.twich_stream_r_controller]),
-) -> TwichStreamReadSchema:
+) -> TwichStreamSchema:
     """
     get_stream_by_user_login: Return twich stream by user login.
 
@@ -138,7 +138,7 @@ async def get_stream_by_user_login(
         controller (TwichStreamController): Twich stream controller.
 
     Returns:
-        TwichStreamReadSchema: TwichStreamReadSchema instance.
+        TwichStreamSchema: TwichStreamSchema instance.
     """
 
     return await controller.get_stream_by_user_login(user_login)

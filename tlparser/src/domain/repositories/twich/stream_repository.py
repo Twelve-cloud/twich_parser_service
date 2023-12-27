@@ -10,15 +10,15 @@ from domain.events.twich.stream_events import (
     TwichStreamCreatedOrUpdatedEvent,
     TwichStreamDeletedByUserLoginEvent,
 )
-from domain.repositories.base.base_repository import BaseRepository
+from domain.repositories.base.base_repository import IBaseRepository
 
 
-class TwichStreamRepository(BaseRepository[TwichStreamEntity, TwichStreamCreatedOrUpdatedEvent]):
+class ITwichStreamRepository(IBaseRepository[TwichStreamEntity, TwichStreamCreatedOrUpdatedEvent]):
     """
-    TwichStreamRepository: Abstract class for twich stream repositories.
+    ITwichStreamRepository: Abstract class for twich stream repositories.
 
     Args:
-        BaseRepository (TwichStreamEntity): BaseRepository for TwichStreamRepository.
+        IBaseRepository (TwichStreamEntity): IBaseRepository for ITwichStreamRepository.
     """
 
     @abstractmethod

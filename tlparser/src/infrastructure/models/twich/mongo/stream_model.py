@@ -5,7 +5,6 @@ stream_model: File, containing twich stream model for mongo.
 
 from datetime import datetime
 from mongoengine import DateTimeField, Document, IntField, ListField, StringField
-from application.fields.twich.stream_fields import TwichStreamStatusType
 
 
 class TwichStream(Document):
@@ -68,7 +67,8 @@ class TwichStream(Document):
     )
 
     type: StringField = StringField(
-        choices=TwichStreamStatusType.choices,
+        min_length=0,
+        max_length=128,
     )
 
     parsed_at: DateTimeField = DateTimeField(

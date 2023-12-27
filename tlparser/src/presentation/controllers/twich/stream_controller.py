@@ -6,13 +6,15 @@ stream_controller.py: File, containing twich stream controller.
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
-from application.schemas.twich.stream_schema import TwichStreamReadSchema
-from application.services.twich.stream_service import TwichStreamService
+from domain.entities.twich.stream_entity import TwichStreamEntity
 from domain.exceptions.twich.stream_exceptions import (
     GetStreamBadRequestException,
     GetStreamUnauthorizedException,
     StreamNotFoundException,
 )
+from domain.services.twich.stream_service import ITwichStreamService
+from presentation.mappers.twich.stream_mapper import TwichStreamMapper
+from presentation.schemas.twich.stream_schema import TwichStreamSchema
 
 
 class TwichStreamController:
@@ -20,15 +22,15 @@ class TwichStreamController:
     TwichStreamController: Class, representing twich stream controller. It handles all exceptions.
     """
 
-    def __init__(self, service: TwichStreamService) -> None:
+    def __init__(self, service: ITwichStreamService) -> None:
         """
         __init__: Initialize twich stream controller class.
 
         Args:
-            service (TwichStreamService): TwichStreamService instance.
+            service (ITwichStreamService): Twich stream service abstract class.
         """
 
-        self.service: TwichStreamService = service
+        self.service: ITwichStreamService = service
 
     async def parse_stream(self, user_login: str) -> None:
         """
@@ -40,7 +42,7 @@ class TwichStreamController:
 
         await self.service.parse_stream(user_login)
 
-    async def private_parse_stream(self, user_login: str) -> TwichStreamReadSchema:
+    async def private_parse_stream(self, user_login: str) -> TwichStreamSchema:
         """
         private_parse_stream: Delegate parsing to TwichStreamService, catch and handle exceptions.
 
@@ -58,11 +60,12 @@ class TwichStreamController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            TwichStreamReadSchema: TwichStreamReadSchema instance.
+            TwichStreamSchema: TwichStreamSchema instance.
         """
 
         try:
-            return await self.service.private_parse_stream(user_login)
+            stream: TwichStreamEntity = await self.service.private_parse_stream(user_login)
+            return TwichStreamMapper.to_schema(stream)
         except (GetStreamBadRequestException, GetStreamUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except StreamNotFoundException:
@@ -96,7 +99,7 @@ class TwichStreamController:
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    async def get_all_streams(self) -> list[TwichStreamReadSchema]:
+    async def get_all_streams(self) -> list[TwichStreamSchema]:
         """
         get_all_streams: Delegate access to TwichStreamService, handle exceptions.
 
@@ -104,15 +107,16 @@ class TwichStreamController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            list[TwichStreamReadSchema]: List of twich streams.
+            list[TwichStreamSchema]: List of twich streams.
         """
 
         try:
-            return await self.service.get_all_streams()
+            streams: list[TwichStreamEntity] = await self.service.get_all_streams()
+            return [TwichStreamMapper.to_schema(stream) for stream in streams]
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    async def get_stream_by_user_login(self, user_login: str) -> TwichStreamReadSchema:
+    async def get_stream_by_user_login(self, user_login: str) -> TwichStreamSchema:
         """
         get_stream_by_user_login: Delegate access to TwichStreamService, handle exceptions.
 
@@ -124,11 +128,12 @@ class TwichStreamController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            TwichStreamReadSchema: TwichStreamReadSchema instance.
+            TwichStreamSchema: TwichStreamSchema instance.
         """
 
         try:
-            return await self.service.get_stream_by_user_login(user_login)
+            stream: TwichStreamEntity = await self.service.get_stream_by_user_login(user_login)
+            return TwichStreamMapper.to_schema(stream)
         except StreamNotFoundException:
             raise HTTPException(status_code=404, detail='Stream is not found (stream is off)')
         except Exception:

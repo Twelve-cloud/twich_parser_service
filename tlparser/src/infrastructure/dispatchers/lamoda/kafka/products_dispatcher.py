@@ -11,7 +11,7 @@ from domain.events.lamoda.products_events import (
     LamodaProductCreatedOrUpdatedEvent,
     LamodaProductsDeletedByCategoryEvent,
 )
-from domain.repositories.lamoda.products_repository import LamodaProductsRepository
+from domain.repositories.lamoda.products_repository import ILamodaProductsRepository
 
 
 class LamodaProductsKafkaDispatcher:
@@ -24,7 +24,7 @@ class LamodaProductsKafkaDispatcher:
         bootstrap_servers: str,
         api_version: tuple,
         topic: str,
-        repository: LamodaProductsRepository,
+        repository: ILamodaProductsRepository,
     ) -> None:
         """
         __init__: Initialize lamoda products kafka dispathcer.
@@ -41,7 +41,7 @@ class LamodaProductsKafkaDispatcher:
             value_deserializer=lambda v: loads(v),
         )
         self.consumer.subscribe([topic])
-        self.repository: LamodaProductsRepository = repository
+        self.repository: ILamodaProductsRepository = repository
         Thread(target=self.run, args=()).start()
 
     def run(self) -> None:

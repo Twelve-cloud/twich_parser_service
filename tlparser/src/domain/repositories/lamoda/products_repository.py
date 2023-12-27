@@ -10,17 +10,17 @@ from domain.events.lamoda.products_events import (
     LamodaProductsDeletedByCategoryEvent,
     PublicParseProductsCalledEvent,
 )
-from domain.repositories.base.base_repository import BaseRepository
+from domain.repositories.base.base_repository import IBaseRepository
 
 
-class LamodaProductsRepository(
-    BaseRepository[LamodaProductEntity, LamodaProductCreatedOrUpdatedEvent]
+class ILamodaProductsRepository(
+    IBaseRepository[LamodaProductEntity, LamodaProductCreatedOrUpdatedEvent]
 ):
     """
-    LamodaProductsRepository: Abstract class for lamoda products repositories.
+    ILamodaProductsRepository: Abstract class for lamoda products repositories.
 
     Args:
-        BaseRepository (LamodaProductEntity): BaseRepository for LamodaProductsRepository.
+        IBaseRepository (LamodaProductEntity): IBaseRepository for ILamodaProductsRepository.
     """
 
     @abstractmethod

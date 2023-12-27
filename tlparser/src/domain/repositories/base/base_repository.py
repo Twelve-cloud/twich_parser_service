@@ -34,13 +34,13 @@ class ResultWithEvent(Generic[T, E]):
         self.event = event
 
 
-class BaseRepository(Generic[T, E], metaclass=ABCMeta):
+class IBaseRepository(Generic[T, E], metaclass=ABCMeta):
     """
-    BaseRepository: Abstract class for every repository.
+    IBaseRepository: Abstract class for every repository.
 
     Args:
-        Generic (_type_): Base superclass for BaseRepository.
-        metaclass (_type_): Base metaclass for BaseRepository.
+        Generic (_type_): Base superclass for IBaseRepository.
+        metaclass (_type_): Base metaclass for IBaseRepository.
     """
 
     @abstractmethod

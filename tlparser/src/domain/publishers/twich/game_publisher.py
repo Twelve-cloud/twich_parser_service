@@ -9,15 +9,15 @@ from domain.events.twich.game_events import (
     TwichGameCreatedOrUpdatedEvent,
     TwichGameDeletedByNameEvent,
 )
-from domain.publishers.base.base_publisher import BasePublisher
+from domain.publishers.base.base_publisher import IBasePublisher
 
 
-class TwichGamePublisher(BasePublisher[TwichGameCreatedOrUpdatedEvent]):
+class ITwichGamePublisher(IBasePublisher[TwichGameCreatedOrUpdatedEvent]):
     """
-    TwichGamePublisher: Abstract class for twich game publishers.
+    ITwichGamePublisher: Abstract class for twich game publishers.
 
     Args:
-        BasePublisher (TwichGameCreatedOrUpdatedEvent): Base publisher for TwichGamePublisher.
+        IBasePublisher (TwichGameCreatedOrUpdatedEvent): Base publisher for ITwichGamePublisher.
     """
 
     @abstractmethod

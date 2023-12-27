@@ -6,13 +6,15 @@ game_controller.py: File, containing twich game controller.
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
-from application.schemas.twich.game_schema import TwichGameReadSchema
-from application.services.twich.game_service import TwichGameService
+from domain.entities.twich.game_entity import TwichGameEntity
 from domain.exceptions.twich.game_exceptions import (
     GameNotFoundException,
     GetGameBadRequestException,
     GetGameUnauthorizedException,
 )
+from domain.services.twich.game_service import ITwichGameService
+from presentation.mappers.twich.game_mapper import TwichGameMapper
+from presentation.schemas.twich.game_schema import TwichGameSchema
 
 
 class TwichGameController:
@@ -20,15 +22,15 @@ class TwichGameController:
     TwichGameController: Class, representing twich game controller. It handles all exceptions.
     """
 
-    def __init__(self, service: TwichGameService) -> None:
+    def __init__(self, service: ITwichGameService) -> None:
         """
         __init__: Initialize twich game controller class.
 
         Args:
-            service (TwichGameService): TwichGameService instance.
+            service (ITwichGameService): Twich game service abstract class.
         """
 
-        self.service: TwichGameService = service
+        self.service: ITwichGameService = service
 
     async def parse_game(self, game_name: str) -> None:
         """
@@ -40,7 +42,7 @@ class TwichGameController:
 
         await self.service.parse_game(game_name)
 
-    async def private_parse_game(self, game_name: str) -> TwichGameReadSchema:
+    async def private_parse_game(self, game_name: str) -> TwichGameSchema:
         """
         private_parse_game: Delegate parsing to TwichGameService, handle exceptions.
 
@@ -58,11 +60,12 @@ class TwichGameController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            TwichGameReadSchema: TwichGameReadSchema instance.
+            TwichGameSchema: TwichGameSchema instance.
         """
 
         try:
-            return await self.service.private_parse_game(game_name)
+            game: TwichGameEntity = await self.service.private_parse_game(game_name)
+            return TwichGameMapper.to_schema(game)
         except (GetGameBadRequestException, GetGameUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except GameNotFoundException:
@@ -96,7 +99,7 @@ class TwichGameController:
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    async def get_all_games(self) -> list[TwichGameReadSchema]:
+    async def get_all_games(self) -> list[TwichGameSchema]:
         """
         get_all_games: Delegate access to TwichGameService, handle exceptions.
 
@@ -104,15 +107,16 @@ class TwichGameController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            list[TwichGameReadSchema]: List of games.
+            list[TwichGameSchema]: List of games.
         """
 
         try:
-            return await self.service.get_all_games()
+            games: list[TwichGameEntity] = await self.service.get_all_games()
+            return [TwichGameMapper.to_schema(game) for game in games]
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
-    async def get_game_by_name(self, game_name: str) -> TwichGameReadSchema:
+    async def get_game_by_name(self, game_name: str) -> TwichGameSchema:
         """
         get_game_by_name: Delegate access to TwichGameService, handle exceptions.
 
@@ -124,11 +128,12 @@ class TwichGameController:
             HTTPException: Raised when Any other exception is raised.
 
         Returns:
-            TwichGameReadSchema: TwichGameReadSchema instance.
+            TwichGameSchema: TwichGameSchema instance.
         """
 
         try:
-            return await self.service.get_game_by_name(game_name)
+            game: TwichGameEntity = await self.service.get_game_by_name(game_name)
+            return TwichGameMapper.to_schema(game)
         except GameNotFoundException:
             raise HTTPException(status_code=404, detail='Game is not found')
         except Exception:
