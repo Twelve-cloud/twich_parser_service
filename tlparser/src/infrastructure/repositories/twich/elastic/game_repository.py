@@ -4,13 +4,13 @@ game_repository.py: File, containing twich game elastic repository implementatio
 
 
 from typing import Collection
-from application.exceptions.twich.game_exceptions import GameNotFoundException
 from domain.entities.twich.game_entity import TwichGameEntity
 from domain.events.twich.game_events import (
     PublicParseGameCalledEvent,
     TwichGameCreatedOrUpdatedEvent,
     TwichGameDeletedByNameEvent,
 )
+from domain.exceptions.twich.game_exceptions import GameNotFoundException
 from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.twich.game_repository import TwichGameRepository
 from infrastructure.connections.elastic.database import ElasticSearchDatabase
@@ -34,7 +34,7 @@ class TwichGameElasticRepository(TwichGameRepository):
             db (ElasticSearchDatabase): ElasticDatabase instance, containing elastic connection.
         """
 
-        self.db = db
+        self.db: ElasticSearchDatabase = db
         TwichGame.init()
 
     def parse_game(self, name: str) -> PublicParseGameCalledEvent:

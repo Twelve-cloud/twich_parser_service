@@ -17,8 +17,8 @@ class TwichAPIToken:
         __init__: Initialize TwichAPIToken class.
         """
 
-        self.access_token = self._get_twich_api_token()
-        self.headers = self._prepare_token_headers()
+        self.access_token: str = self._get_twich_api_token()
+        self.headers: dict[str, str] = self._prepare_token_headers()
 
     def _get_twich_api_token(self) -> str:
         """

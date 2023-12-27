@@ -6,13 +6,13 @@ stream_controller.py: File, containing twich stream controller.
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
-from application.exceptions.twich.stream_exceptions import (
+from application.schemas.twich.stream_schema import TwichStreamReadSchema
+from application.services.twich.stream_service import TwichStreamService
+from domain.exceptions.twich.stream_exceptions import (
     GetStreamBadRequestException,
     GetStreamUnauthorizedException,
     StreamNotFoundException,
 )
-from application.schemas.twich.stream_schema import TwichStreamReadSchema
-from application.services.twich.stream_service import TwichStreamService
 
 
 class TwichStreamController:
@@ -28,7 +28,7 @@ class TwichStreamController:
             service (TwichStreamService): TwichStreamService instance.
         """
 
-        self.service = service
+        self.service: TwichStreamService = service
 
     def parse_stream(self, user_login: str) -> None:
         """

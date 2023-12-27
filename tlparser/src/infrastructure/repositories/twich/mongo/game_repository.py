@@ -4,13 +4,13 @@ game_repository.py: File, containing twich game mongo repository implementation.
 
 
 from typing import Optional
-from application.exceptions.twich.game_exceptions import GameNotFoundException
 from domain.entities.twich.game_entity import TwichGameEntity
 from domain.events.twich.game_events import (
     PublicParseGameCalledEvent,
     TwichGameCreatedOrUpdatedEvent,
     TwichGameDeletedByNameEvent,
 )
+from domain.exceptions.twich.game_exceptions import GameNotFoundException
 from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.twich.game_repository import TwichGameRepository
 from infrastructure.connections.mongo.database import MongoDatabase
@@ -34,7 +34,7 @@ class TwichGameMongoRepository(TwichGameRepository):
             db (MongoDatabase): MongoDatabase instance, containing mongo connection.
         """
 
-        self.db = db
+        self.db: MongoDatabase = db
 
     def parse_game(self, name: str) -> PublicParseGameCalledEvent:
         """

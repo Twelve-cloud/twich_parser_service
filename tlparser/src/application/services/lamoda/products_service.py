@@ -7,7 +7,6 @@ from json import JSONDecodeError, loads
 from re import compile
 from bs4 import BeautifulSoup
 from requests import Response, session
-from application.exceptions.lamoda.products_exceptions import WrongCategoryUrlException
 from application.mappers.lamoda.product_mapper import (
     LamodaProductCreateMapper,
     LamodaProductReadMapper,
@@ -23,6 +22,7 @@ from domain.events.lamoda.products_events import (
     LamodaProductsDeletedByCategoryEvent,
     PublicParseProductsCalledEvent,
 )
+from domain.exceptions.lamoda.products_exceptions import WrongCategoryUrlException
 from domain.publishers.lamoda.products_publisher import LamodaProductsPublisher
 from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.lamoda.products_repository import LamodaProductsRepository
@@ -45,8 +45,8 @@ class LamodaProductsService:
             repository (LamodaProductsRepository): Lamoda products repository.
         """
 
-        self.repository = repository
-        self.publisher = publisher
+        self.repository: LamodaProductsRepository = repository
+        self.publisher: LamodaProductsPublisher = publisher
 
     def _prepare_product_links(self, category: str) -> list[str]:
         """

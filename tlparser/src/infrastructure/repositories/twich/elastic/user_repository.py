@@ -4,13 +4,13 @@ user_repository.py: File, containing twich user elastic repository implementatio
 
 
 from typing import Collection
-from application.exceptions.twich.user_exceptions import UserNotFoundException
 from domain.entities.twich.user_entity import TwichUserEntity
 from domain.events.twich.user_events import (
     PublicParseUserCalledEvent,
     TwichUserCreatedOrUpdatedEvent,
     TwichUserDeletedByLoginEvent,
 )
+from domain.exceptions.twich.user_exceptions import UserNotFoundException
 from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.twich.user_repository import TwichUserRepository
 from infrastructure.connections.elastic.database import ElasticSearchDatabase
@@ -34,7 +34,7 @@ class TwichUserElasticRepository(TwichUserRepository):
             db (ElasticSearchDatabase): ElasticDatabase instance, containing elastic connection.
         """
 
-        self.db = db
+        self.db: ElasticSearchDatabase = db
         TwichUser.init()
 
     def parse_user(self, login: str) -> PublicParseUserCalledEvent:

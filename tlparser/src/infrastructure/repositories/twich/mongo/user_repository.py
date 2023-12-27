@@ -4,13 +4,13 @@ user_repository.py: File, containing twich user mongo repository implementation.
 
 
 from typing import Optional
-from application.exceptions.twich.user_exceptions import UserNotFoundException
 from domain.entities.twich.user_entity import TwichUserEntity
 from domain.events.twich.user_events import (
     PublicParseUserCalledEvent,
     TwichUserCreatedOrUpdatedEvent,
     TwichUserDeletedByLoginEvent,
 )
+from domain.exceptions.twich.user_exceptions import UserNotFoundException
 from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.twich.user_repository import TwichUserRepository
 from infrastructure.connections.mongo.database import MongoDatabase
@@ -34,7 +34,7 @@ class TwichUserMongoRepository(TwichUserRepository):
             db (MongoDatabase): MongoDatabase instance, containing mongo connection.
         """
 
-        self.db = db
+        self.db: MongoDatabase = db
 
     def parse_user(self, login: str) -> PublicParseUserCalledEvent:
         """

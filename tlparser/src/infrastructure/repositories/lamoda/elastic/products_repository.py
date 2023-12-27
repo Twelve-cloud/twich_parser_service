@@ -32,7 +32,7 @@ class LamodaProductsElasticRepository(LamodaProductsRepository):
             db (ElasticSearchDatabase): ElasticDatabase instance, containing elastic connection.
         """
 
-        self.db = db
+        self.db: ElasticSearchDatabase = db
         LamodaProduct.init()
 
     def parse_products(self, category: str) -> PublicParseProductsCalledEvent:

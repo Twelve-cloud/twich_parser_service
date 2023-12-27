@@ -6,13 +6,13 @@ game_controller.py: File, containing twich game controller.
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
-from application.exceptions.twich.game_exceptions import (
+from application.schemas.twich.game_schema import TwichGameReadSchema
+from application.services.twich.game_service import TwichGameService
+from domain.exceptions.twich.game_exceptions import (
     GameNotFoundException,
     GetGameBadRequestException,
     GetGameUnauthorizedException,
 )
-from application.schemas.twich.game_schema import TwichGameReadSchema
-from application.services.twich.game_service import TwichGameService
 
 
 class TwichGameController:
@@ -28,7 +28,7 @@ class TwichGameController:
             service (TwichGameService): TwichGameService instance.
         """
 
-        self.service = service
+        self.service: TwichGameService = service
 
     def parse_game(self, game_name: str) -> None:
         """

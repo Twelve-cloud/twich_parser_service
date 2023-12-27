@@ -32,7 +32,7 @@ class LamodaProductsMongoRepository(LamodaProductsRepository):
             db (MongoDatabase): MongoDatabase instance, containing mongo connection.
         """
 
-        self.db = db
+        self.db: MongoDatabase = db
 
     def parse_products(self, category: str) -> PublicParseProductsCalledEvent:
         """

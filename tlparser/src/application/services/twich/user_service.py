@@ -6,11 +6,6 @@ user_service.py: File, containing service for a twich user.
 from fastapi import status
 from requests import Response, get
 from application.dependencies.twich.token_dependency import TwichAPIToken
-from application.exceptions.twich.user_exceptions import (
-    GetUserBadRequestException,
-    GetUserUnauthorizedException,
-    UserNotFoundException,
-)
 from application.mappers.twich.user_mapper import TwichUserCreateMapper, TwichUserReadMapper
 from application.schemas.twich.user_schema import TwichUserCreateSchema, TwichUserReadSchema
 from common.config.twich.settings import settings
@@ -19,6 +14,11 @@ from domain.events.twich.user_events import (
     PublicParseUserCalledEvent,
     TwichUserCreatedOrUpdatedEvent,
     TwichUserDeletedByLoginEvent,
+)
+from domain.exceptions.twich.user_exceptions import (
+    GetUserBadRequestException,
+    GetUserUnauthorizedException,
+    UserNotFoundException,
 )
 from domain.publishers.twich.user_publisher import TwichUserPublisher
 from domain.repositories.base.base_repository import ResultWithEvent
@@ -43,10 +43,10 @@ class TwichUserService:
             repository (TwichUserRepository): Twich user repository.
         """
 
-        self.repository = repository
-        self.publisher = publisher
-        self.access_token = token.access_token
-        self.headers = token.headers
+        self.repository: TwichUserRepository = repository
+        self.publisher: TwichUserPublisher = publisher
+        self.access_token: str = token.access_token
+        self.headers: dict[str, str] = token.headers
 
     def parse_user(self, user_login: str) -> None:
         """

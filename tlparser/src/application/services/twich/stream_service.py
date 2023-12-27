@@ -6,11 +6,6 @@ stream_service.py: File, containing service for a twich stream.
 from fastapi import status
 from requests import Response, get
 from application.dependencies.twich.token_dependency import TwichAPIToken
-from application.exceptions.twich.stream_exceptions import (
-    GetStreamBadRequestException,
-    GetStreamUnauthorizedException,
-    StreamNotFoundException,
-)
 from application.mappers.twich.stream_mapper import TwichStreamCreateMapper, TwichStreamReadMapper
 from application.schemas.twich.stream_schema import TwichStreamCreateSchema, TwichStreamReadSchema
 from common.config.twich.settings import settings
@@ -19,6 +14,11 @@ from domain.events.twich.stream_events import (
     PublicParseStreamCalledEvent,
     TwichStreamCreatedOrUpdatedEvent,
     TwichStreamDeletedByUserLoginEvent,
+)
+from domain.exceptions.twich.stream_exceptions import (
+    GetStreamBadRequestException,
+    GetStreamUnauthorizedException,
+    StreamNotFoundException,
 )
 from domain.publishers.twich.stream_publisher import TwichStreamPublisher
 from domain.repositories.base.base_repository import ResultWithEvent
@@ -43,10 +43,10 @@ class TwichStreamService:
             repository (TwichStreamRepository): Twich stream repository.
         """
 
-        self.repository = repository
-        self.publisher = publisher
-        self.access_token = token.access_token
-        self.headers = token.headers
+        self.repository: TwichStreamRepository = repository
+        self.publisher: TwichStreamPublisher = publisher
+        self.access_token: str = token.access_token
+        self.headers: dict[str, str] = token.headers
 
     def parse_stream(self, user_login: str) -> None:
         """

@@ -4,13 +4,13 @@ stream_repository.py: File, containing twich stream elastic repository implement
 
 
 from typing import Collection
-from application.exceptions.twich.stream_exceptions import StreamNotFoundException
 from domain.entities.twich.stream_entity import TwichStreamEntity
 from domain.events.twich.stream_events import (
     PublicParseStreamCalledEvent,
     TwichStreamCreatedOrUpdatedEvent,
     TwichStreamDeletedByUserLoginEvent,
 )
+from domain.exceptions.twich.stream_exceptions import StreamNotFoundException
 from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.twich.stream_repository import TwichStreamRepository
 from infrastructure.connections.elastic.database import ElasticSearchDatabase
@@ -34,7 +34,7 @@ class TwichStreamElasticRepository(TwichStreamRepository):
             db (ElasticSearchDatabase): ElasticDatabase instance, containing elastic connection.
         """
 
-        self.db = db
+        self.db: ElasticSearchDatabase = db
         TwichStream.init()
 
     def parse_stream(self, user_login: str) -> PublicParseStreamCalledEvent:

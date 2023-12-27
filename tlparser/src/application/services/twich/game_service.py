@@ -6,11 +6,6 @@ game_service.py: File, containing service for a twich game.
 from fastapi import status
 from requests import Response, get
 from application.dependencies.twich.token_dependency import TwichAPIToken
-from application.exceptions.twich.game_exceptions import (
-    GameNotFoundException,
-    GetGameBadRequestException,
-    GetGameUnauthorizedException,
-)
 from application.mappers.twich.game_mapper import TwichGameCreateMapper, TwichGameReadMapper
 from application.schemas.twich.game_schema import TwichGameCreateSchema, TwichGameReadSchema
 from common.config.twich.settings import settings
@@ -19,6 +14,11 @@ from domain.events.twich.game_events import (
     PublicParseGameCalledEvent,
     TwichGameCreatedOrUpdatedEvent,
     TwichGameDeletedByNameEvent,
+)
+from domain.exceptions.twich.game_exceptions import (
+    GameNotFoundException,
+    GetGameBadRequestException,
+    GetGameUnauthorizedException,
 )
 from domain.publishers.twich.game_publisher import TwichGamePublisher
 from domain.repositories.base.base_repository import ResultWithEvent
@@ -43,10 +43,10 @@ class TwichGameService:
             repository (TwichGameRepository): Twich game repository.
         """
 
-        self.repository = repository
-        self.publisher = publisher
-        self.access_token = token.access_token
-        self.headers = token.headers
+        self.repository: TwichGameRepository = repository
+        self.publisher: TwichGamePublisher = publisher
+        self.access_token: str = token.access_token
+        self.headers: dict[str, str] = token.headers
 
     def parse_game(self, game_name: str) -> None:
         """

@@ -4,13 +4,13 @@ stream_repository.py: File, containing twich stream mongo repository implementat
 
 
 from typing import Optional
-from application.exceptions.twich.stream_exceptions import StreamNotFoundException
 from domain.entities.twich.stream_entity import TwichStreamEntity
 from domain.events.twich.stream_events import (
     PublicParseStreamCalledEvent,
     TwichStreamCreatedOrUpdatedEvent,
     TwichStreamDeletedByUserLoginEvent,
 )
+from domain.exceptions.twich.stream_exceptions import StreamNotFoundException
 from domain.repositories.base.base_repository import ResultWithEvent
 from domain.repositories.twich.stream_repository import TwichStreamRepository
 from infrastructure.connections.mongo.database import MongoDatabase
@@ -34,7 +34,7 @@ class TwichStreamMongoRepository(TwichStreamRepository):
             db (MongoDatabase): MongoDatabase instance, containing mongo connection.
         """
 
-        self.db = db
+        self.db: MongoDatabase = db
 
     def parse_stream(self, user_login: str) -> PublicParseStreamCalledEvent:
         """

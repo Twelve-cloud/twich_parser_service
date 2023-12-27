@@ -6,13 +6,13 @@ user_controller.py: File, containing twich user controller.
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
-from application.exceptions.twich.user_exceptions import (
+from application.schemas.twich.user_schema import TwichUserReadSchema
+from application.services.twich.user_service import TwichUserService
+from domain.exceptions.twich.user_exceptions import (
     GetUserBadRequestException,
     GetUserUnauthorizedException,
     UserNotFoundException,
 )
-from application.schemas.twich.user_schema import TwichUserReadSchema
-from application.services.twich.user_service import TwichUserService
 
 
 class TwichUserController:
@@ -28,7 +28,7 @@ class TwichUserController:
             service (TwichUserService): TwichUserService instance.
         """
 
-        self.service = service
+        self.service: TwichUserService = service
 
     def parse_user(self, user_login: str) -> None:
         """

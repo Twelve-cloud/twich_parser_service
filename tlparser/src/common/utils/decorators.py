@@ -29,7 +29,7 @@ def singleton(aClass: Any) -> Callable:
 
         def __call__(self, *args: tuple, **kwargs: dict) -> Optional[aClass]:
             if self.instance is None:
-                self.instance = aClass(*args, **kwargs)
+                self.instance: aClass = aClass(*args, **kwargs)
 
             return self.instance
 
@@ -49,7 +49,7 @@ class ReadOnlyClassProperty:
             function (Callable): Function to decorate.
         """
 
-        self.function = function
+        self.function: Callable = function
 
     def __get__(self, instance: Any, owner: Any) -> Any:
         """
