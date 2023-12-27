@@ -15,12 +15,12 @@ from domain.publishers.lamoda.products_publisher import LamodaProductsPublisher
 from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 
-class KafkaLamodaProductsPublisher(LamodaProductsPublisher):
+class LamodaProductsKafkaPublisher(LamodaProductsPublisher):
     """
-    KafkaLamodaProductsPublisher: Kafka implementation publisher class for lamoda products.
+    LamodaProductsKafkaPublisher: Kafka implementation publisher class for lamoda products.
 
     Args:
-        BasePublisher (_type_): Base publisher for KafkaLamodaProductsPublisher.
+        BasePublisher (_type_): Base publisher for LamodaProductsKafkaPublisher.
     """
 
     def __init__(self, kafka_producer: KafkaProducerConnection) -> None:

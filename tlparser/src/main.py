@@ -36,6 +36,10 @@ class Application:
         )
 
         self.container: Container = Container()
+        self.container.lamoda_products_kafka_dispatcher()
+        self.container.twich_game_kafka_dispatcher()
+        self.container.twich_user_kafka_dispatcher()
+        self.container.twich_stream_kafka_dispatcher()
 
         self.app.add_middleware(
             CORSMiddleware,

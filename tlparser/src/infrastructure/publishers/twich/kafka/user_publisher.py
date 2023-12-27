@@ -15,12 +15,12 @@ from domain.publishers.twich.user_publisher import TwichUserPublisher
 from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 
-class KafkaTwichUserPublisher(TwichUserPublisher):
+class TwichUserKafkaPublisher(TwichUserPublisher):
     """
-    KafkaTwichUserPublisher: Kafka implementation publisher class for twich user.
+    TwichUserKafkaPublisher: Kafka implementation publisher class for twich user.
 
     Args:
-        BasePublisher (_type_): Base publisher for KafkaTwichUserPublisher.
+        BasePublisher (_type_): Base publisher for TwichUserKafkaPublisher.
     """
 
     def __init__(self, kafka_producer: KafkaProducerConnection) -> None:

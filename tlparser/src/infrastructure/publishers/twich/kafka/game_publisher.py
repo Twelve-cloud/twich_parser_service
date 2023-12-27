@@ -15,12 +15,12 @@ from domain.publishers.twich.game_publisher import TwichGamePublisher
 from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 
-class KafkaTwichGamePublisher(TwichGamePublisher):
+class TwichGameKafkaPublisher(TwichGamePublisher):
     """
-    KafkaTwichGamePublisher: Kafka implementation publisher class for twich game.
+    TwichGameKafkaPublisher: Kafka implementation publisher class for twich game.
 
     Args:
-        BasePublisher (_type_): Base publisher for KafkaTwichGamePublisher.
+        BasePublisher (_type_): Base publisher for TwichGameKafkaPublisher.
     """
 
     def __init__(self, kafka_producer: KafkaProducerConnection) -> None:
