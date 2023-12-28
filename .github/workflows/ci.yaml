@@ -42,7 +42,7 @@ jobs:
         run: mypy .
 
       - name: run unit tests
-        run: pytest tests/unit/
+        run: PYTHONPATH=$(pwd)/src/ python -m pytest tests/unit/
 
   caller_static:
     runs-on: [ubuntu-latest]
