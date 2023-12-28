@@ -45,7 +45,7 @@ class TwichUserKafkaService:
             user_login (str): Login of the user.
         """
 
-        self.repository.parse_user(user_login)
+        await self.repository.parse_user(user_login)
 
         return
 
@@ -63,7 +63,7 @@ class TwichUserKafkaService:
         user_entity: TwichUserEntity = await self.domain_service.parse_user(user_login)
 
         user: ResultWithEvent[TwichUserEntity, TwichUserCreatedOrUpdatedEvent] = (
-            self.repository.create_or_update(user_entity)
+            await self.repository.create_or_update(user_entity)
         )
 
         return TwichUserMapper.to_schema(user.result)
@@ -76,7 +76,7 @@ class TwichUserKafkaService:
             schema (TwichUserSchema): Twich user schema.
         """
 
-        self.repository.create_or_update(TwichUserMapper.to_domain(schema))
+        await self.repository.create_or_update(TwichUserMapper.to_domain(schema))
 
     async def delete_user_by_login(self, user_login: str) -> None:
         """
@@ -86,7 +86,7 @@ class TwichUserKafkaService:
             user_login (str): Login of the user.
         """
 
-        self.repository.delete_user_by_login(user_login)
+        await self.repository.delete_user_by_login(user_login)
 
         return
 
@@ -98,7 +98,9 @@ class TwichUserKafkaService:
             list[TwichUserSchema]: List of twich users.
         """
 
-        return [TwichUserMapper.to_schema(user_entity) for user_entity in self.repository.all()]
+        return [
+            TwichUserMapper.to_schema(user_entity) for user_entity in await self.repository.all()
+        ]
 
     async def get_user_by_login(self, user_login: str) -> TwichUserSchema:
         """
@@ -111,6 +113,6 @@ class TwichUserKafkaService:
             TwichUserSchema: TwichUserSchema instance.
         """
 
-        user_entity: TwichUserEntity = self.repository.get_user_by_login(user_login)
+        user_entity: TwichUserEntity = await self.repository.get_user_by_login(user_login)
 
         return TwichUserMapper.to_schema(user_entity)

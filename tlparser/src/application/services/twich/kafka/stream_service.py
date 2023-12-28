@@ -45,7 +45,7 @@ class TwichStreamKafkaService:
             user_login (str): Login of the user.
         """
 
-        self.repository.parse_stream(user_login)
+        await self.repository.parse_stream(user_login)
 
         return
 
@@ -63,7 +63,7 @@ class TwichStreamKafkaService:
         stream_entity: TwichStreamEntity = await self.domain_service.parse_stream(user_login)
 
         stream: ResultWithEvent[TwichStreamEntity, TwichStreamCreatedOrUpdatedEvent] = (
-            self.repository.create_or_update(stream_entity)
+            await self.repository.create_or_update(stream_entity)
         )
 
         return TwichStreamMapper.to_schema(stream.result)
@@ -76,7 +76,7 @@ class TwichStreamKafkaService:
             schema (TwichStreamSchema): Twich stream schema.
         """
 
-        self.repository.create_or_update(TwichStreamMapper.to_domain(schema))
+        await self.repository.create_or_update(TwichStreamMapper.to_domain(schema))
 
     async def delete_stream_by_user_login(self, user_login: str) -> None:
         """
@@ -86,7 +86,7 @@ class TwichStreamKafkaService:
             user_login (str): Login of the user.
         """
 
-        self.repository.delete_stream_by_user_login(user_login)
+        await self.repository.delete_stream_by_user_login(user_login)
 
         return
 
@@ -99,7 +99,8 @@ class TwichStreamKafkaService:
         """
 
         return [
-            TwichStreamMapper.to_schema(stream_entity) for stream_entity in self.repository.all()
+            TwichStreamMapper.to_schema(stream_entity)
+            for stream_entity in await self.repository.all()
         ]
 
     async def get_stream_by_user_login(self, user_login: str) -> TwichStreamSchema:
@@ -113,6 +114,8 @@ class TwichStreamKafkaService:
             TwichStreamSchema: TwichStreamSchema instance.
         """
 
-        stream_entity: TwichStreamEntity = self.repository.get_stream_by_user_login(user_login)
+        stream_entity: TwichStreamEntity = await self.repository.get_stream_by_user_login(
+            user_login,
+        )
 
         return TwichStreamMapper.to_schema(stream_entity)

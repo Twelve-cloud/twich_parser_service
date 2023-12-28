@@ -33,7 +33,7 @@ class TwichStreamKafkaPublisher(ITwichStreamPublisher):
 
         self.producer = kafka_producer.producer
 
-    def publish_parse_stream_called_event(
+    async def publish_parse_stream_called_event(
         self,
         event: PublicParseStreamCalledEvent,
     ) -> None:
@@ -46,7 +46,7 @@ class TwichStreamKafkaPublisher(ITwichStreamPublisher):
 
         Thread(target=self.producer.send, args=(base_settings.KAFKA_PARSING_TOPIC, event)).start()
 
-    def publish_created_or_updated_event(
+    async def publish_created_or_updated_event(
         self,
         event: TwichStreamCreatedOrUpdatedEvent,
     ) -> None:
@@ -59,7 +59,7 @@ class TwichStreamKafkaPublisher(ITwichStreamPublisher):
 
         Thread(target=self.producer.send, args=(twich_settings.KAFKA_STREAM_TOPIC, event)).start()
 
-    def publish_stream_deleted_by_user_login_event(
+    async def publish_stream_deleted_by_user_login_event(
         self,
         event: TwichStreamDeletedByUserLoginEvent,
     ) -> None:

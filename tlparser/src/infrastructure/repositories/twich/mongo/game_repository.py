@@ -36,7 +36,7 @@ class TwichGameMongoRepository(ITwichGameRepository):
 
         self.db: MongoDatabase = db
 
-    def parse_game(self, name: str) -> PublicParseGameCalledEvent:
+    async def parse_game(self, name: str) -> PublicParseGameCalledEvent:
         """
         parse_game: Return event about parsing twich game.
 
@@ -49,7 +49,7 @@ class TwichGameMongoRepository(ITwichGameRepository):
 
         return PublicParseGameCalledEvent(type='twich_game', name=name)
 
-    def create_or_update(
+    async def create_or_update(
         self, game_entity: TwichGameEntity
     ) -> ResultWithEvent[TwichGameEntity, TwichGameCreatedOrUpdatedEvent]:
         """
@@ -79,7 +79,7 @@ class TwichGameMongoRepository(ITwichGameRepository):
             event=event,
         )
 
-    def all(self) -> list[TwichGameEntity]:
+    async def all(self) -> list[TwichGameEntity]:
         """
         all: Return list of twich games.
 
@@ -91,7 +91,7 @@ class TwichGameMongoRepository(ITwichGameRepository):
             TwichGameMapper.to_domain(game_persistence) for game_persistence in TwichGame.objects
         ]
 
-    def delete_game_by_name(self, name: str) -> TwichGameDeletedByNameEvent:
+    async def delete_game_by_name(self, name: str) -> TwichGameDeletedByNameEvent:
         """
         delete_game_by_name: Delete game by name.
 
@@ -107,7 +107,7 @@ class TwichGameMongoRepository(ITwichGameRepository):
 
         return TwichGameDeletedByNameEvent(name=name)
 
-    def get_game_by_name(self, name: str) -> TwichGameEntity:
+    async def get_game_by_name(self, name: str) -> TwichGameEntity:
         """
         get_game_by_name: Return game by name.
 

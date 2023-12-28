@@ -33,7 +33,7 @@ class LamodaProductsKafkaPublisher(ILamodaProductsPublisher):
 
         self.producer = kafka_producer.producer
 
-    def publish_parse_products_called_event(
+    async def publish_parse_products_called_event(
         self,
         event: PublicParseProductsCalledEvent,
     ) -> None:
@@ -46,7 +46,7 @@ class LamodaProductsKafkaPublisher(ILamodaProductsPublisher):
 
         Thread(target=self.producer.send, args=(base_settings.KAFKA_PARSING_TOPIC, event)).start()
 
-    def publish_created_or_updated_event(
+    async def publish_created_or_updated_event(
         self,
         event: LamodaProductCreatedOrUpdatedEvent,
     ) -> None:
@@ -59,7 +59,7 @@ class LamodaProductsKafkaPublisher(ILamodaProductsPublisher):
 
         Thread(target=self.producer.send, args=(lamoda_settings.KAFKA_PRODUCT_TOPIC, event)).start()
 
-    def publish_products_deleted_by_category_event(
+    async def publish_products_deleted_by_category_event(
         self,
         event: LamodaProductsDeletedByCategoryEvent,
     ) -> None:

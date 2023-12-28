@@ -37,7 +37,7 @@ class TwichStreamElasticRepository(ITwichStreamRepository):
         self.db: ElasticSearchDatabase = db
         TwichStream.init()
 
-    def parse_stream(self, user_login: str) -> PublicParseStreamCalledEvent:
+    async def parse_stream(self, user_login: str) -> PublicParseStreamCalledEvent:
         """
         parse_stream: Return event about parsing twich stream.
 
@@ -50,7 +50,7 @@ class TwichStreamElasticRepository(ITwichStreamRepository):
 
         return PublicParseStreamCalledEvent(type='twich_stream', user_login=user_login)
 
-    def create_or_update(
+    async def create_or_update(
         self, stream_entity: TwichStreamEntity
     ) -> ResultWithEvent[TwichStreamEntity, TwichStreamCreatedOrUpdatedEvent]:
         """
@@ -89,7 +89,7 @@ class TwichStreamElasticRepository(ITwichStreamRepository):
             event=event,
         )
 
-    def all(self) -> list[TwichStreamEntity]:
+    async def all(self) -> list[TwichStreamEntity]:
         """
         all: Return list of twich streams.
 
@@ -102,7 +102,10 @@ class TwichStreamElasticRepository(ITwichStreamRepository):
             for stream_persistence in TwichStream.search().query()
         ]
 
-    def delete_stream_by_user_login(self, user_login: str) -> TwichStreamDeletedByUserLoginEvent:
+    async def delete_stream_by_user_login(
+        self,
+        user_login: str,
+    ) -> TwichStreamDeletedByUserLoginEvent:
         """
         delete_stream_by_user_login: Delete stream by user login.
 
@@ -117,7 +120,7 @@ class TwichStreamElasticRepository(ITwichStreamRepository):
 
         return TwichStreamDeletedByUserLoginEvent(user_login=user_login)
 
-    def get_stream_by_user_login(self, user_login: str) -> TwichStreamEntity:
+    async def get_stream_by_user_login(self, user_login: str) -> TwichStreamEntity:
         """
         get_stream_by_user_login: Return stream by user login.
 

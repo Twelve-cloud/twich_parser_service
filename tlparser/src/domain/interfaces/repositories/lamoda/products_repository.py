@@ -24,7 +24,7 @@ class ILamodaProductsRepository(
     """
 
     @abstractmethod
-    def parse_products(self, category: str) -> PublicParseProductsCalledEvent:
+    async def parse_products(self, category: str) -> PublicParseProductsCalledEvent:
         """
         parse_products: Return event about parsing products.
 
@@ -38,7 +38,10 @@ class ILamodaProductsRepository(
         pass
 
     @abstractmethod
-    def delete_products_by_category(self, category: str) -> LamodaProductsDeletedByCategoryEvent:
+    async def delete_products_by_category(
+        self,
+        category: str,
+    ) -> LamodaProductsDeletedByCategoryEvent:
         """
         delete_products_by_category: Delete products by category.
 
@@ -52,7 +55,7 @@ class ILamodaProductsRepository(
         pass
 
     @abstractmethod
-    def get_products_by_category(self, category: str) -> list[LamodaProductEntity]:
+    async def get_products_by_category(self, category: str) -> list[LamodaProductEntity]:
         """
         get_products_by_category: Return products by category.
 

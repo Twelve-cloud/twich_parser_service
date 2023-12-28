@@ -21,7 +21,7 @@ class ILamodaProductsPublisher(IBasePublisher[LamodaProductCreatedOrUpdatedEvent
     """
 
     @abstractmethod
-    def publish_parse_products_called_event(
+    async def publish_parse_products_called_event(
         self,
         event: PublicParseProductsCalledEvent,
     ) -> None:
@@ -35,7 +35,7 @@ class ILamodaProductsPublisher(IBasePublisher[LamodaProductCreatedOrUpdatedEvent
         pass
 
     @abstractmethod
-    def publish_products_deleted_by_category_event(
+    async def publish_products_deleted_by_category_event(
         self,
         event: LamodaProductsDeletedByCategoryEvent,
     ) -> None:

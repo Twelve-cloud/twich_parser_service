@@ -49,9 +49,9 @@ class LamodaProductsRestService:
             category (str): Category lamoda url.
         """
 
-        event: PublicParseProductsCalledEvent = self.repository.parse_products(category)
+        event: PublicParseProductsCalledEvent = await self.repository.parse_products(category)
 
-        self.publisher.publish_parse_products_called_event(event)
+        await self.publisher.publish_parse_products_called_event(event)
 
         return
 
@@ -75,9 +75,9 @@ class LamodaProductsRestService:
         for product_entity in product_entities:
             product_entity_with_event: ResultWithEvent[
                 LamodaProductEntity, LamodaProductCreatedOrUpdatedEvent
-            ] = self.repository.create_or_update(product_entity)
+            ] = await self.repository.create_or_update(product_entity)
 
-            self.publisher.publish_created_or_updated_event(product_entity_with_event.event)
+            await self.publisher.publish_created_or_updated_event(product_entity_with_event.event)
 
             product_schemas.append(LamodaProductMapper.to_schema(product_entity_with_event.result))
 
@@ -91,7 +91,7 @@ class LamodaProductsRestService:
             schema (LamodaProductSchema): Lamoda product schema.
         """
 
-        self.repository.create_or_update(LamodaProductMapper.to_domain(schema))
+        await self.repository.create_or_update(LamodaProductMapper.to_domain(schema))
 
         return
 
@@ -103,11 +103,11 @@ class LamodaProductsRestService:
             category (str): Category lamoda url.
         """
 
-        event: LamodaProductsDeletedByCategoryEvent = self.repository.delete_products_by_category(
-            category,
+        event: LamodaProductsDeletedByCategoryEvent = (
+            await self.repository.delete_products_by_category(category)
         )
 
-        self.publisher.publish_products_deleted_by_category_event(event)
+        await self.publisher.publish_products_deleted_by_category_event(event)
 
         return
 
@@ -121,7 +121,7 @@ class LamodaProductsRestService:
 
         return [
             LamodaProductMapper.to_schema(product_entity)
-            for product_entity in self.repository.all()
+            for product_entity in await self.repository.all()
         ]
 
     async def get_products_by_category(self, category: str) -> list[LamodaProductSchema]:
@@ -137,5 +137,5 @@ class LamodaProductsRestService:
 
         return [
             LamodaProductMapper.to_schema(product_entity)
-            for product_entity in self.repository.get_products_by_category(category)
+            for product_entity in await self.repository.get_products_by_category(category)
         ]

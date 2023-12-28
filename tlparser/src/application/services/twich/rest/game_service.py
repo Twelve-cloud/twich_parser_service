@@ -49,9 +49,9 @@ class TwichGameRestService:
             game_name (str): Name of the game.
         """
 
-        event: PublicParseGameCalledEvent = self.repository.parse_game(game_name)
+        event: PublicParseGameCalledEvent = await self.repository.parse_game(game_name)
 
-        self.publisher.publish_parse_game_called_event(event)
+        await self.publisher.publish_parse_game_called_event(event)
 
         return
 
@@ -69,12 +69,12 @@ class TwichGameRestService:
         game_entity: TwichGameEntity = await self.domain_service.parse_game(game_name)
 
         game_entity_with_event: ResultWithEvent[TwichGameEntity, TwichGameCreatedOrUpdatedEvent] = (
-            self.repository.create_or_update(game_entity)
+            await self.repository.create_or_update(game_entity)
         )
 
         game_event: TwichGameCreatedOrUpdatedEvent = game_entity_with_event.event
 
-        self.publisher.publish_created_or_updated_event(game_event)
+        await self.publisher.publish_created_or_updated_event(game_event)
 
         return TwichGameMapper.to_schema(game_entity_with_event.result)
 
@@ -86,7 +86,7 @@ class TwichGameRestService:
             schema (TwichGameSchema): Twich game schema.
         """
 
-        self.repository.create_or_update(TwichGameMapper.to_domain(schema))
+        await self.repository.create_or_update(TwichGameMapper.to_domain(schema))
 
     async def delete_game_by_name(self, game_name: str) -> None:
         """
@@ -96,9 +96,9 @@ class TwichGameRestService:
             game_name (str): Name of the game.
         """
 
-        event: TwichGameDeletedByNameEvent = self.repository.delete_game_by_name(game_name)
+        event: TwichGameDeletedByNameEvent = await self.repository.delete_game_by_name(game_name)
 
-        self.publisher.publish_game_deleted_by_name_event(event)
+        await self.publisher.publish_game_deleted_by_name_event(event)
 
         return
 
@@ -110,7 +110,9 @@ class TwichGameRestService:
             list[TwichGameSchema]: List of twich games.
         """
 
-        return [TwichGameMapper.to_schema(game_entity) for game_entity in self.repository.all()]
+        return [
+            TwichGameMapper.to_schema(game_entity) for game_entity in await self.repository.all()
+        ]
 
     async def get_game_by_name(self, game_name: str) -> TwichGameSchema:
         """
@@ -123,6 +125,6 @@ class TwichGameRestService:
             TwichGameSchema: TwichGameSchema instance.
         """
 
-        game_entity: TwichGameEntity = self.repository.get_game_by_name(game_name)
+        game_entity: TwichGameEntity = await self.repository.get_game_by_name(game_name)
 
         return TwichGameMapper.to_schema(game_entity)

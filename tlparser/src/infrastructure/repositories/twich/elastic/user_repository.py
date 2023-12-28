@@ -37,7 +37,7 @@ class TwichUserElasticRepository(ITwichUserRepository):
         self.db: ElasticSearchDatabase = db
         TwichUser.init()
 
-    def parse_user(self, login: str) -> PublicParseUserCalledEvent:
+    async def parse_user(self, login: str) -> PublicParseUserCalledEvent:
         """
         parse_user: Return event about parsing twich user.
 
@@ -50,7 +50,7 @@ class TwichUserElasticRepository(ITwichUserRepository):
 
         return PublicParseUserCalledEvent(type='twich_user', login=login)
 
-    def create_or_update(
+    async def create_or_update(
         self, user_entity: TwichUserEntity
     ) -> ResultWithEvent[TwichUserEntity, TwichUserCreatedOrUpdatedEvent]:
         """
@@ -86,7 +86,7 @@ class TwichUserElasticRepository(ITwichUserRepository):
             event=event,
         )
 
-    def all(self) -> list[TwichUserEntity]:
+    async def all(self) -> list[TwichUserEntity]:
         """
         all: Return list of twich users.
 
@@ -99,7 +99,7 @@ class TwichUserElasticRepository(ITwichUserRepository):
             for user_persistence in TwichUser.search().query()
         ]
 
-    def delete_user_by_login(self, login: str) -> TwichUserDeletedByLoginEvent:
+    async def delete_user_by_login(self, login: str) -> TwichUserDeletedByLoginEvent:
         """
         delete_user_by_login: Delete user by login.
 
@@ -114,7 +114,7 @@ class TwichUserElasticRepository(ITwichUserRepository):
 
         return TwichUserDeletedByLoginEvent(login=login)
 
-    def get_user_by_login(self, login: str) -> TwichUserEntity:
+    async def get_user_by_login(self, login: str) -> TwichUserEntity:
         """
         get_user_by_login: Return user by login.
 

@@ -49,9 +49,9 @@ class TwichStreamRestService:
             user_login (str): Login of the user.
         """
 
-        event: PublicParseStreamCalledEvent = self.repository.parse_stream(user_login)
+        event: PublicParseStreamCalledEvent = await self.repository.parse_stream(user_login)
 
-        self.publisher.publish_parse_stream_called_event(event)
+        await self.publisher.publish_parse_stream_called_event(event)
 
         return
 
@@ -69,12 +69,12 @@ class TwichStreamRestService:
         stream_entity: TwichStreamEntity = await self.domain_service.parse_stream(user_login)
 
         stream: ResultWithEvent[TwichStreamEntity, TwichStreamCreatedOrUpdatedEvent] = (
-            self.repository.create_or_update(stream_entity)
+            await self.repository.create_or_update(stream_entity)
         )
 
         stream_event: TwichStreamCreatedOrUpdatedEvent = stream.event
 
-        self.publisher.publish_created_or_updated_event(stream_event)
+        await self.publisher.publish_created_or_updated_event(stream_event)
 
         return TwichStreamMapper.to_schema(stream.result)
 
@@ -86,7 +86,7 @@ class TwichStreamRestService:
             schema (TwichStreamSchema): Twich stream schema.
         """
 
-        self.repository.create_or_update(TwichStreamMapper.to_domain(schema))
+        await self.repository.create_or_update(TwichStreamMapper.to_domain(schema))
 
     async def delete_stream_by_user_login(self, user_login: str) -> None:
         """
@@ -96,11 +96,11 @@ class TwichStreamRestService:
             user_login (str): Login of the user.
         """
 
-        event: TwichStreamDeletedByUserLoginEvent = self.repository.delete_stream_by_user_login(
-            user_login
+        event: TwichStreamDeletedByUserLoginEvent = (
+            await self.repository.delete_stream_by_user_login(user_login)
         )
 
-        self.publisher.publish_stream_deleted_by_user_login_event(event)
+        await self.publisher.publish_stream_deleted_by_user_login_event(event)
 
         return
 
@@ -113,7 +113,8 @@ class TwichStreamRestService:
         """
 
         return [
-            TwichStreamMapper.to_schema(stream_entity) for stream_entity in self.repository.all()
+            TwichStreamMapper.to_schema(stream_entity)
+            for stream_entity in await self.repository.all()
         ]
 
     async def get_stream_by_user_login(self, user_login: str) -> TwichStreamSchema:
@@ -127,6 +128,8 @@ class TwichStreamRestService:
             TwichStreamSchema: TwichStreamSchema instance.
         """
 
-        stream_entity: TwichStreamEntity = self.repository.get_stream_by_user_login(user_login)
+        stream_entity: TwichStreamEntity = await self.repository.get_stream_by_user_login(
+            user_login,
+        )
 
         return TwichStreamMapper.to_schema(stream_entity)

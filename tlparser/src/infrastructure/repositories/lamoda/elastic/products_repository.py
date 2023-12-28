@@ -35,7 +35,7 @@ class LamodaProductsElasticRepository(ILamodaProductsRepository):
         self.db: ElasticSearchDatabase = db
         LamodaProduct.init()
 
-    def parse_products(self, category: str) -> PublicParseProductsCalledEvent:
+    async def parse_products(self, category: str) -> PublicParseProductsCalledEvent:
         """
         parse_products: Return event about parsing products.
 
@@ -48,7 +48,7 @@ class LamodaProductsElasticRepository(ILamodaProductsRepository):
 
         return PublicParseProductsCalledEvent(type='lamoda_product', category=category)
 
-    def create_or_update(
+    async def create_or_update(
         self, product_entity: LamodaProductEntity
     ) -> ResultWithEvent[LamodaProductEntity, LamodaProductCreatedOrUpdatedEvent]:
         """
@@ -82,7 +82,7 @@ class LamodaProductsElasticRepository(ILamodaProductsRepository):
             event=event,
         )
 
-    def all(self) -> list[LamodaProductEntity]:
+    async def all(self) -> list[LamodaProductEntity]:
         """
         all: Return list of lamoda products.
 
@@ -95,7 +95,10 @@ class LamodaProductsElasticRepository(ILamodaProductsRepository):
             for product_persistence in LamodaProduct.search().query()
         ]
 
-    def delete_products_by_category(self, category: str) -> LamodaProductsDeletedByCategoryEvent:
+    async def delete_products_by_category(
+        self,
+        category: str,
+    ) -> LamodaProductsDeletedByCategoryEvent:
         """
         delete_products_by_category: Delete lamoda products by category.
 
@@ -110,7 +113,7 @@ class LamodaProductsElasticRepository(ILamodaProductsRepository):
 
         return LamodaProductsDeletedByCategoryEvent(category=category)
 
-    def get_products_by_category(self, category: str) -> list[LamodaProductEntity]:
+    async def get_products_by_category(self, category: str) -> list[LamodaProductEntity]:
         """
         get_products_by_category: Return lamoda products with the same category.
 

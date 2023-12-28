@@ -49,9 +49,9 @@ class TwichUserRestService:
             user_login (str): Login of the user.
         """
 
-        event: PublicParseUserCalledEvent = self.repository.parse_user(user_login)
+        event: PublicParseUserCalledEvent = await self.repository.parse_user(user_login)
 
-        self.publisher.publish_parse_user_called_event(event)
+        await self.publisher.publish_parse_user_called_event(event)
 
         return
 
@@ -69,12 +69,12 @@ class TwichUserRestService:
         user_entity: TwichUserEntity = await self.domain_service.parse_user(user_login)
 
         user: ResultWithEvent[TwichUserEntity, TwichUserCreatedOrUpdatedEvent] = (
-            self.repository.create_or_update(user_entity)
+            await self.repository.create_or_update(user_entity)
         )
 
         user_event: TwichUserCreatedOrUpdatedEvent = user.event
 
-        self.publisher.publish_created_or_updated_event(user_event)
+        await self.publisher.publish_created_or_updated_event(user_event)
 
         return TwichUserMapper.to_schema(user.result)
 
@@ -86,7 +86,7 @@ class TwichUserRestService:
             schema (TwichUserSchema): Twich user schema.
         """
 
-        self.repository.create_or_update(TwichUserMapper.to_domain(schema))
+        await self.repository.create_or_update(TwichUserMapper.to_domain(schema))
 
     async def delete_user_by_login(self, user_login: str) -> None:
         """
@@ -96,9 +96,9 @@ class TwichUserRestService:
             user_login (str): Login of the user.
         """
 
-        event: TwichUserDeletedByLoginEvent = self.repository.delete_user_by_login(user_login)
+        event: TwichUserDeletedByLoginEvent = await self.repository.delete_user_by_login(user_login)
 
-        self.publisher.publish_user_deleted_by_login_event(event)
+        await self.publisher.publish_user_deleted_by_login_event(event)
 
         return
 
@@ -110,7 +110,9 @@ class TwichUserRestService:
             list[TwichUserSchema]: List of twich users.
         """
 
-        return [TwichUserMapper.to_schema(user_entity) for user_entity in self.repository.all()]
+        return [
+            TwichUserMapper.to_schema(user_entity) for user_entity in await self.repository.all()
+        ]
 
     async def get_user_by_login(self, user_login: str) -> TwichUserSchema:
         """
@@ -123,6 +125,6 @@ class TwichUserRestService:
             TwichUserSchema: TwichUserSchema instance.
         """
 
-        user_entity: TwichUserEntity = self.repository.get_user_by_login(user_login)
+        user_entity: TwichUserEntity = await self.repository.get_user_by_login(user_login)
 
         return TwichUserMapper.to_schema(user_entity)

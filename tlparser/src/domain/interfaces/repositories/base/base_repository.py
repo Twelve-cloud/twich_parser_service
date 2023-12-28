@@ -24,7 +24,7 @@ class IBaseRepository(Generic[T, E], metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def create_or_update(self, entity: T) -> ResultWithEvent[T, E]:
+    async def create_or_update(self, entity: T) -> ResultWithEvent[T, E]:
         """
         create_or_update: Create entity in db if it does not exist, otherwise update it.
 
@@ -38,7 +38,7 @@ class IBaseRepository(Generic[T, E], metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def all(self) -> list[T]:
+    async def all(self) -> list[T]:
         """
         all: Return list of entities. Must be overriden.
 

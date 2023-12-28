@@ -21,7 +21,7 @@ class ITwichStreamPublisher(IBasePublisher[TwichStreamCreatedOrUpdatedEvent]):
     """
 
     @abstractmethod
-    def publish_parse_stream_called_event(
+    async def publish_parse_stream_called_event(
         self,
         event: PublicParseStreamCalledEvent,
     ) -> None:
@@ -35,7 +35,7 @@ class ITwichStreamPublisher(IBasePublisher[TwichStreamCreatedOrUpdatedEvent]):
         pass
 
     @abstractmethod
-    def publish_stream_deleted_by_user_login_event(
+    async def publish_stream_deleted_by_user_login_event(
         self,
         event: TwichStreamDeletedByUserLoginEvent,
     ) -> None:

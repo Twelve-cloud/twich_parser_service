@@ -22,7 +22,7 @@ class ITwichUserRepository(IBaseRepository[TwichUserEntity, TwichUserCreatedOrUp
     """
 
     @abstractmethod
-    def parse_user(self, login: str) -> PublicParseUserCalledEvent:
+    async def parse_user(self, login: str) -> PublicParseUserCalledEvent:
         """
         parse_user: Return event about parsing twich user.
 
@@ -36,7 +36,7 @@ class ITwichUserRepository(IBaseRepository[TwichUserEntity, TwichUserCreatedOrUp
         pass
 
     @abstractmethod
-    def delete_user_by_login(self, login: str) -> TwichUserDeletedByLoginEvent:
+    async def delete_user_by_login(self, login: str) -> TwichUserDeletedByLoginEvent:
         """
         delete_user_by_login: Delete user by login.
 
@@ -50,7 +50,7 @@ class ITwichUserRepository(IBaseRepository[TwichUserEntity, TwichUserCreatedOrUp
         pass
 
     @abstractmethod
-    def get_user_by_login(self, login: str) -> TwichUserEntity:
+    async def get_user_by_login(self, login: str) -> TwichUserEntity:
         """
         get_user_by_login: Return user by login.
 

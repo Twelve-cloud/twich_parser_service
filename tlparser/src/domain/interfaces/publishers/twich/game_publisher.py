@@ -21,7 +21,7 @@ class ITwichGamePublisher(IBasePublisher[TwichGameCreatedOrUpdatedEvent]):
     """
 
     @abstractmethod
-    def publish_parse_game_called_event(
+    async def publish_parse_game_called_event(
         self,
         event: PublicParseGameCalledEvent,
     ) -> None:
@@ -35,7 +35,7 @@ class ITwichGamePublisher(IBasePublisher[TwichGameCreatedOrUpdatedEvent]):
         pass
 
     @abstractmethod
-    def publish_game_deleted_by_name_event(
+    async def publish_game_deleted_by_name_event(
         self,
         event: TwichGameDeletedByNameEvent,
     ) -> None:

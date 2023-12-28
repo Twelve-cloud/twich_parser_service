@@ -22,7 +22,7 @@ class ITwichGameRepository(IBaseRepository[TwichGameEntity, TwichGameCreatedOrUp
     """
 
     @abstractmethod
-    def parse_game(self, name: str) -> PublicParseGameCalledEvent:
+    async def parse_game(self, name: str) -> PublicParseGameCalledEvent:
         """
         parse_game: Return event about parsing twich game.
 
@@ -36,7 +36,7 @@ class ITwichGameRepository(IBaseRepository[TwichGameEntity, TwichGameCreatedOrUp
         pass
 
     @abstractmethod
-    def delete_game_by_name(self, name: str) -> TwichGameDeletedByNameEvent:
+    async def delete_game_by_name(self, name: str) -> TwichGameDeletedByNameEvent:
         """
         delete_game_by_name: Delete game by name.
 
@@ -50,7 +50,7 @@ class ITwichGameRepository(IBaseRepository[TwichGameEntity, TwichGameCreatedOrUp
         pass
 
     @abstractmethod
-    def get_game_by_name(self, name: str) -> TwichGameEntity:
+    async def get_game_by_name(self, name: str) -> TwichGameEntity:
         """
         get_game_by_name: Return game by name.
 

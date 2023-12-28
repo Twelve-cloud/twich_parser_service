@@ -22,7 +22,7 @@ class ITwichStreamRepository(IBaseRepository[TwichStreamEntity, TwichStreamCreat
     """
 
     @abstractmethod
-    def parse_stream(self, user_login: str) -> PublicParseStreamCalledEvent:
+    async def parse_stream(self, user_login: str) -> PublicParseStreamCalledEvent:
         """
         parse_stream: Return event about parsing twich stream.
 
@@ -36,7 +36,10 @@ class ITwichStreamRepository(IBaseRepository[TwichStreamEntity, TwichStreamCreat
         pass
 
     @abstractmethod
-    def delete_stream_by_user_login(self, user_login: str) -> TwichStreamDeletedByUserLoginEvent:
+    async def delete_stream_by_user_login(
+        self,
+        user_login: str,
+    ) -> TwichStreamDeletedByUserLoginEvent:
         """
         delete_stream_by_user_login: Delete stream by user login.
 
@@ -50,7 +53,7 @@ class ITwichStreamRepository(IBaseRepository[TwichStreamEntity, TwichStreamCreat
         pass
 
     @abstractmethod
-    def get_stream_by_user_login(self, user_login: str) -> TwichStreamEntity:
+    async def get_stream_by_user_login(self, user_login: str) -> TwichStreamEntity:
         """
         get_stream_by_user_login: Return stream by user login.
 

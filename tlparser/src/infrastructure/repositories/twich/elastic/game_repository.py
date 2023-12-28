@@ -37,7 +37,7 @@ class TwichGameElasticRepository(ITwichGameRepository):
         self.db: ElasticSearchDatabase = db
         TwichGame.init()
 
-    def parse_game(self, name: str) -> PublicParseGameCalledEvent:
+    async def parse_game(self, name: str) -> PublicParseGameCalledEvent:
         """
         parse_game: Return event about parsing twich game.
 
@@ -50,7 +50,7 @@ class TwichGameElasticRepository(ITwichGameRepository):
 
         return PublicParseGameCalledEvent(type='twich_game', name=name)
 
-    def create_or_update(
+    async def create_or_update(
         self, game_entity: TwichGameEntity
     ) -> ResultWithEvent[TwichGameEntity, TwichGameCreatedOrUpdatedEvent]:
         """
@@ -81,7 +81,7 @@ class TwichGameElasticRepository(ITwichGameRepository):
             event=event,
         )
 
-    def all(self) -> list[TwichGameEntity]:
+    async def all(self) -> list[TwichGameEntity]:
         """
         all: Return list of twich games.
 
@@ -94,7 +94,7 @@ class TwichGameElasticRepository(ITwichGameRepository):
             for game_persistence in TwichGame.search().query()
         ]
 
-    def delete_game_by_name(self, name: str) -> TwichGameDeletedByNameEvent:
+    async def delete_game_by_name(self, name: str) -> TwichGameDeletedByNameEvent:
         """
         delete_game_by_name: Delete game by name.
 
@@ -109,7 +109,7 @@ class TwichGameElasticRepository(ITwichGameRepository):
 
         return TwichGameDeletedByNameEvent(name=name)
 
-    def get_game_by_name(self, name: str) -> TwichGameEntity:
+    async def get_game_by_name(self, name: str) -> TwichGameEntity:
         """
         get_game_by_name: Return game by name.
 

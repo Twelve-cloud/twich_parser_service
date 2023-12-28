@@ -21,7 +21,7 @@ class ITwichUserPublisher(IBasePublisher[TwichUserCreatedOrUpdatedEvent]):
     """
 
     @abstractmethod
-    def publish_parse_user_called_event(
+    async def publish_parse_user_called_event(
         self,
         event: PublicParseUserCalledEvent,
     ) -> None:
@@ -35,7 +35,7 @@ class ITwichUserPublisher(IBasePublisher[TwichUserCreatedOrUpdatedEvent]):
         pass
 
     @abstractmethod
-    def publish_user_deleted_by_login_event(
+    async def publish_user_deleted_by_login_event(
         self,
         event: TwichUserDeletedByLoginEvent,
     ) -> None:

@@ -36,7 +36,7 @@ class TwichUserMongoRepository(ITwichUserRepository):
 
         self.db: MongoDatabase = db
 
-    def parse_user(self, login: str) -> PublicParseUserCalledEvent:
+    async def parse_user(self, login: str) -> PublicParseUserCalledEvent:
         """
         parse_user: Return event about parsing twich user.
 
@@ -49,7 +49,7 @@ class TwichUserMongoRepository(ITwichUserRepository):
 
         return PublicParseUserCalledEvent(type='twich_user', login=login)
 
-    def create_or_update(
+    async def create_or_update(
         self, user_entity: TwichUserEntity
     ) -> ResultWithEvent[TwichUserEntity, TwichUserCreatedOrUpdatedEvent]:
         """
@@ -84,7 +84,7 @@ class TwichUserMongoRepository(ITwichUserRepository):
             event=event,
         )
 
-    def all(self) -> list[TwichUserEntity]:
+    async def all(self) -> list[TwichUserEntity]:
         """
         all: Return list of twich users.
 
@@ -96,7 +96,7 @@ class TwichUserMongoRepository(ITwichUserRepository):
             TwichUserMapper.to_domain(user_persistence) for user_persistence in TwichUser.objects
         ]
 
-    def delete_user_by_login(self, login: str) -> TwichUserDeletedByLoginEvent:
+    async def delete_user_by_login(self, login: str) -> TwichUserDeletedByLoginEvent:
         """
         delete_user_by_login: Delete user by login.
 
@@ -112,7 +112,7 @@ class TwichUserMongoRepository(ITwichUserRepository):
 
         return TwichUserDeletedByLoginEvent(login=login)
 
-    def get_user_by_login(self, login: str) -> TwichUserEntity:
+    async def get_user_by_login(self, login: str) -> TwichUserEntity:
         """
         get_user_by_login: Return user by login.
 

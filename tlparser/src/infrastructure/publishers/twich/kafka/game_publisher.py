@@ -33,7 +33,7 @@ class TwichGameKafkaPublisher(ITwichGamePublisher):
 
         self.producer = kafka_producer.producer
 
-    def publish_parse_game_called_event(
+    async def publish_parse_game_called_event(
         self,
         event: PublicParseGameCalledEvent,
     ) -> None:
@@ -46,7 +46,7 @@ class TwichGameKafkaPublisher(ITwichGamePublisher):
 
         Thread(target=self.producer.send, args=(base_settings.KAFKA_PARSING_TOPIC, event)).start()
 
-    def publish_created_or_updated_event(
+    async def publish_created_or_updated_event(
         self,
         event: TwichGameCreatedOrUpdatedEvent,
     ) -> None:
@@ -59,7 +59,7 @@ class TwichGameKafkaPublisher(ITwichGamePublisher):
 
         Thread(target=self.producer.send, args=(twich_settings.KAFKA_GAME_TOPIC, event)).start()
 
-    def publish_game_deleted_by_name_event(
+    async def publish_game_deleted_by_name_event(
         self,
         event: TwichGameDeletedByNameEvent,
     ) -> None:

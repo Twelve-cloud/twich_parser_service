@@ -33,7 +33,7 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
 
         self.producer = kafka_producer.producer
 
-    def publish_parse_user_called_event(
+    async def publish_parse_user_called_event(
         self,
         event: PublicParseUserCalledEvent,
     ) -> None:
@@ -46,7 +46,7 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
 
         Thread(target=self.producer.send, args=(base_settings.KAFKA_PARSING_TOPIC, event)).start()
 
-    def publish_created_or_updated_event(
+    async def publish_created_or_updated_event(
         self,
         event: TwichUserCreatedOrUpdatedEvent,
     ) -> None:
@@ -59,7 +59,7 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
 
         Thread(target=self.producer.send, args=(twich_settings.KAFKA_USER_TOPIC, event)).start()
 
-    def publish_user_deleted_by_login_event(
+    async def publish_user_deleted_by_login_event(
         self,
         event: TwichUserDeletedByLoginEvent,
     ) -> None:

@@ -21,7 +21,7 @@ class IBasePublisher(Generic[T], metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def publish_created_or_updated_event(self, event: T) -> None:
+    async def publish_created_or_updated_event(self, event: T) -> None:
         """
         publish_created_or_updated_event: Publish created or updated event.
 

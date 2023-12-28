@@ -45,7 +45,7 @@ class LamodaProductsKafkaService:
             category (str): Category lamoda url.
         """
 
-        self.repository.parse_products(category)
+        await self.repository.parse_products(category)
 
         return
 
@@ -69,7 +69,7 @@ class LamodaProductsKafkaService:
         for product_entity in product_entities:
             product_entity_with_event: ResultWithEvent[
                 LamodaProductEntity, LamodaProductCreatedOrUpdatedEvent
-            ] = self.repository.create_or_update(product_entity)
+            ] = await self.repository.create_or_update(product_entity)
 
             product_schemas.append(LamodaProductMapper.to_schema(product_entity_with_event.result))
 
@@ -83,7 +83,7 @@ class LamodaProductsKafkaService:
             schema (LamodaProductSchema): Lamoda product schema.
         """
 
-        self.repository.create_or_update(LamodaProductMapper.to_domain(schema))
+        await self.repository.create_or_update(LamodaProductMapper.to_domain(schema))
 
         return
 
@@ -95,7 +95,7 @@ class LamodaProductsKafkaService:
             category (str): Category lamoda url.
         """
 
-        self.repository.delete_products_by_category(category)
+        await self.repository.delete_products_by_category(category)
 
         return
 
@@ -109,7 +109,7 @@ class LamodaProductsKafkaService:
 
         return [
             LamodaProductMapper.to_schema(product_entity)
-            for product_entity in self.repository.all()
+            for product_entity in await self.repository.all()
         ]
 
     async def get_products_by_category(self, category: str) -> list[LamodaProductSchema]:
@@ -125,5 +125,5 @@ class LamodaProductsKafkaService:
 
         return [
             LamodaProductMapper.to_schema(product_entity)
-            for product_entity in self.repository.get_products_by_category(category)
+            for product_entity in await self.repository.get_products_by_category(category)
         ]
