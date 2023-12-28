@@ -1,36 +1,67 @@
 """
-products_service.py: File, containing lamoda products service abstract class.
+products_service.py: File, containing domain service for lamoda products.
 """
 
 
-from abc import abstractmethod
+from datetime import datetime
+from json import JSONDecodeError, loads
+from re import compile
+from bs4 import BeautifulSoup
+from requests import Response, session
+from common.config.lamoda.settings import settings
 from domain.entities.lamoda.product_entity import LamodaProductEntity
-from domain.services.base.base_service import IBaseService
+from domain.exceptions.lamoda.products_exceptions import WrongCategoryUrlException
 
 
-class ILamodaProductsService(IBaseService):
+class LamodaProductsDomainService:
     """
-    ILamodaProductsService: Class, that represents abstract class for lamoda products service.
-
-    Args:
-        IBaseService (_type_): Base abstract class for lamoda products abstract class.
+    LamodaProductsDomainService: Class, that contains business logic for lamoda products.
     """
 
-    @abstractmethod
-    async def parse_products(self, category: str) -> None:
+    def __init__(self) -> None:
         """
-        parse_products: Called lamoda products publisher to publish event about parsing.
+        __init__: Do some initialization for LamodaProductsDomainService class.
+        """
+
+    async def _prepare_product_links(self, category: str) -> list[str]:
+        """
+        _prepare_product_links: Parse lamoda category url and return list of product links.
 
         Args:
             category (str): Category lamoda url.
+
+        Raises:
+            WrongCategoryUrl: Raised when category url is wrong.
+
+        Returns:
+            list[str]: List of product links.
         """
 
-        pass
+        product_links: list[str] = []
+        page: int = 1
 
-    @abstractmethod
-    async def private_parse_products(self, category: str) -> list[LamodaProductEntity]:
+        with session() as s:
+            category_url: str = settings.LAMODA_CATEGORY_BASE_URL + category
+
+            while True:
+                response: Response = s.get(category_url + f'?page={page}')
+                soup: BeautifulSoup = BeautifulSoup(response.text, 'html.parser')
+                tags: list = soup.find_all('a', href=compile('/p/'))
+
+                if not tags and page == 1:
+                    raise WrongCategoryUrlException
+
+                if not tags:
+                    break
+
+                product_links.extend([tag.attrs['href'] for tag in tags])
+                page += 1
+
+        return product_links
+
+    async def parse_products(self, category: str) -> list[LamodaProductEntity]:
         """
-        private_parse_products: Parse lamoda products by category.
+        parse_products: Parse lamoda products by category.
 
         Args:
             category (str): Category lamoda url.
@@ -39,40 +70,34 @@ class ILamodaProductsService(IBaseService):
             list[LamodaProductEntity]: List of LamodaProductEntity instances.
         """
 
-        pass
+        product_links: list[str] = await self._prepare_product_links(category)
+        products: list[LamodaProductEntity] = []
 
-    @abstractmethod
-    async def delete_products_by_category(self, category: str) -> None:
-        """
-        delete_products_by_category: Delete products by category.
+        with session() as s:
+            for product_link in product_links:
+                response: Response = s.get(settings.LAMODA_BASE_URL + product_link)
+                soup: BeautifulSoup = BeautifulSoup(response.text, 'html.parser')
+                product_data_text: str = soup.find_all('script')[-1].text.replace('&quot;', '')
 
-        Args:
-            category (str): Category lamoda url.
-        """
+                try:
+                    product_data_json: dict = loads(product_data_text)[0]
+                    product_dict: dict = {
+                        'sku': product_data_json['sku'],
+                        'url': settings.LAMODA_BASE_URL + product_link,
+                        'category': product_data_json['category'],
+                        'description': product_data_json['description'],
+                        'price': float(product_data_json['offers']['price']),
+                        'price_currency': product_data_json['offers']['priceCurrency'],
+                        'price_valid_until': product_data_json['offers']['priceValidUntil'],
+                    }
 
-        pass
+                    product_entity: LamodaProductEntity = LamodaProductEntity(**product_dict)
+                    product_entity.price_valid_until = datetime.strptime(
+                        product_dict['price_valid_until'][:-3],
+                        '%Y-%m-%d %H:%M:%S.%f',
+                    )
+                    products.append(product_entity)
+                except (JSONDecodeError, KeyError):
+                    pass
 
-    @abstractmethod
-    async def get_all_products(self) -> list[LamodaProductEntity]:
-        """
-        get_all_products: Return all products.
-
-        Returns:
-            list[LamodaProductEntity]: List of lamoda products.
-        """
-
-        pass
-
-    @abstractmethod
-    async def get_products_by_category(self, category: str) -> list[LamodaProductEntity]:
-        """
-        get_products_by_category: Return products by category.
-
-        Args:
-            category (str): Category lamoda url.
-
-        Returns:
-            list[LamodaProductEntity]: List of lamoda products with the same category.
-        """
-
-        pass
+        return products

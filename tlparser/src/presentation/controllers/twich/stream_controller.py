@@ -6,15 +6,13 @@ stream_controller.py: File, containing twich stream controller.
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
-from domain.entities.twich.stream_entity import TwichStreamEntity
+from application.interfaces.services.twich.stream_service import ITwichStreamService
+from application.schemas.twich.stream_schema import TwichStreamSchema
 from domain.exceptions.twich.stream_exceptions import (
     GetStreamBadRequestException,
     GetStreamUnauthorizedException,
     StreamNotFoundException,
 )
-from domain.services.twich.stream_service import ITwichStreamService
-from presentation.mappers.twich.stream_mapper import TwichStreamMapper
-from presentation.schemas.twich.stream_schema import TwichStreamSchema
 
 
 class TwichStreamController:
@@ -64,8 +62,7 @@ class TwichStreamController:
         """
 
         try:
-            stream: TwichStreamEntity = await self.service.private_parse_stream(user_login)
-            return TwichStreamMapper.to_schema(stream)
+            return await self.service.private_parse_stream(user_login)
         except (GetStreamBadRequestException, GetStreamUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except StreamNotFoundException:
@@ -111,8 +108,7 @@ class TwichStreamController:
         """
 
         try:
-            streams: list[TwichStreamEntity] = await self.service.get_all_streams()
-            return [TwichStreamMapper.to_schema(stream) for stream in streams]
+            return await self.service.get_all_streams()
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
@@ -132,8 +128,7 @@ class TwichStreamController:
         """
 
         try:
-            stream: TwichStreamEntity = await self.service.get_stream_by_user_login(user_login)
-            return TwichStreamMapper.to_schema(stream)
+            return await self.service.get_stream_by_user_login(user_login)
         except StreamNotFoundException:
             raise HTTPException(status_code=404, detail='Stream is not found (stream is off)')
         except Exception:

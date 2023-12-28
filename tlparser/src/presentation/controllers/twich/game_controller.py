@@ -6,15 +6,13 @@ game_controller.py: File, containing twich game controller.
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
-from domain.entities.twich.game_entity import TwichGameEntity
+from application.interfaces.services.twich.game_service import ITwichGameService
+from application.schemas.twich.game_schema import TwichGameSchema
 from domain.exceptions.twich.game_exceptions import (
     GameNotFoundException,
     GetGameBadRequestException,
     GetGameUnauthorizedException,
 )
-from domain.services.twich.game_service import ITwichGameService
-from presentation.mappers.twich.game_mapper import TwichGameMapper
-from presentation.schemas.twich.game_schema import TwichGameSchema
 
 
 class TwichGameController:
@@ -64,8 +62,7 @@ class TwichGameController:
         """
 
         try:
-            game: TwichGameEntity = await self.service.private_parse_game(game_name)
-            return TwichGameMapper.to_schema(game)
+            return await self.service.private_parse_game(game_name)
         except (GetGameBadRequestException, GetGameUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except GameNotFoundException:
@@ -111,8 +108,7 @@ class TwichGameController:
         """
 
         try:
-            games: list[TwichGameEntity] = await self.service.get_all_games()
-            return [TwichGameMapper.to_schema(game) for game in games]
+            return await self.service.get_all_games()
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
@@ -132,8 +128,7 @@ class TwichGameController:
         """
 
         try:
-            game: TwichGameEntity = await self.service.get_game_by_name(game_name)
-            return TwichGameMapper.to_schema(game)
+            return await self.service.get_game_by_name(game_name)
         except GameNotFoundException:
             raise HTTPException(status_code=404, detail='Game is not found')
         except Exception:

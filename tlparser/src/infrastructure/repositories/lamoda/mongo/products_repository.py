@@ -9,8 +9,8 @@ from domain.events.lamoda.products_events import (
     LamodaProductsDeletedByCategoryEvent,
     PublicParseProductsCalledEvent,
 )
-from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.lamoda.products_repository import ILamodaProductsRepository
+from domain.interfaces.repositories.lamoda.products_repository import ILamodaProductsRepository
+from domain.types.types import ResultWithEvent
 from infrastructure.connections.mongo.database import MongoDatabase
 from infrastructure.mappers.lamoda.mongo.product_mapper import LamodaProductMapper
 from infrastructure.models.lamoda.mongo.product_model import LamodaProduct

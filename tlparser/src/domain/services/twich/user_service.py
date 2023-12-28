@@ -1,36 +1,40 @@
 """
-user_service.py: File, containing twich user service abstract class.
+user_service.py: File, containing domain service for a twich user.
 """
 
 
-from abc import abstractmethod
+from datetime import datetime
+from fastapi import status
+from requests import Response, get
+from common.config.twich.settings import settings
+from domain.dependencies.twich.token_dependency import TwichAPIToken
 from domain.entities.twich.user_entity import TwichUserEntity
-from domain.services.base.base_service import IBaseService
+from domain.exceptions.twich.user_exceptions import (
+    GetUserBadRequestException,
+    GetUserUnauthorizedException,
+    UserNotFoundException,
+)
 
 
-class ITwichUserService(IBaseService):
+class TwichUserDomainService:
     """
-    ITwichUserService: Class, that represents abstract class for twich user service.
-
-    Args:
-        IBaseService (_type_): Base abstract class for twich user abstract class.
+    TwichUserDomainService: Class, that contains business logic for twich users.
     """
 
-    @abstractmethod
-    async def parse_user(self, user_login: str) -> None:
+    def __init__(self, token: TwichAPIToken) -> None:
         """
-        parse_user: Called twich user publisher to publish event about parsing.
+        __init__: Do some initialization for TwichUserDomainService class.
 
         Args:
-            user_login (str): Login of the user.
+            token (TwichAPIToken): Token for twich api.
         """
 
-        pass
+        self.access_token: str = token.access_token
+        self.headers: dict[str, str] = token.headers
 
-    @abstractmethod
-    async def private_parse_user(self, user_login: str) -> TwichUserEntity:
+    async def parse_user(self, user_login: str) -> TwichUserEntity:
         """
-        private_parse_user: Parse user data from the Twich.
+        parse_user: Parse user data from the Twich.
 
         Args:
             user_login (str): Login of the user.
@@ -44,40 +48,23 @@ class ITwichUserService(IBaseService):
             TwichUserEntity: TwichUserEntity instance.
         """
 
-        pass
+        response: Response = get(
+            f'{settings.TWICH_GET_USER_BASE_URL}?login={user_login}',
+            headers=self.headers,
+        )
 
-    @abstractmethod
-    async def delete_user_by_login(self, user_login: str) -> None:
-        """
-        delete_user_by_login: Delete twich user.
+        if response.status_code == status.HTTP_400_BAD_REQUEST:
+            raise GetUserBadRequestException
 
-        Args:
-            user_login (str): Login of the user.
-        """
+        if response.status_code == status.HTTP_401_UNAUTHORIZED:
+            raise GetUserUnauthorizedException
 
-        pass
+        user_data: list = response.json().get('data')
 
-    @abstractmethod
-    async def get_all_users(self) -> list[TwichUserEntity]:
-        """
-        get_all_users: Return list of twich users.
+        if not user_data:
+            raise UserNotFoundException
 
-        Returns:
-            list[TwichUserEntity]: List of twich users.
-        """
+        user_entity: TwichUserEntity = TwichUserEntity(**user_data[0])
+        user_entity.created_at = datetime.strptime(user_data[0]['created_at'], '%Y-%m-%dT%H:%M:%SZ')
 
-        pass
-
-    @abstractmethod
-    async def get_user_by_login(self, user_login: str) -> TwichUserEntity:
-        """
-        get_user_by_login: Return user by login.
-
-        Args:
-            user_login (str): Login of the user.
-
-        Returns:
-            TwichUserEntity: TwichUserEntity instance.
-        """
-
-        pass
+        return user_entity

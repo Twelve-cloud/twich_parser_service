@@ -11,7 +11,7 @@ from domain.events.twich.user_events import (
     TwichUserCreatedOrUpdatedEvent,
     TwichUserDeletedByLoginEvent,
 )
-from domain.publishers.twich.user_publisher import ITwichUserPublisher
+from domain.interfaces.publishers.twich.user_publisher import ITwichUserPublisher
 from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 

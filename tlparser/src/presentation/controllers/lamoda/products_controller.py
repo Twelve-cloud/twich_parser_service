@@ -6,11 +6,9 @@ products_controller.py: File, containing lamoda products controller.
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
-from domain.entities.lamoda.product_entity import LamodaProductEntity
+from application.interfaces.services.lamoda.products_service import ILamodaProductsService
+from application.schemas.lamoda.product_schema import LamodaProductSchema
 from domain.exceptions.lamoda.products_exceptions import WrongCategoryUrlException
-from domain.services.lamoda.products_service import ILamodaProductsService
-from presentation.mappers.lamoda.product_mapper import LamodaProductMapper
-from presentation.schemas.lamoda.product_schema import LamodaProductSchema
 
 
 class LamodaProductsController:
@@ -59,10 +57,7 @@ class LamodaProductsController:
         """
 
         try:
-            products: list[LamodaProductEntity] = await self.service.private_parse_products(
-                category
-            )
-            return [LamodaProductMapper.to_schema(product) for product in products]
+            return await self.service.private_parse_products(category)
         except WrongCategoryUrlException:
             raise HTTPException(status_code=400, detail='Wrong category url')
         except ConnectionError:
@@ -106,8 +101,7 @@ class LamodaProductsController:
         """
 
         try:
-            products: list[LamodaProductEntity] = await self.service.get_all_products()
-            return [LamodaProductMapper.to_schema(product) for product in products]
+            return await self.service.get_all_products()
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
@@ -126,9 +120,6 @@ class LamodaProductsController:
         """
 
         try:
-            products: list[LamodaProductEntity] = await self.service.get_products_by_category(
-                category
-            )
-            return [LamodaProductMapper.to_schema(product) for product in products]
+            return await self.service.get_products_by_category(category)
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')

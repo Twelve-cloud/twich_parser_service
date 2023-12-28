@@ -1,78 +1,73 @@
 """
-stream_service: File, containing twich stream service abstract class.
+stream_service.py: File, containing domain service for a twich stream.
 """
 
 
-from abc import abstractmethod
+from datetime import datetime
+from fastapi import status
+from requests import Response, get
+from common.config.twich.settings import settings
+from domain.dependencies.twich.token_dependency import TwichAPIToken
 from domain.entities.twich.stream_entity import TwichStreamEntity
-from domain.services.base.base_service import IBaseService
+from domain.exceptions.twich.stream_exceptions import (
+    GetStreamBadRequestException,
+    GetStreamUnauthorizedException,
+    StreamNotFoundException,
+)
 
 
-class ITwichStreamService(IBaseService):
+class TwichStreamDomainService:
     """
-    ITwichStreamService: Class, that represents abstract class for twich stream service.
-
-    Args:
-        IBaseService (_type_): Base abstract class for twich stream abstract class.
+    TwichStreamDomainService: Class, that contains business logic for twich streams.
     """
 
-    @abstractmethod
-    async def parse_stream(self, user_login: str) -> None:
+    def __init__(self, token: TwichAPIToken) -> None:
         """
-        parse_stream: Called twich stream publisher to publish event about parsing.
+        __init__: Do some initialization for TwichStreamDomainService class.
+
+        Args:
+            token (TwichAPIToken): Token for twich api.
+        """
+
+        self.access_token: str = token.access_token
+        self.headers: dict[str, str] = token.headers
+
+    async def parse_stream(self, user_login: str) -> TwichStreamEntity:
+        """
+        parse_stream: Parse stream data from the Twich.
 
         Args:
             user_login (str): Login of the user.
-        """
 
-        pass
-
-    @abstractmethod
-    async def private_parse_stream(self, user_login: str) -> TwichStreamEntity:
-        """
-        private_parse_stream: Parse stream data from the Twich.
-
-        Args:
-            user_login (str): Login of the user.
+        Raises:
+            GetStreamBadRequestException: Raised when TwichAPI return 400 status code.
+            GetStreamUnauthorizedException: Raised when TwichAPI return 401 status code.
+            StreamNotFoundException: Raised when TwichAPI return no stream.
 
         Returns:
             TwichStreamEntity: TwichStreamEntity instance.
         """
 
-        pass
+        response: Response = get(
+            f'{settings.TWICH_GET_STREAM_BASE_URL}?user_login={user_login}',
+            headers=self.headers,
+        )
 
-    @abstractmethod
-    async def delete_stream_by_user_login(self, user_login: str) -> None:
-        """
-        delete_stream_by_user_login: Delete twich stream.
+        if response.status_code == status.HTTP_400_BAD_REQUEST:
+            raise GetStreamBadRequestException
 
-        Args:
-            user_login (str): Login of the user.
-        """
+        if response.status_code == status.HTTP_401_UNAUTHORIZED:
+            raise GetStreamUnauthorizedException
 
-        pass
+        stream_data: list = response.json().get('data')
 
-    @abstractmethod
-    async def get_all_streams(self) -> list[TwichStreamEntity]:
-        """
-        get_all_streams: Return all twich streams.
+        if not stream_data:
+            raise StreamNotFoundException
 
-        Returns:
-            list[TwichStreamEntity]: List of twich streams.
-        """
+        stream_entity: TwichStreamEntity = TwichStreamEntity(**stream_data[0])
+        stream_entity.started_at = datetime.strptime(
+            stream_data[0]['started_at'],
+            '%Y-%m-%dT%H:%M:%SZ',
+        )
 
-        pass
-
-    @abstractmethod
-    async def get_stream_by_user_login(self, user_login: str) -> TwichStreamEntity:
-        """
-        get_stream_by_user_login _summary_
-
-        Args:
-            user_login (str): _description_
-
-        Returns:
-            TwichStreamEntity: TwichStreamEntity instance.
-        """
-
-        pass
+        return stream_entity

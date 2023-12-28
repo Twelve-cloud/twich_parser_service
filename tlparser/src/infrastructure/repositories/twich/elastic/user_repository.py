@@ -11,8 +11,8 @@ from domain.events.twich.user_events import (
     TwichUserDeletedByLoginEvent,
 )
 from domain.exceptions.twich.user_exceptions import UserNotFoundException
-from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.twich.user_repository import ITwichUserRepository
+from domain.interfaces.repositories.twich.user_repository import ITwichUserRepository
+from domain.types.types import ResultWithEvent
 from infrastructure.connections.elastic.database import ElasticSearchDatabase
 from infrastructure.mappers.twich.elastic.user_mapper import TwichUserMapper
 from infrastructure.models.twich.elastic.user_model import TwichUser

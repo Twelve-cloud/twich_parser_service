@@ -11,8 +11,8 @@ from domain.events.twich.stream_events import (
     TwichStreamDeletedByUserLoginEvent,
 )
 from domain.exceptions.twich.stream_exceptions import StreamNotFoundException
-from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.twich.stream_repository import ITwichStreamRepository
+from domain.interfaces.repositories.twich.stream_repository import ITwichStreamRepository
+from domain.types.types import ResultWithEvent
 from infrastructure.connections.elastic.database import ElasticSearchDatabase
 from infrastructure.mappers.twich.elastic.stream_mapper import TwichStreamMapper
 from infrastructure.models.twich.elastic.stream_model import TwichStream

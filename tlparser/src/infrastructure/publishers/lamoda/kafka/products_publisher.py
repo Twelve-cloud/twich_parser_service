@@ -11,7 +11,7 @@ from domain.events.lamoda.products_events import (
     LamodaProductsDeletedByCategoryEvent,
     PublicParseProductsCalledEvent,
 )
-from domain.publishers.lamoda.products_publisher import ILamodaProductsPublisher
+from domain.interfaces.publishers.lamoda.products_publisher import ILamodaProductsPublisher
 from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 

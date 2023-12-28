@@ -11,7 +11,7 @@ from domain.events.twich.stream_events import (
     TwichStreamCreatedOrUpdatedEvent,
     TwichStreamDeletedByUserLoginEvent,
 )
-from domain.publishers.twich.stream_publisher import ITwichStreamPublisher
+from domain.interfaces.publishers.twich.stream_publisher import ITwichStreamPublisher
 from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 

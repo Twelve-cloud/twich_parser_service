@@ -8,10 +8,10 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
+from application.schemas.twich.user_schema import TwichUserSchema
 from container import Container
 from presentation.api.v1.endpoints.metadata.twich.user_metadata import TwichUserMetadata
 from presentation.controllers.twich.user_controller import TwichUserController
-from presentation.schemas.twich.user_schema import TwichUserSchema
 
 
 router: APIRouter = APIRouter(

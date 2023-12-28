@@ -6,15 +6,13 @@ user_controller.py: File, containing twich user controller.
 from fastapi import HTTPException
 from pydantic import ValidationError
 from requests import ConnectionError, RequestException, Timeout, TooManyRedirects
-from domain.entities.twich.user_entity import TwichUserEntity
+from application.interfaces.services.twich.user_service import ITwichUserService
+from application.schemas.twich.user_schema import TwichUserSchema
 from domain.exceptions.twich.user_exceptions import (
     GetUserBadRequestException,
     GetUserUnauthorizedException,
     UserNotFoundException,
 )
-from domain.services.twich.user_service import ITwichUserService
-from presentation.mappers.twich.user_mapper import TwichUserMapper
-from presentation.schemas.twich.user_schema import TwichUserSchema
 
 
 class TwichUserController:
@@ -64,8 +62,7 @@ class TwichUserController:
         """
 
         try:
-            user: TwichUserEntity = await self.service.private_parse_user(user_login)
-            return TwichUserMapper.to_schema(user)
+            return await self.service.private_parse_user(user_login)
         except (GetUserBadRequestException, GetUserUnauthorizedException):
             raise HTTPException(status_code=503, detail='Service unavaliable (TwichAPI exception)')
         except UserNotFoundException:
@@ -111,8 +108,7 @@ class TwichUserController:
         """
 
         try:
-            users: list[TwichUserEntity] = await self.service.get_all_users()
-            return [TwichUserMapper.to_schema(user) for user in users]
+            return await self.service.get_all_users()
         except Exception:
             raise HTTPException(status_code=503, detail='Service unavaliable (internal error)')
 
@@ -132,8 +128,7 @@ class TwichUserController:
         """
 
         try:
-            user: TwichUserEntity = await self.service.get_user_by_login(user_login)
-            return TwichUserMapper.to_schema(user)
+            return await self.service.get_user_by_login(user_login)
         except UserNotFoundException:
             raise HTTPException(status_code=404, detail='User is not found')
         except Exception:

@@ -11,8 +11,8 @@ from domain.events.twich.game_events import (
     TwichGameDeletedByNameEvent,
 )
 from domain.exceptions.twich.game_exceptions import GameNotFoundException
-from domain.repositories.base.base_repository import ResultWithEvent
-from domain.repositories.twich.game_repository import ITwichGameRepository
+from domain.interfaces.repositories.twich.game_repository import ITwichGameRepository
+from domain.types.types import ResultWithEvent
 from infrastructure.connections.elastic.database import ElasticSearchDatabase
 from infrastructure.mappers.twich.elastic.game_mapper import TwichGameMapper
 from infrastructure.models.twich.elastic.game_model import TwichGame

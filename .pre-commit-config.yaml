@@ -31,7 +31,7 @@ repos:
 
       - id: parser_ut
         name: parser unit tests
-        entry: bash -c "cd tlparser && poetry run pytest tests/unit/"
+        entry: bash -c "cd tlparser && PYTHONPATH=$(pwd)/src/ poetry run python -m pytest tests/unit/"
         language: system
         types: [python]
         pass_filenames: false

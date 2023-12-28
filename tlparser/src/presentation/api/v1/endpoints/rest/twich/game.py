@@ -8,10 +8,10 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, Response, status
 from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
+from application.schemas.twich.game_schema import TwichGameSchema
 from container import Container
 from presentation.api.v1.endpoints.metadata.twich.game_metadata import TwichGameMetadata
 from presentation.controllers.twich.game_controller import TwichGameController
-from presentation.schemas.twich.game_schema import TwichGameSchema
 
 
 router: APIRouter = APIRouter(

@@ -11,7 +11,7 @@ from domain.events.twich.game_events import (
     TwichGameCreatedOrUpdatedEvent,
     TwichGameDeletedByNameEvent,
 )
-from domain.publishers.twich.game_publisher import ITwichGamePublisher
+from domain.interfaces.publishers.twich.game_publisher import ITwichGamePublisher
 from infrastructure.connections.kafka.producer import KafkaProducerConnection
 
 
