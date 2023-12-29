@@ -44,7 +44,11 @@ class TwichStreamKafkaDispatcher:
         )
         self.consumer.subscribe([topic])
         self.service: ITwichStreamService = service
-        Thread(target=asyncio.run, args=(self.run(),)).start()
+        Thread(
+            target=asyncio.run,
+            args=(self.run(),),
+            daemon=True,
+        ).start()
 
     async def run(self) -> None:
         """

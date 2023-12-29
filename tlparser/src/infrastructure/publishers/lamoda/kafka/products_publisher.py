@@ -44,7 +44,11 @@ class LamodaProductsKafkaPublisher(ILamodaProductsPublisher):
             event (PublicParseProductsCalledEvent): Public parse products called event.
         """
 
-        Thread(target=self.producer.send, args=(base_settings.KAFKA_PARSING_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(base_settings.KAFKA_PARSING_TOPIC, event),
+            daemon=True,
+        ).start()
 
     async def publish_created_or_updated_event(
         self,
@@ -57,7 +61,11 @@ class LamodaProductsKafkaPublisher(ILamodaProductsPublisher):
             event (LamodaProductCreatedOrUpdatedEvent): Lamoda products created/updated event.
         """
 
-        Thread(target=self.producer.send, args=(lamoda_settings.KAFKA_PRODUCT_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(lamoda_settings.KAFKA_PRODUCT_TOPIC, event),
+            daemon=True,
+        ).start()
 
     async def publish_products_deleted_by_category_event(
         self,
@@ -70,4 +78,8 @@ class LamodaProductsKafkaPublisher(ILamodaProductsPublisher):
             event (LamodaProductsDeletedByCategoryEvent): Lamoda products deleted by category event.
         """
 
-        Thread(target=self.producer.send, args=(lamoda_settings.KAFKA_PRODUCT_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(lamoda_settings.KAFKA_PRODUCT_TOPIC, event),
+            daemon=True,
+        ).start()

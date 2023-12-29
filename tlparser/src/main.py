@@ -51,15 +51,12 @@ class Application:
 
         self.app.include_router(rest_v1_routers, prefix=f'/{settings.API_NAME}')
 
+        redis = aioredis.from_url(
+            f'{settings.REDIS_PROTOCOL}://{settings.REDIS_USERNAME}:{settings.REDIS_PASSWORD}'
+            f'@{settings.REDIS_HOST}:{settings.REDIS_PORT}/{settings.REDIS_DB_NUMBER}'
+        )
+        FastAPICache.init(RedisBackend(redis), prefix='fastapi-cache')
+
 
 application: Application = Application()
 app: FastAPI = application.app
-
-
-@app.on_event("startup")
-async def startup() -> None:
-    redis = aioredis.from_url(
-        f'{settings.REDIS_PROTOCOL}://{settings.REDIS_USERNAME}:{settings.REDIS_PASSWORD}'
-        f'@{settings.REDIS_HOST}:{settings.REDIS_PORT}/{settings.REDIS_DB_NUMBER}'
-    )
-    FastAPICache.init(RedisBackend(redis), prefix='fastapi-cache')

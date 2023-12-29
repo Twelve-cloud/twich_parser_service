@@ -44,7 +44,11 @@ class TwichStreamKafkaPublisher(ITwichStreamPublisher):
             event (PublicParseStreamCalledEvent): Public parse stream called event.
         """
 
-        Thread(target=self.producer.send, args=(base_settings.KAFKA_PARSING_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(base_settings.KAFKA_PARSING_TOPIC, event),
+            daemon=True,
+        ).start()
 
     async def publish_created_or_updated_event(
         self,
@@ -57,7 +61,11 @@ class TwichStreamKafkaPublisher(ITwichStreamPublisher):
             event (TwichStreamCreatedOrUpdatedEvent): Twich stream created/updated event.
         """
 
-        Thread(target=self.producer.send, args=(twich_settings.KAFKA_STREAM_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(twich_settings.KAFKA_STREAM_TOPIC, event),
+            daemon=True,
+        ).start()
 
     async def publish_stream_deleted_by_user_login_event(
         self,
@@ -70,4 +78,8 @@ class TwichStreamKafkaPublisher(ITwichStreamPublisher):
             event (TwichStreamDeletedByUserLoginEvent): Twich stream deleted by user login event.
         """
 
-        Thread(target=self.producer.send, args=(twich_settings.KAFKA_STREAM_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(twich_settings.KAFKA_STREAM_TOPIC, event),
+            daemon=True,
+        ).start()

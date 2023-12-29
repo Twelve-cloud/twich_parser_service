@@ -44,7 +44,11 @@ class TwichGameKafkaPublisher(ITwichGamePublisher):
             event (PublicParseGameCalledEvent): Public parse game called event.
         """
 
-        Thread(target=self.producer.send, args=(base_settings.KAFKA_PARSING_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(base_settings.KAFKA_PARSING_TOPIC, event),
+            daemon=True,
+        ).start()
 
     async def publish_created_or_updated_event(
         self,
@@ -57,7 +61,11 @@ class TwichGameKafkaPublisher(ITwichGamePublisher):
             event (TwichGameCreatedOrUpdatedEvent): Twich game created/updated event.
         """
 
-        Thread(target=self.producer.send, args=(twich_settings.KAFKA_GAME_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(twich_settings.KAFKA_GAME_TOPIC, event),
+            daemon=True,
+        ).start()
 
     async def publish_game_deleted_by_name_event(
         self,
@@ -70,4 +78,8 @@ class TwichGameKafkaPublisher(ITwichGamePublisher):
             event (TwichGameDeletedByNameEvent): Twich game deleted by name event.
         """
 
-        Thread(target=self.producer.send, args=(twich_settings.KAFKA_GAME_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(twich_settings.KAFKA_GAME_TOPIC, event),
+            daemon=True,
+        ).start()

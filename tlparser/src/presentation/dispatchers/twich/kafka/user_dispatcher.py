@@ -44,7 +44,11 @@ class TwichUserKafkaDispatcher:
         )
         self.consumer.subscribe([topic])
         self.service: ITwichUserService = service
-        Thread(target=asyncio.run, args=(self.run(),)).start()
+        Thread(
+            target=asyncio.run,
+            args=(self.run(),),
+            daemon=True,
+        ).start()
 
     async def run(self) -> None:
         """

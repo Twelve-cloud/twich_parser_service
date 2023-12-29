@@ -59,7 +59,7 @@ class LamodaProductsController:
         try:
             return await self.service.private_parse_products(category)
         except WrongCategoryUrlException:
-            raise HTTPException(status_code=400, detail='Wrong category url')
+            raise HTTPException(status_code=404, detail='Wrong category url')
         except ConnectionError:
             raise HTTPException(status_code=503, detail='Service unavaliable (connection issues)')
         except Timeout:

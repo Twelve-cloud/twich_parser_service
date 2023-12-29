@@ -44,7 +44,11 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
             event (PublicParseUserCalledEvent): Public parse user called event.
         """
 
-        Thread(target=self.producer.send, args=(base_settings.KAFKA_PARSING_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(base_settings.KAFKA_PARSING_TOPIC, event),
+            daemon=True,
+        ).start()
 
     async def publish_created_or_updated_event(
         self,
@@ -57,7 +61,11 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
             event (TwichUserCreatedOrUpdatedEvent): Twich user created/updated event.
         """
 
-        Thread(target=self.producer.send, args=(twich_settings.KAFKA_USER_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(twich_settings.KAFKA_USER_TOPIC, event),
+            daemon=True,
+        ).start()
 
     async def publish_user_deleted_by_login_event(
         self,
@@ -70,4 +78,8 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
             event (TwichUserDeletedByLoginEvent): Twich user deleted by login event.
         """
 
-        Thread(target=self.producer.send, args=(twich_settings.KAFKA_USER_TOPIC, event)).start()
+        Thread(
+            target=self.producer.send,
+            args=(twich_settings.KAFKA_USER_TOPIC, event),
+            daemon=True,
+        ).start()
