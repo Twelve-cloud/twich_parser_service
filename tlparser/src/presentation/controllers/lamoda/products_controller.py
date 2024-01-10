@@ -26,22 +26,22 @@ class LamodaProductsController:
 
         self.service: ILamodaProductsService = service
 
-    async def parse_products(self, category: str) -> None:
+    async def parse_products(self, category_id: str) -> None:
         """
         parse_products: Called lamoda products service to send event about parsing.
 
         Args:
-            category (str): Category lamoda url.
+            category+id (str): Category lamoda identifier.
         """
 
-        await self.service.parse_products(category)
+        await self.service.parse_products(category_id)
 
-    async def private_parse_products(self, category: str) -> list[LamodaProductSchema]:
+    async def private_parse_products(self, category_id: str) -> list[LamodaProductSchema]:
         """
         private_parse_products: Delegate parsing to LamodaProductsService, handle all exceptions.
 
         Args:
-            category (str): Category lamoda url.
+            category_id (str): Category lamoda identifier.
 
         Raises:
             HTTPException: Raised when client passed wrong category url.
@@ -57,7 +57,7 @@ class LamodaProductsController:
         """
 
         try:
-            return await self.service.private_parse_products(category)
+            return await self.service.private_parse_products(category_id)
         except WrongCategoryUrlException:
             raise HTTPException(status_code=404, detail='Wrong category url')
         except ConnectionError:

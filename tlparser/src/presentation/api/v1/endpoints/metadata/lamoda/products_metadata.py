@@ -15,7 +15,7 @@ class LamodaProductsMetadata:
     parse_products_description: str = 'Produce message to kafka to parse lamoda products.'
     parse_products_response_description: str = 'Message has been produced to kafka.'
 
-    private_parse_products_summary: str = 'Parse products by category.'
+    private_parse_products_summary: str = 'Parse products by category id.'
     private_parse_products_description: str = 'Parse products of the lamoda platform by categories.'
     private_parse_products_response_description: str = 'Lamoda products have been parsed.'
 

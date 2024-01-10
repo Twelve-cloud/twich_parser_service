@@ -41,26 +41,26 @@ class LamodaProductsRestService:
         self.publisher: ILamodaProductsPublisher = publisher
         self.repository: ILamodaProductsRepository = repository
 
-    async def parse_products(self, category: str) -> None:
+    async def parse_products(self, category_id: str) -> None:
         """
         parse_products: Called lamoda products publisher to publish event about parsing.
 
         Args:
-            category (str): Category lamoda url.
+            category_id (str): Category lamoda identifier.
         """
 
-        event: PublicParseProductsCalledEvent = await self.repository.parse_products(category)
+        event: PublicParseProductsCalledEvent = await self.repository.parse_products(category_id)
 
         await self.publisher.publish_parse_products_called_event(event)
 
         return
 
-    async def private_parse_products(self, category: str) -> list[LamodaProductSchema]:
+    async def private_parse_products(self, category_id: str) -> list[LamodaProductSchema]:
         """
         private_parse_products: Parse lamoda products by category.
 
         Args:
-            category (str): Category lamoda url.
+            category_d (str): Category lamoda identifier.
 
         Returns:
             list[LamodaProductSchema]: List of LamodaProductEntity instances.
@@ -69,7 +69,7 @@ class LamodaProductsRestService:
         product_schemas: list[LamodaProductSchema] = []
 
         product_entities: list[LamodaProductEntity] = await self.domain_service.parse_products(
-            category,
+            category_id,
         )
 
         for product_entity in product_entities:
