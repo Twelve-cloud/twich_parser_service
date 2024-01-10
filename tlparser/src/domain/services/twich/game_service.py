@@ -3,8 +3,9 @@ game_service.py: File, containing domain service for a twich game.
 """
 
 
+from typing import Optional
+from aiohttp import ClientSession
 from fastapi import status
-from requests import Response, get
 from common.config.twich.settings import settings
 from domain.dependencies.twich.token_dependency import TwichAPIToken
 from domain.entities.twich.game_entity import TwichGameEntity
@@ -47,22 +48,27 @@ class TwichGameDomainService:
             TwichGameEntity: TwichGameEntity instance.
         """
 
-        response: Response = get(
-            f'{settings.TWICH_GET_GAME_BASE_URL}?name={game_name}',
-            headers=self.headers,
-        )
+        async with ClientSession() as session:
+            async with session.get(
+                f'{settings.TWICH_GET_GAME_BASE_URL}?name={game_name}',
+                headers=self.headers,
+            ) as response:
+                if response.status == status.HTTP_400_BAD_REQUEST:
+                    raise GetGameBadRequestException
 
-        if response.status_code == status.HTTP_400_BAD_REQUEST:
-            raise GetGameBadRequestException
+                if response.status == status.HTTP_401_UNAUTHORIZED:
+                    raise GetGameUnauthorizedException
 
-        if response.status_code == status.HTTP_401_UNAUTHORIZED:
-            raise GetGameUnauthorizedException
+                game_data: Optional[dict] = await response.json()
 
-        game_data: list = response.json().get('data')
+                if not game_data:
+                    raise GameNotFoundException
 
-        if not game_data:
-            raise GameNotFoundException
+                game: Optional[list] = game_data.get('data')
 
-        game_entity: TwichGameEntity = TwichGameEntity(**game_data[0])
+                if not game:
+                    raise GameNotFoundException
 
-        return game_entity
+                game_entity: TwichGameEntity = TwichGameEntity(**game[0])
+
+                return game_entity

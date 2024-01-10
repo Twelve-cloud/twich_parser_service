@@ -21,57 +21,57 @@ router: APIRouter = APIRouter(
 
 
 @router.post(
-    path='/products/{category:path}',
+    path='/products/{category_id}',
     status_code=status.HTTP_200_OK,
     **LamodaProductsMetadata.parse_products,
 )
 @inject
 async def parse_products(
-    category: Annotated[str, Path(min_length=1, max_length=128)],
+    category_id: Annotated[str, Path(min_length=1, max_length=128)],
     controller: LamodaProductsController = Depends(Provide[Container.lamoda_products_w_controller]),
 ) -> Response:
     """
     parse_products: Produce message of parsing products to kafka.
 
     Args:
-        category (str): Category of the products.
+        category_id (str): Category identifier of the products.
 
     Returns:
         Response: HTTP status code 200.
     """
 
-    await controller.parse_products(category)
+    await controller.parse_products(category_id)
 
     return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
 
 @router.get(
-    path='/private/products/{category:path}',
+    path='/private/products/{category_id}',
     status_code=status.HTTP_200_OK,
     **LamodaProductsMetadata.private_parse_products,
 )
 @cache(expire=60)
 @inject
 async def private_parse_products(
-    category: Annotated[str, Path(min_length=1, max_length=128)],
+    category_id: Annotated[str, Path(min_length=1, max_length=128)],
     controller: LamodaProductsController = Depends(Provide[Container.lamoda_products_w_controller]),
 ) -> list[LamodaProductSchema]:
     """
     private_parse_products: Parse lamoda products and return result as LamodaProductSchema.
 
     Args:
-        category (str): Category of the products.
+        category_id (str): Category identifier of the products.
         controller (LamodaProductsController): Lamoda controller.
 
     Returns:
         list[LamodaProductSchema]: Response as list of LamodaProductSchema instances.
     """
 
-    return await controller.private_parse_products(category)
+    return await controller.private_parse_products(category_id)
 
 
 @router.delete(
-    path='/products/{category:path}',
+    path='/products/{category}',
     status_code=status.HTTP_204_NO_CONTENT,
     **LamodaProductsMetadata.delete_products_by_category,
 )
@@ -120,7 +120,7 @@ async def get_all_products(
 
 
 @router.get(
-    path='/products/{category:path}',
+    path='/products/{category}',
     status_code=status.HTTP_200_OK,
     **LamodaProductsMetadata.get_products_by_category,
 )

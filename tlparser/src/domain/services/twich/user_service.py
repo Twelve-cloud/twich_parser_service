@@ -4,8 +4,9 @@ user_service.py: File, containing domain service for a twich user.
 
 
 from datetime import datetime
+from typing import Optional
+from aiohttp import ClientSession
 from fastapi import status
-from requests import Response, get
 from common.config.twich.settings import settings
 from domain.dependencies.twich.token_dependency import TwichAPIToken
 from domain.entities.twich.user_entity import TwichUserEntity
@@ -48,23 +49,31 @@ class TwichUserDomainService:
             TwichUserEntity: TwichUserEntity instance.
         """
 
-        response: Response = get(
-            f'{settings.TWICH_GET_USER_BASE_URL}?login={user_login}',
-            headers=self.headers,
-        )
+        async with ClientSession() as session:
+            async with session.get(
+                f'{settings.TWICH_GET_USER_BASE_URL}?login={user_login}',
+                headers=self.headers,
+            ) as response:
+                if response.status == status.HTTP_400_BAD_REQUEST:
+                    raise GetUserBadRequestException
 
-        if response.status_code == status.HTTP_400_BAD_REQUEST:
-            raise GetUserBadRequestException
+                if response.status == status.HTTP_401_UNAUTHORIZED:
+                    raise GetUserUnauthorizedException
 
-        if response.status_code == status.HTTP_401_UNAUTHORIZED:
-            raise GetUserUnauthorizedException
+                user_data: Optional[dict] = await response.json()
 
-        user_data: list = response.json().get('data')
+                if not user_data:
+                    raise UserNotFoundException
 
-        if not user_data:
-            raise UserNotFoundException
+                user: Optional[list] = user_data.get('data')
 
-        user_entity: TwichUserEntity = TwichUserEntity(**user_data[0])
-        user_entity.created_at = datetime.strptime(user_data[0]['created_at'], '%Y-%m-%dT%H:%M:%SZ')
+                if not user:
+                    raise UserNotFoundException
 
-        return user_entity
+                user_entity: TwichUserEntity = TwichUserEntity(**user[0])
+                user_entity.created_at = datetime.strptime(
+                    user[0]['created_at'],
+                    '%Y-%m-%dT%H:%M:%SZ',
+                )
+
+                return user_entity
