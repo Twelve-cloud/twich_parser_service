@@ -12,15 +12,11 @@ pytestmark = pytest.mark.anyio
 
 class TestLamodaProductsAPI:
     async def test_parse_lamoda_products(self, client):
-        response = await client.post(
-            '/api/v1/lamoda/products/1480/accs-premium-men-oblojki-dlia-dok-v/',
-        )
+        response = await client.post('/api/v1/lamoda/products/1480')
         assert response.status_code == status.HTTP_200_OK
 
     async def test_private_parse_lamoda_products(self, client):
-        response = await client.get(
-            '/api/v1/lamoda/products/1480/accs-premium-men-oblojki-dlia-dok-v/',
-        )
+        response = await client.get('/api/v1/lamoda/products/1480')
         assert response.status_code == status.HTTP_200_OK
 
         response = await client.get('/api/v1/lamoda/private/products/1232131')
