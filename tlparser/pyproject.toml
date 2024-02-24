@@ -29,6 +29,8 @@ kafka-python = "2.0.2"
 elasticsearch="7.10.1"
 elasticsearch-dsl = "7.4.0"
 aiohttp =  "3.9.1"
+strawberry-graphql = {extras = ["fastapi"], version = "=0.219.2"}
+
 
 [tool.poetry.group.prd]
 optional = true
@@ -87,8 +89,8 @@ exclude = '''(?x)(
 
 [tool.black]
 line-length = 100
-skip-string-normalization = 1
-preview = 1
+skip-string-normalization = true
+preview = true
 include = '\.pyi?$'
 exclude = '''
 /(
