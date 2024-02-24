@@ -12,7 +12,7 @@ from common.config.base.settings import settings
 from common.utils.decorators import singleton
 from container import Container
 from metadata import ProjectMetadata
-from presentation.api.v1.routes import routers as rest_v1_routers
+from presentation.api.rest.routes import routers as rest_v1_routers
 
 
 @singleton

@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
 from application.schemas.twich.game_schema import TwichGameSchema
 from container import Container
-from presentation.api.v1.endpoints.metadata.twich.game_metadata import TwichGameMetadata
+from presentation.api.rest.v1.metadata.twich.game_metadata import TwichGameMetadata
 from presentation.controllers.twich.game_controller import TwichGameController
 
 

@@ -60,10 +60,10 @@ class Container(DeclarativeContainer):
 
     wiring_config: WiringConfiguration = WiringConfiguration(
         modules=[
-            'presentation.api.v1.rest.endpoints.lamoda.products',
-            'presentation.api.v1.rest.endpoints.twich.game',
-            'presentation.api.v1.rest.endpoints.twich.user',
-            'presentation.api.v1.rest.endpoints.twich.stream',
+            'presentation.api.rest.v1.endpoints.lamoda.products',
+            'presentation.api.rest.v1.endpoints.twich.game',
+            'presentation.api.rest.v1.endpoints.twich.user',
+            'presentation.api.rest.v1.endpoints.twich.stream',
         ],
     )
 

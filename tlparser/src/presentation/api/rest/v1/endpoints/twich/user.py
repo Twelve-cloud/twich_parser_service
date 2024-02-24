@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
 from application.schemas.twich.user_schema import TwichUserSchema
 from container import Container
-from presentation.api.v1.endpoints.metadata.twich.user_metadata import TwichUserMetadata
+from presentation.api.rest.v1.metadata.twich.user_metadata import TwichUserMetadata
 from presentation.controllers.twich.user_controller import TwichUserController
 
 
