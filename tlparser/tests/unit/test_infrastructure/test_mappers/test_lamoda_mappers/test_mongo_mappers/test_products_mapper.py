@@ -4,7 +4,7 @@ test_products_mapper.py: File, containing tests for product mapper.
 
 
 from datetime import datetime
-from domain.entities.lamoda.product_entity import LamodaProductEntity
+from domain.entities.lamoda.product_entity import LamodaProduct
 from infrastructure.mappers.lamoda.mongo.product_mapper import LamodaProductMapper
 from infrastructure.models.lamoda.mongo.product_model import LamodaProduct
 
@@ -28,7 +28,7 @@ class TestLamodaProductMapper:
         assert entity.parsed_at == persistence.parsed_at
 
     def test_to_persistence(self):
-        entity = LamodaProductEntity(
+        entity = LamodaProduct(
             sku='sku',
             url='url',
             category='category',

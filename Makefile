@@ -12,7 +12,6 @@ COMPOSE_PRD :=                             \
     -f ${COMPOSE_PRD_ELASTIC}              \
     -f ${COMPOSE_PRD_REDIS}                \
     -f ${COMPOSE_PRD_WEB}                  \
-    -f ${COMPOSE_PRD_CALLER}               \
 
 COMPOSE_PRD_ENV :=                                       \
     --env-file=.env                                      \
@@ -33,7 +32,6 @@ COMPOSE_DEV :=                             \
     -f ${COMPOSE_DEV_ELASTIC}              \
     -f ${COMPOSE_DEV_REDIS}                \
     -f ${COMPOSE_DEV_WEB}                  \
-    -f ${COMPOSE_DEV_CALLER}               \
 
 COMPOSE_DEV_ENV :=                                       \
     --env-file=.env                                      \
@@ -73,23 +71,6 @@ parser_it: docker-compose.yaml
         printf "${GREEN}Tests Passed${NC}\n";                                                       \
         sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_WEB_INTEGRATION} down;          \
     fi                                                                                              \
-
-COMPOSE_CALLER_INTEGRATION :=              \
-    -f docker-compose.yaml                 \
-    -f ${COMPOSE_TESTS_KAFKA}              \
-    -f ${COMPOSE_TESTS_CALLER_INTEGRATION} \
-
-caller_it: docker-compose.yaml
-    sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_CALLER_INTEGRATION} up -d --build
-    @if [ `sudo docker wait tests` -ne 0 ] ; then                                                   \
-        sudo docker logs tests;                                                                     \
-        printf "${RED}Tests Failed${NC}\n";                                                         \
-        sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_CALLER_INTEGRATION} down;       \
-    else                                                                                            \
-        sudo docker logs tests;                                                                     \
-        printf "${GREEN}Tests Passed${NC}\n";                                                       \
-        sudo docker compose -p tests ${COMPOSE_TESTS_ENV} ${COMPOSE_CALLER_INTEGRATION} down;       \
-    fi
 
 COMPOSE_WEB_COMPONENT :=                   \
     -f docker-compose.yaml                 \

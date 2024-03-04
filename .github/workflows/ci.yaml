@@ -44,41 +44,6 @@ jobs:
       - name: run unit tests
         run: pytest tests/unit/
 
-  caller_static:
-    runs-on: [ubuntu-latest]
-
-    defaults:
-      run:
-        working-directory: ./caller
-
-    steps:
-      - name: clone github repository
-        uses: actions/checkout@v3
-
-      - name: install python3.10
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.10'
-          architecture: 'x64'
-
-      - name: install poetry
-        run: pip install poetry
-
-      - name: create venv and install dependencies
-        run: poetry install --with tests
-
-      - name: run flake8
-        run: flake8 .
-
-      - name: run black
-        run: black --check .
-
-      - name: run isort
-        run: isort --check-only .
-
-      - name: run mypy
-        run: mypy .
-
   parser_it:
     runs-on: [ubuntu-latest]
 
@@ -101,27 +66,6 @@ jobs:
 
       - name: run parser integration tests
         run: make parser_it
-
-  caller_it:
-    runs-on: [ubuntu-latest]
-
-    defaults:
-      run:
-        working-directory: ./
-
-    steps:
-      - name: clone github repository
-        uses: actions/checkout@v3
-
-      - name: create envs files
-        run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-          echo "${{ secrets.ENV_FILE_COMPOSE }}" > ./tlparser/env/tests/.env.tests.compose
-          echo "${{ secrets.ENV_FILE_KAFKA }}" > ./tlparser/env/tests/.env.tests.kafka
-          echo "${{ secrets.ENV_FILE_CALLER }}" > ./caller/env/tests/.env.tests.caller
-
-      - name: run caller integration tests
-        run: make caller_it
 
   parser_component:
     runs-on: [ubuntu-latest]

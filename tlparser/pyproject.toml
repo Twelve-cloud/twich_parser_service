@@ -17,9 +17,6 @@ pydantic = "2.5.2"
 pydantic-settings = "2.1.0"
 uvicorn = "0.24.0"
 dependency-injector = "4.41.0"
-requests = "2.31.0"
-types-requests = "2.25.10"
-beautifulsoup4 = "4.12.2"
 pymongo = "4.6.1"
 mongoengine = "0.27.0"
 redis = "5.0.1"
@@ -29,6 +26,7 @@ kafka-python = "2.0.2"
 elasticsearch="7.10.1"
 elasticsearch-dsl = "7.4.0"
 aiohttp =  "3.9.1"
+py-automapper = "1.2.3"
 strawberry-graphql = {extras = ["fastapi"], version = "=0.219.2"}
 
 
@@ -67,6 +65,7 @@ force_grid_wrap = 0
 use_parentheses = true
 treat_all_comments_as_code = true
 lines_between_sections = 0
+split_on_trailing_comma = true
 
 [tool.flake8]
 max-line-length = 100
@@ -86,6 +85,9 @@ exclude = '''(?x)(
     | migrations/$
     | tests/$
 )'''
+plugins = [
+    "pydantic.mypy"
+]
 
 [tool.black]
 line-length = 100

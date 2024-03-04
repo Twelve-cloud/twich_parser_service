@@ -1,9 +1,9 @@
 """
-decorators.py: File, containing decorators for a project.
+decorators.py: File, containing decorators.
 """
 
 
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 
 def singleton(aClass: Any) -> Callable:
@@ -14,20 +14,24 @@ def singleton(aClass: Any) -> Callable:
         aClass (Any): Any class.
 
     Returns:
-        Callable: Wrapper function.
+        Callable: Wrapper class instance with overriden __call__ method.
     """
 
     class Wrapper:
         """
         Wrapper: Class, provide access to singleton instance.
-
-        Returns:
-            _type_: Singleton instance.
         """
 
-        instance: Optional[aClass] = None
+        instance: aClass = None
 
-        def __call__(self, *args: tuple, **kwargs: dict) -> Optional[aClass]:
+        def __call__(self, *args: tuple, **kwargs: dict) -> aClass:
+            """
+            __call__: Called when class with singleton decorator is being created.
+
+            Returns:
+                aClass: single aClass instance.
+            """
+
             if self.instance is None:
                 self.instance: aClass = aClass(*args, **kwargs)
 
@@ -43,7 +47,7 @@ class ReadOnlyClassProperty:
 
     def __init__(self, function: Callable):
         """
-        __init__: Do some initialization.
+        __init__: Initialize read only class property.
 
         Args:
             function (Callable): Function to decorate.

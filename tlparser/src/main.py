@@ -12,6 +12,7 @@ from common.config.base.settings import settings
 from common.utils.decorators import singleton
 from container import Container
 from metadata import ProjectMetadata
+from presentation.api.graphql.routes import router as graphql_router
 from presentation.api.rest.routes import routers as rest_v1_routers
 
 
@@ -50,6 +51,7 @@ class Application:
         )
 
         self.app.include_router(rest_v1_routers, prefix=f'/{settings.API_NAME}')
+        self.app.include_router(graphql_router, prefix=f'/{settings.API_NAME}/graphql')
 
         redis = aioredis.from_url(
             f'{settings.REDIS_PROTOCOL}://{settings.REDIS_USERNAME}:{settings.REDIS_PASSWORD}'
