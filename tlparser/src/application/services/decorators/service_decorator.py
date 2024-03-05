@@ -3,9 +3,9 @@ service_decorator.py: File, containing service decorator.
 """
 
 
-from common.interfaces import IDecorator, IExceptionHandler
-from application.interfaces.services import IBaseService
 from typing import Any
+from application.interfaces.services import IBaseService
+from common.interfaces import IDecorator, IExceptionHandler
 
 
 class ServiceDecorator(IDecorator):
