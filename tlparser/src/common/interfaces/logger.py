@@ -4,8 +4,7 @@ logger.py: File, containing logger interface.
 
 
 from abc import ABCMeta, abstractmethod
-from logging import Logger
-from typing import Any
+from typing import ClassVar
 
 
 class ILogger(metaclass=ABCMeta):
@@ -16,32 +15,33 @@ class ILogger(metaclass=ABCMeta):
         ABCMeta: Base metaclass for logger interface that make this class abstract.
     """
 
+    DEBUG: ClassVar[int] = 10
+    INFO: ClassVar[int] = 20
+    WARNING: ClassVar[int] = 30
+    ERROR: ClassVar[int] = 40
+    CRITICAL: ClassVar[int] = 50
+
     @abstractmethod
-    def _configure_and_get_logger(self, name: str) -> Logger:
+    def _configure_logger(self, name: str) -> None:
         """
-        _configure_and_get_logger: Should configure up and return logger.
+        _configure_logger: Should configure logger.
         Must be overriden.
 
         Args:
             name (str): Name of the logger.
-
-        Returns:
-            Logger: Configured logger instance.
         """
 
         pass
 
     @abstractmethod
-    def __getattr__(self, name: str) -> Any:
+    def log(self, level: int, message: str) -> None:
         """
-        __getattr__: Should translate all calls to logging.logger.
+        log: Should log message.
         Must be overriden.
 
         Args:
-            name (str): Name of the attribute.
-
-        Returns:
-            Any: Any value that logging.logger returns.
+            level (str): Message level.
+            message (str): Message.
         """
 
         pass

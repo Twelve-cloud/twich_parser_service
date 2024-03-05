@@ -12,7 +12,6 @@ from application.exceptions import (
 )
 from common.interfaces import IExceptionHandler, ILogger
 from domain.exceptions import (
-    BaseDomainException,
     ObjectNotFoundException,
     ParserException,
     TwichGetObjectBadRequestException,
@@ -40,7 +39,7 @@ class DomainExceptionHandler(IExceptionHandler):
 
         self.logger: ILogger = logger
 
-        self.handler_map: dict[type[BaseDomainException], Callable] = {
+        self.handler_map: dict[type[Exception], Callable] = {
             ObjectNotFoundException: self.handle_not_found_exception,
             ParserException: self.handle_parser_exception,
             TwichGetObjectBadRequestException: self.handle_bad_request_exception,
@@ -65,20 +64,64 @@ class DomainExceptionHandler(IExceptionHandler):
         if handler:
             handler(exception)
         else:
-            raise ServiceUnavailableException(exception.message)
+            self.logger.log(self.logger.CRITICAL, str(exception))
+            raise ServiceUnavailableException(str(exception))
 
-    def handle_token_exception(self, exception: TwichTokenNotObtainedException) -> None:
+    def handle_not_found_exception(self, exception: ObjectNotFoundException) -> None:
         """
-        handle_token_exception: Handle twich token not obtained exception.
+        handle_not_found_exception: Handle object not found exception.
 
         Args:
-            exception (TwichTokenNotObtainedException): Twich token not obtained exception.
+            exception (ObjectNotFoundException): Object not found exception.
+
+        Raises:
+            NotFoundException: Not found exception.
+        """
+
+        self.logger.log(self.logger.ERROR, exception.message)
+        raise NotFoundException(exception.message)
+
+    def handle_parser_exception(self, exception: ParserException) -> None:
+        """
+        handle_parser_exception: Handle parser exception.
+
+        Args:
+            exception (ParserException): Parser exception.
 
         Raises:
             ServiceUnavailableException: Service unavailable exception.
         """
 
-        raise TwichException(message=exception.message)
+        self.logger.log(self.logger.CRITICAL, exception.message)
+        raise ServiceUnavailableException(exception.message)
+
+    def handle_bad_request_exception(self, exception: TwichGetObjectBadRequestException) -> None:
+        """
+        handle_bad_request_exception: Handle twich get object bad request exception.
+
+        Args:
+            exception (TwichGetObjectBadRequestException): Twich get object bad request exception.
+
+        Raises:
+            TwichException: Twich exception.
+        """
+
+        self.logger.log(self.logger.CRITICAL, exception.message)
+        raise TwichException(exception.message)
+
+    def handle_timeout_exception(self, exception: TwichRequestTimeoutException) -> None:
+        """
+        handle_timeout_exception: Handle twich request timeout exception.
+
+        Args:
+            exception (TwichRequestTimeoutException): Twich request timeout exception.
+
+        Raises:
+            RequestTimeoutException: Request timeout exception.
+        """
+
+        self.logger.log(self.logger.ERROR, exception.message)
+        raise RequestTimeoutException(exception.message)
 
     def handle_unauthorized_exception(self, exception: TwichRequestUnauthorizedException) -> None:
         """
@@ -88,53 +131,22 @@ class DomainExceptionHandler(IExceptionHandler):
             exception (TwichRequestUnauthorizedException): Twich request unauthorized exception.
 
         Raises:
-            ServiceUnavailableException: Service unavailable exception.
+            TwichException: Twich exception.
         """
 
-        raise TwichException(message=exception.message)
+        self.logger.log(self.logger.CRITICAL, exception.message)
+        raise TwichException(exception.message)
 
-    def handle_bad_request_exception(self, exception: GetObjectBadRequestException) -> None:
+    def handle_token_exception(self, exception: TwichTokenNotObtainedException) -> None:
         """
-        handle_bad_request_exception _summary_
+        handle_token_exception: Handle twich token not obtained exception.
 
         Args:
-            exception (GetObjectBadRequestException): _description_
-        """
-
-        raise TwichException(message=exception.message)
-
-    def handle_timeout_exception(self, exception: TwichRequestTimeoutException) -> None:
-        """
-        handle_timeout_exception: Handle timeout error by asyncio.
-
-        Args:
-            exception (TimeoutError): Timeout error.
+            exception (TwichTokenNotObtainedException): Twich token not obtained exception.
 
         Raises:
-            RequestTimeoutException: Request timeout exception.
+            TwichException: Twich exception.
         """
 
-        raise RequestTimeoutException(message=exception.message)
-
-    def handle_not_found_exception(self, exception: ObjectNotFoundException) -> None:
-        """
-        handle_not_found_exception _summary_
-
-        Args:
-            exception (ObjectNotFoundException): _description_
-        """
-
-        raise NotFoundException(message=exception.message)
-
-    def handle_parser_exception(self, exception: ParserException) -> None:
-        """
-        handle_parser_exception: Handle client error by aiohttp.
-
-        Args:
-            exception (ClientError): Client error.
-
-        Raises:
-            ServiceUnavailableException: Service unavailable exception.
-        """
-
-        raise ServiceUnavailableException(message=exception.message)
+        self.logger.log(self.logger.CRITICAL, exception.message)
+        raise TwichException(exception.message)
