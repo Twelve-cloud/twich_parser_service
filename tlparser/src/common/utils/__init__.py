@@ -1,9 +1,9 @@
 """
-__init__.py: File, containing other utils modules to simplify import.
+__init__.py: File, containing other util modules to simplify import.
 """
 
 
-from common.decorators import ReadOnlyClassProperty, Singleton
+from common.utils.decorators import ReadOnlyClassProperty, Singleton
 
 
 __all__: list[str] = [

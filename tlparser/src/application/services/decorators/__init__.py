@@ -1,15 +1,11 @@
 """
-__init__.py: File, containing other services modules to simplify import.
+__init__.py: File, containing other decorator modules to simplify import.
 """
 
 
-from application.services.game import TwichGameService
-from application.services.stream import TwichStreamService
-from application.services.user import TwichUserService
+from application.services.decorators.service_decorator import ServiceDecorator
 
 
 __all__: list[str] = [
-    'TwichGameService',
-    'TwichStreamService',
-    'TwichUserService',
+    'ServiceDecorator',
 ]

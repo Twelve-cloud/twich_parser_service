@@ -6,9 +6,9 @@ decorators.py: File, containing decorators.
 from typing import Any, Callable
 
 
-def singleton(aClass: Any) -> Callable:
+def Singleton(aClass: Any) -> Callable:
     """
-    singleton: Decorator, that represents singleton design pattern.
+    Singleton: Decorator, that represents singleton design pattern.
 
     Args:
         aClass (Any): Any class.

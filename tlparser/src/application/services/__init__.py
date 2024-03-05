@@ -1,5 +1,5 @@
 """
-__init__.py: File, containing other services modules to simplify import.
+__init__.py: File, containing other service modules to simplify import.
 """
 
 
