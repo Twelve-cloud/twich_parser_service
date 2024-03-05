@@ -34,7 +34,7 @@ class DomainExceptionHandler(IExceptionHandler):
         __init__: Initialize domain exception handler.
 
         Args:
-            logger (ILogger): Logger interface.
+            logger (ILogger): Logger.
         """
 
         self.logger: ILogger = logger

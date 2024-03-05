@@ -25,8 +25,8 @@ class ServiceDecorator(IDecorator):
         __init__: Initialize service decorator.
 
         Args:
-            service (IBaseService): Service interface.
-            exception_handler (IExceptionHandler): Exception handler interface.
+            service (IBaseService): Application service.
+            exception_handler (IExceptionHandler): Exception handler.
         """
 
         self.service: IBaseService = service
@@ -35,7 +35,7 @@ class ServiceDecorator(IDecorator):
     def __getattr__(self, name: str) -> Any:
         """
         __getattr__: Translate all calls to service.
-        Also catch an exception and send it to handler exception.
+        Also catch an exception and send it to exception handler.
 
         Args:
             name (str): Name of the attribute.
