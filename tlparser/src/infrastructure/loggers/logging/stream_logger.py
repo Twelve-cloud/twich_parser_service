@@ -5,8 +5,7 @@ stream_logger.py: File, containing stream logger.
 
 import logging
 from logging import Formatter, Logger, StreamHandler, getLogger
-from typing import Any
-from common.interfaces.loggers import ILogger
+from common.interfaces import ILogger
 
 
 class StreamLogger(ILogger):
@@ -25,22 +24,19 @@ class StreamLogger(ILogger):
             name (str): Name of the logger.
         """
 
-        self.logger: Logger = self._configure_and_get_logger(name)
+        self._configure_logger(name)
 
-    def _configure_and_get_logger(self, name: str) -> Logger:
+    def _configure_logger(self, name: str) -> None:
         """
-        _configure_and_get_logger: Configure and return logger.
+        _configure_logger: Configure logger.
         It configure logger to write messages to output stream using special string format.
 
         Args:
             name (str): Name of the logger.
-
-        Returns:
-            Logger: Configured logger instance.
         """
 
-        logger: Logger = getLogger(name)
-        logger.setLevel(logging.INFO)
+        self._logger: Logger = getLogger(name)
+        self._logger.setLevel(logging.INFO)
 
         stream_handler: StreamHandler = StreamHandler()
         stream_handler.setLevel(logging.INFO)
@@ -53,19 +49,15 @@ class StreamLogger(ILogger):
         formatter: Formatter = Formatter(format_string, format_date)
 
         stream_handler.setFormatter(formatter)
-        logger.addHandler(stream_handler)
+        self._logger.addHandler(stream_handler)
 
-        return logger
-
-    def __getattr__(self, name: str) -> Any:
+    def log(self, level: int, message: str) -> None:
         """
-        __getattr__: Translate all calls to self.logger.
+        log: Log message.
 
         Args:
-            name (str): Name of the attribute.
-
-        Returns:
-            Any: Any value that self.logger returns.
+            level (str): Message level.
+            message (str): Message.
         """
 
-        return getattr(self.logger, name)
+        self._logger.log(level, message)

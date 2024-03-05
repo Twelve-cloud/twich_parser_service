@@ -1,27 +1,30 @@
 """
-game.py: File, containing domain service for a twich game.
+game.py: File, containing parser for a twich game.
 """
 
 
 from datetime import datetime
 from typing import Optional
 from aiohttp import ClientSession
-from common.config.twich.settings import settings
-from domain.dependencies.token import TwichAPIToken
-from domain.exceptions.common import TwichRequestUnauthorizedException
-from domain.exceptions.game import GameNotFoundException, GetGameBadRequestException
-from domain.models.game import TwichGame
+from common.config import settings
+from domain.exceptions import (
+    ObjectNotFoundException,
+    TwichGetObjectBadRequestException,
+    TwichRequestUnauthorizedException,
+)
+from domain.models import TwichGame
+from infrastructure.parsers.dependencies import TwichAPIToken
 
 
-class TwichGameDomainService:
+class TwichGameParser:
     """
-    TwichGameDomainService: Class, that contains parsing logic for a twich game.
+    TwichGameParser: Class, that contains parsing logic for a twich game.
     It parse twich game from Twich, then create it and return.
     """
 
     def __init__(self, token: TwichAPIToken) -> None:
         """
-        __init__: Initialize twich game domain service class instance.
+        __init__: Initialize twich game parser class instance.
 
         Args:
             token (TwichAPIToken): Token for Twich API.
@@ -37,9 +40,9 @@ class TwichGameDomainService:
             name (str): Name of the game.
 
         Raises:
-            GetGameBadRequestException: Raised when request to Twich API return 400 status code.
-            GetGameUnauthorizedException: Raised when request to Twich API return 401 status code.
-            GameNotFoundException: Raised when request to Twich API does not return a game.
+            TwichGetObjectBadRequestException: Raised when request to Twich API return 400 code.
+            GetGameUnauthorizedException: Raised when request to Twich API return 401 code.
+            ObjectNotFoundException: Raised when request to Twich API does not return a game.
 
         Returns:
             TwichGame: Twich game domain model instance.
@@ -52,20 +55,20 @@ class TwichGameDomainService:
                 timeout=10,
             ) as response:
                 if response.status == 400:
-                    raise GetGameBadRequestException
+                    raise TwichGetObjectBadRequestException('Get game bad request to Twich API')
 
                 if response.status == 401:
-                    raise TwichRequestUnauthorizedException
+                    raise TwichRequestUnauthorizedException('Request to Twich API is unauthorized.')
 
                 game_json: Optional[dict] = await response.json()
 
                 if not game_json:
-                    raise GameNotFoundException
+                    raise ObjectNotFoundException('Game is not found.')
 
                 game_data: Optional[list] = game_json.get('data')
 
                 if not game_data:
-                    raise GameNotFoundException
+                    raise ObjectNotFoundException('Game is not found.')
 
                 game: TwichGame = TwichGame.create(
                     **game_data[0],

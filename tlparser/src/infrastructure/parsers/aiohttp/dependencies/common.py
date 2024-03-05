@@ -5,8 +5,8 @@ common.py: File, containing common dependencies.
 
 from typing import AsyncGenerator
 from aiohttp import ClientSession
-from common.config.twich.settings import settings
-from domain.exceptions.common import TwichTokenNotObtainedException
+from common.config import settings
+from domain.exceptions import TwichTokenNotObtainedException
 
 
 class TwichAPIToken:
@@ -63,5 +63,5 @@ async def get_twich_api_token() -> AsyncGenerator[TwichAPIToken, None]:
                 json_response: dict = await response.json()
                 access_token: str = json_response['access_token']
                 yield TwichAPIToken(access_token)
-            except Exception:
-                raise TwichTokenNotObtainedException
+            except Exception as exception:
+                raise TwichTokenNotObtainedException(f'Error during obtaining token: {exception}')
