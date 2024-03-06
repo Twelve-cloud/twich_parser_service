@@ -43,13 +43,22 @@ class TwichUserCreatedEvent(TwichUserDomainEvent):
 
 
 @dataclass
-class TwichUserDeletedByLoginEvent(TwichUserDomainEvent):
+class TwichUserDeletedEvent(TwichUserDomainEvent):
     """
-    TwichUserDeletedByLoginEvent: Class that represents domain event.
+    TwichUserDeletedEvent: Class that represents domain event.
     That domain event represents that twich user has been deleted.
 
     Args:
         TwichUserDomainEvent: Base domain event class for twich users.
     """
 
+    id: int
     login: str
+    description: str
+    display_name: str
+    type: str
+    broadcaster_type: str
+    profile_image_url: str
+    offline_image_url: str
+    created_at: datetime
+    parsed_at: datetime

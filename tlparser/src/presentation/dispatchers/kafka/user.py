@@ -8,7 +8,7 @@ from pickle import loads
 from threading import Thread
 from automapper import mapper
 from kafka import KafkaConsumer
-from domain.events.user import TwichUserCreatedEvent, TwichUserDeletedByLoginEvent
+from domain.events.user import TwichUserCreatedEvent, TwichUserDeletedEvent
 from domain.interfaces.repositories import ITwichUserRepository
 from domain.models import TwichUser
 
@@ -58,7 +58,7 @@ class TwichUserKafkaDispatcher:
                 case TwichUserCreatedEvent.__name__:
                     user: TwichUser = mapper.to(TwichUser).map(event)
                     await self.repository.add_or_update(user)
-                case TwichUserDeletedByLoginEvent.__name__:
+                case TwichUserDeletedEvent.__name__:
                     user = mapper.to(TwichUser).map(event)
                     await self.repository.delete(user)
                 case _:

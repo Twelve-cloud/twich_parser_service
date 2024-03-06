@@ -8,7 +8,7 @@ from datetime import datetime
 from automapper import mapper
 from domain.events import (
     TwichStreamCreatedEvent,
-    TwichStreamDeletedByUserLoginEvent,
+    TwichStreamDeletedEvent,
     TwichStreamDomainEvent,
 )
 from domain.models import BaseDomainModel
@@ -139,7 +139,5 @@ class TwichStream(BaseDomainModel[TwichStreamDomainEvent]):
         delete: Register domain event that represents that twich stream has been deleted.
         """
 
-        event: TwichStreamDeletedByUserLoginEvent = mapper.to(
-            TwichStreamDeletedByUserLoginEvent
-        ).map(self)
+        event: TwichStreamDeletedEvent = mapper.to(TwichStreamDeletedEvent).map(self)
         self.register_event(event)

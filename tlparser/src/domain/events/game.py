@@ -38,13 +38,17 @@ class TwichGameCreatedEvent(TwichGameDomainEvent):
 
 
 @dataclass
-class TwichGameDeletedByNameEvent(TwichGameDomainEvent):
+class TwichGameDeletedEvent(TwichGameDomainEvent):
     """
-    TwichGameDeletedByNameEvent: Class that represents domain event.
+    TwichGameDeletedEvent: Class that represents domain event.
     That domain event represents that twich game has been deleted.
 
     Args:
         TwichGameDomainEvent: Base domain event class for twich games.
     """
 
+    id: int
     name: str
+    igdb_id: str
+    box_art_url: str
+    parsed_at: datetime

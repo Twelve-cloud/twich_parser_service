@@ -6,7 +6,7 @@ stream.py: File, containing publisher interface for a twich stream.
 from abc import abstractmethod
 from domain.events import (
     TwichStreamCreatedEvent,
-    TwichStreamDeletedByUserLoginEvent,
+    TwichStreamDeletedEvent,
     TwichStreamDomainEvent,
 )
 from domain.interfaces.publishers import IBasePublisher
@@ -21,10 +21,7 @@ class ITwichStreamPublisher(IBasePublisher[TwichStreamDomainEvent]):
     """
 
     @abstractmethod
-    async def publish_stream_created_event(
-        self,
-        event: TwichStreamCreatedEvent,
-    ) -> None:
+    async def publish_stream_created_event(self, event: TwichStreamCreatedEvent) -> None:
         """
         publish_stream_created_event: Should publish event that stream is created.
         Must be overriden.
@@ -37,17 +34,14 @@ class ITwichStreamPublisher(IBasePublisher[TwichStreamDomainEvent]):
         pass
 
     @abstractmethod
-    async def publish_stream_deleted_by_user_login_event(
-        self,
-        event: TwichStreamDeletedByUserLoginEvent,
-    ) -> None:
+    async def publish_stream_deleted_event(self, event: TwichStreamDeletedEvent) -> None:
         """
-        publish_stream_deleted_by_user_login_event: Should publish event that stream is deleted.
+        publish_stream_deleted_event: Should publish event that stream is deleted.
         Must be overriden.
 
         Args:
-            event (TwichStreamDeletedByUserLoginEvent): Twich stream domain event.
-                That domain event represents that twich stream has been deleted by user login.
+            event (TwichStreamDeletedEvent): Twich stream domain event.
+                That domain event represents that twich stream has been deleted.
         """
 
         pass

@@ -46,13 +46,25 @@ class TwichStreamCreatedEvent(TwichStreamDomainEvent):
 
 
 @dataclass
-class TwichStreamDeletedByUserLoginEvent(TwichStreamDomainEvent):
+class TwichStreamDeletedEvent(TwichStreamDomainEvent):
     """
-    TwichStreamDeletedByUserLoginEvent: Class that represents domain event.
+    TwichStreamDeletedEvent: Class that represents domain event.
     That domain event represents that twich stream has been deleted.
 
     Args:
         TwichStreamDomainEvent: Base domain event class for twich streams.
     """
 
+    id: int
+    user_id: int
+    user_name: str
     user_login: str
+    game_id: int
+    game_name: str
+    language: str
+    title: str
+    tags: list[str]
+    started_at: datetime
+    viewer_count: int
+    type: str
+    parsed_at: datetime

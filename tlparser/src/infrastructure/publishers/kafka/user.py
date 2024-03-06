@@ -7,7 +7,7 @@ from threading import Thread
 from common.config import settings
 from domain.events.user import (
     TwichUserCreatedEvent,
-    TwichUserDeletedByLoginEvent,
+    TwichUserDeletedEvent,
     TwichUserDomainEvent,
 )
 from domain.interfaces.publishers import ITwichUserPublisher
@@ -19,7 +19,7 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
     TwichUserKafkaPublisher: Kafka implementation publisher class for twich user.
 
     Args:
-        IBasePublisher (_type_): Base publisher for TwichUserKafkaPublisher.
+        IBasePublisher: Base publisher for TwichUserKafkaPublisher.
     """
 
     def __init__(self, kafka_producer: KafkaProducerConnection) -> None:
@@ -43,20 +43,17 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
         for event in events:
             if isinstance(event, TwichUserCreatedEvent):
                 await self.publish_user_created_event(event)
-            elif isinstance(event, TwichUserDeletedByLoginEvent):
-                await self.publish_user_deleted_by_login_event(event)
+            elif isinstance(event, TwichUserDeletedEvent):
+                await self.publish_user_deleted_event(event)
 
         return
 
-    async def publish_user_created_event(
-        self,
-        event: TwichUserCreatedEvent,
-    ) -> None:
+    async def publish_user_created_event(self, event: TwichUserCreatedEvent) -> None:
         """
-        publish_created_or_updated_event: Publish user created/updated event.
+        publish_created_event: Publish user created event.
 
         Args:
-            event (TwichUserCreatedOrUpdatedEvent): Twich user created/updated event.
+            event (TwichUserCreatedEvent): Twich user created event.
         """
 
         Thread(
@@ -65,15 +62,12 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
             daemon=True,
         ).start()
 
-    async def publish_user_deleted_by_login_event(
-        self,
-        event: TwichUserDeletedByLoginEvent,
-    ) -> None:
+    async def publish_user_deleted_event(self, event: TwichUserDeletedEvent) -> None:
         """
-        publish_user_deleted_by_login_event: Publish user deleted by login event.
+        publish_user_deleted_event: Publish user deleted event.
 
         Args:
-            event (TwichUserDeletedByLoginEvent): Twich user deleted by login event.
+            event (TwichUserDeletedEvent): Twich user deleted event.
         """
 
         Thread(

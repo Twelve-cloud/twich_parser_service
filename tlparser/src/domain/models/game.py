@@ -8,7 +8,7 @@ from datetime import datetime
 from automapper import mapper
 from domain.events import (
     TwichGameCreatedEvent,
-    TwichGameDeletedByNameEvent,
+    TwichGameDeletedEvent,
     TwichGameDomainEvent,
 )
 from domain.models import BaseDomainModel
@@ -91,5 +91,5 @@ class TwichGame(BaseDomainModel[TwichGameDomainEvent]):
         delete: Register domain event that represents that twich game has been deleted.
         """
 
-        event: TwichGameDeletedByNameEvent = mapper.to(TwichGameDeletedByNameEvent).map(self)
+        event: TwichGameDeletedEvent = mapper.to(TwichGameDeletedEvent).map(self)
         self.register_event(event)

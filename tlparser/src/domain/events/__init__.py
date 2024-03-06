@@ -6,17 +6,17 @@ __init__.py: File, containing other event modules to simplify import.
 from domain.events.base import BaseDomainEvent
 from domain.events.game import (
     TwichGameCreatedEvent,
-    TwichGameDeletedByNameEvent,
+    TwichGameDeletedEvent,
     TwichGameDomainEvent,
 )
 from domain.events.stream import (
     TwichStreamCreatedEvent,
-    TwichStreamDeletedByUserLoginEvent,
+    TwichStreamDeletedEvent,
     TwichStreamDomainEvent,
 )
 from domain.events.user import (
     TwichUserCreatedEvent,
-    TwichUserDeletedByLoginEvent,
+    TwichUserDeletedEvent,
     TwichUserDomainEvent,
 )
 
@@ -24,12 +24,12 @@ from domain.events.user import (
 __all__: list[str] = [
     'BaseDomainEvent',
     'TwichGameCreatedEvent',
-    'TwichGameDeletedByNameEvent',
+    'TwichGameDeletedEvent',
     'TwichGameDomainEvent',
     'TwichStreamCreatedEvent',
-    'TwichStreamDeletedByUserLoginEvent',
+    'TwichStreamDeletedEvent',
     'TwichStreamDomainEvent',
     'TwichUserCreatedEvent',
-    'TwichUserDeletedByLoginEvent',
+    'TwichUserDeletedEvent',
     'TwichUserDomainEvent',
 ]

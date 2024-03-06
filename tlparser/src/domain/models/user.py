@@ -8,7 +8,7 @@ from datetime import datetime
 from automapper import mapper
 from domain.events import (
     TwichUserCreatedEvent,
-    TwichUserDeletedByLoginEvent,
+    TwichUserDeletedEvent,
     TwichUserDomainEvent,
 )
 from domain.models import BaseDomainModel
@@ -121,5 +121,5 @@ class TwichUser(BaseDomainModel[TwichUserDomainEvent]):
         delete: Register domain event that represents that twich user has been deleted.
         """
 
-        event: TwichUserDeletedByLoginEvent = mapper.to(TwichUserDeletedByLoginEvent).map(self)
+        event: TwichUserDeletedEvent = mapper.to(TwichUserDeletedEvent).map(self)
         self.register_event(event)

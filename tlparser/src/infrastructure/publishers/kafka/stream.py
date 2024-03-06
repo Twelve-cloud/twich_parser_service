@@ -7,7 +7,7 @@ from threading import Thread
 from common.config import settings
 from domain.events.stream import (
     TwichStreamCreatedEvent,
-    TwichStreamDeletedByUserLoginEvent,
+    TwichStreamDeletedEvent,
     TwichStreamDomainEvent,
 )
 from domain.interfaces.publishers import ITwichStreamPublisher
@@ -19,7 +19,7 @@ class TwichStreamKafkaPublisher(ITwichStreamPublisher):
     TwichStreamKafkaPublisher: Kafka implementation publisher class for twich stream.
 
     Args:
-        IBasePublisher (_type_): Base publisher for TwichStreamKafkaPublisher.
+        IBasePublisher: Base publisher for TwichStreamKafkaPublisher.
     """
 
     def __init__(self, kafka_producer: KafkaProducerConnection) -> None:
@@ -43,20 +43,17 @@ class TwichStreamKafkaPublisher(ITwichStreamPublisher):
         for event in events:
             if isinstance(event, TwichStreamCreatedEvent):
                 await self.publish_stream_created_event(event)
-            elif isinstance(event, TwichStreamDeletedByUserLoginEvent):
-                await self.publish_stream_deleted_by_user_login_event(event)
+            elif isinstance(event, TwichStreamDeletedEvent):
+                await self.publish_stream_deleted_event(event)
 
         return
 
-    async def publish_stream_created_event(
-        self,
-        event: TwichStreamCreatedEvent,
-    ) -> None:
+    async def publish_stream_created_event(self, event: TwichStreamCreatedEvent) -> None:
         """
-        publish_created_or_updated_event: Publish stream created/updated event.
+        publish_created_event: Publish stream created event.
 
         Args:
-            event (TwichStreamCreatedOrUpdatedEvent): Twich stream created/updated event.
+            event (TwichStreamCreatedEvent): Twich stream created event.
         """
 
         Thread(
@@ -65,15 +62,12 @@ class TwichStreamKafkaPublisher(ITwichStreamPublisher):
             daemon=True,
         ).start()
 
-    async def publish_stream_deleted_by_user_login_event(
-        self,
-        event: TwichStreamDeletedByUserLoginEvent,
-    ) -> None:
+    async def publish_stream_deleted_event(self, event: TwichStreamDeletedEvent) -> None:
         """
-        publish_stream_deleted_by_user_login_event: Publish stream deleted by user login event.
+        publish_stream_deleted_event: Publish stream deleted  event.
 
         Args:
-            event (TwichStreamDeletedByUserLoginEvent): Twich stream deleted by user login event.
+            event (TwichStreamDeletedEvent): Twich stream deleted event.
         """
 
         Thread(
