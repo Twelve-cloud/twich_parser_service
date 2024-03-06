@@ -8,16 +8,19 @@ from application.dtos.responses.game import (
     DeleteTwichGameByNameResponse,
     GetTwichGameByNameResponse,
     ParseTwichGameResponse,
+    TwichGameResponse,
 )
 from application.dtos.responses.stream import (
     DeleteTwichStreamByUserLoginResponse,
     GetTwichStreamByUserLoginResponse,
     ParseTwichStreamResponse,
+    TwichStreamResponse,
 )
 from application.dtos.responses.user import (
     DeleteTwichUserByLoginResponse,
     GetTwichUserByLoginResponse,
     ParseTwichUserResponse,
+    TwichUserResponse,
 )
 
 
@@ -26,10 +29,13 @@ __all__: list[str] = [
     'DeleteTwichGameByNameResponse',
     'GetTwichGameByNameResponse',
     'ParseTwichGameResponse',
+    'TwichGameResponse',
     'DeleteTwichStreamByUserLoginResponse',
     'GetTwichStreamByUserLoginResponse',
     'ParseTwichStreamResponse',
+    'TwichStreamResponse',
     'DeleteTwichUserByLoginResponse',
     'GetTwichUserByLoginResponse',
     'ParseTwichUserResponse',
+    'TwichUserResponse',
 ]

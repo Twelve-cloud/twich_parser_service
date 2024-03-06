@@ -9,13 +9,25 @@ from pydantic import Field
 from application.dtos.responses import BaseResponse
 
 
-class ParseTwichGameResponse(BaseResponse):
+class TwichGameResponse(BaseResponse):
+    """
+    TwichGameResponse: Class, that represents DTO Response.
+    This DTO Response represents twich game response.
+
+    Args:
+        BaseResponse: Base response class.
+    """
+
+    pass
+
+
+class ParseTwichGameResponse(TwichGameResponse):
     """
     ParseTwichGameResponse: Class, that represents DTO Response.
     This DTO Response represents game that has been parsed.
 
     Args:
-        BaseResponse: Base response class.
+        TwichGameResponse: Twich game response class.
     """
 
     id: Annotated[int, Field(ge=0)]
@@ -25,25 +37,25 @@ class ParseTwichGameResponse(BaseResponse):
     parsed_at: Annotated[datetime, Field()]
 
 
-class DeleteTwichGameByNameResponse(BaseResponse):
+class DeleteTwichGameByNameResponse(TwichGameResponse):
     """
     DeleteTwichGameByNameResponse: Class, that represents DTO Response.
     This DTO Response represents status when game has been deleted.
 
     Args:
-        BaseResponse: Base response class.
+        TwichGameResponse: Twich game response class.
     """
 
     status: Annotated[str, Field(min_length=1, max_length=128)]
 
 
-class GetTwichGameByNameResponse(BaseResponse):
+class GetTwichGameByNameResponse(TwichGameResponse):
     """
     GetTwichGameByNameResponse: Class, that represents DTO Response.
     This DTO Response represents game that has been being getting.
 
     Args:
-        BaseResponse: Base response class.
+        TwichGameResponse: Twich game response class.
     """
 
     id: Annotated[int, Field(ge=0)]

@@ -9,13 +9,25 @@ from pydantic import Field
 from application.dtos.responses import BaseResponse
 
 
-class ParseTwichStreamResponse(BaseResponse):
+class TwichStreamResponse(BaseResponse):
+    """
+    TwichStreamResponse: Class, that represents DTO Response.
+    This DTO Response represents twich stream response.
+
+    Args:
+        BaseResponse: Base response class.
+    """
+
+    pass
+
+
+class ParseTwichStreamResponse(TwichStreamResponse):
     """
     ParseTwichStreamResponse: Class, that represents DTO Response.
     This DTO Response represents stream that has been parsed.
 
     Args:
-        BaseResponse: Base response class.
+        TwichStreamResponse: Twich stream response class.
     """
 
     id: Annotated[int, Field(ge=0)]
@@ -37,25 +49,25 @@ class ParseTwichStreamResponse(BaseResponse):
     parsed_at: Annotated[datetime, Field()]
 
 
-class DeleteTwichStreamByUserLoginResponse(BaseResponse):
+class DeleteTwichStreamByUserLoginResponse(TwichStreamResponse):
     """
     DeleteTwichStreamByUserLoginResponse: Class, that represents DTO Response.
     This DTO Response represents status when stream has been deleted.
 
     Args:
-        BaseResponse: Base response class.
+        TwichStreamResponse: Twich stream response class.
     """
 
     status: Annotated[str, Field(min_length=1, max_length=128)]
 
 
-class GetTwichStreamByUserLoginResponse(BaseResponse):
+class GetTwichStreamByUserLoginResponse(TwichStreamResponse):
     """
     GetTwichStreamByUserLoginResponse: Class, that represents DTO Response.
     This DTO Response represents stream that has been being getting.
 
     Args:
-        BaseResponse: Base response class.
+        TwichStreamResponse: Twich stream response class.
     """
 
     id: Annotated[int, Field(ge=0)]

@@ -9,13 +9,25 @@ from pydantic import Field
 from application.dtos.responses import BaseResponse
 
 
-class ParseTwichUserResponse(BaseResponse):
+class TwichUserResponse(BaseResponse):
+    """
+    TwichUserResponse: Class, that represents DTO Response.
+    This DTO Response represents twich user response.
+
+    Args:
+        BaseResponse: Base response class.
+    """
+
+    pass
+
+
+class ParseTwichUserResponse(TwichUserResponse):
     """
     ParseTwichUserResponse: Class, that represents DTO Response.
     This DTO Response represents user that has been parsed.
 
     Args:
-        BaseResponse: Base response class.
+        TwichUserResponse: Twich user response class.
     """
 
     id: Annotated[int, Field(ge=0)]
@@ -33,25 +45,25 @@ class ParseTwichUserResponse(BaseResponse):
     parsed_at: Annotated[datetime, Field()]
 
 
-class DeleteTwichUserByLoginResponse(BaseResponse):
+class DeleteTwichUserByLoginResponse(TwichUserResponse):
     """
     DeleteTwichUserByLoginResponse: Class, that represents DTO Response.
     This DTO Response represents status when user has been deleted.
 
     Args:
-        BaseResponse: Base response class.
+        TwichUserResponse: Twich user response class.
     """
 
     status: Annotated[str, Field(min_length=1, max_length=128)]
 
 
-class GetTwichUserByLoginResponse(BaseResponse):
+class GetTwichUserByLoginResponse(TwichUserResponse):
     """
     GetTwichUserByLoginResponse: Class, that represents DTO Response.
     This DTO Response represents user that has been being getting.
 
     Args:
-        BaseResponse: Base response class.
+        TwichUserResponse: Twich user response class.
     """
 
     id: Annotated[int, Field(ge=0)]
