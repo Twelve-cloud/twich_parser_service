@@ -6,10 +6,11 @@ user_dispatcher.py: File, containing user kafka dispatcher.
 import asyncio
 from pickle import loads
 from threading import Thread
+from automapper import mapper
 from kafka import KafkaConsumer
-from application.dtos.fastapi_schemas.twich.user_schema import TwichUserSchema
-from application.interfaces.services.twich.user import ITwichUserService
-from domain.events.user import TwichUserCreatedOrUpdatedEvent, TwichUserDeletedByLoginEvent
+from domain.events.user import TwichUserCreatedEvent, TwichUserDeletedByLoginEvent
+from domain.interfaces.repositories import ITwichUserRepository
+from domain.models import TwichUser
 
 
 class TwichUserKafkaDispatcher:
@@ -22,7 +23,7 @@ class TwichUserKafkaDispatcher:
         bootstrap_servers: str,
         api_version: tuple,
         topic: str,
-        service: ITwichUserService,
+        repository: ITwichUserRepository,
     ) -> None:
         """
         __init__: Initialize twich user kafka dispathcer.
@@ -40,7 +41,7 @@ class TwichUserKafkaDispatcher:
             value_deserializer=lambda v: loads(v),
         )
         self.consumer.subscribe([topic])
-        self.service: ITwichUserService = service
+        self.repository: ITwichUserRepository = repository
         Thread(
             target=asyncio.run,
             args=(self.run(),),
@@ -54,21 +55,11 @@ class TwichUserKafkaDispatcher:
 
         for event in self.consumer:
             match event.value.__class__.__name__:
-                case TwichUserCreatedOrUpdatedEvent.__name__:
-                    user_schema: TwichUserSchema = TwichUserSchema.model_construct(
-                        id=event.value.id,
-                        login=event.value.login,
-                        description=event.value.description,
-                        display_name=event.value.display_name,
-                        type=event.value.type,
-                        broadcaster_type=event.value.broadcaster_type,
-                        profile_image_url=event.value.profile_image_url,
-                        offline_image_url=event.value.offline_image_url,
-                        created_at=event.value.created_at,
-                        parsed_at=event.value.parsed_at,
-                    )
-                    await self.service.create(user_schema)
+                case TwichUserCreatedEvent.__name__:
+                    user: TwichUser = mapper.to(TwichUser).map(event)
+                    await self.repository.add_or_update(user)
                 case TwichUserDeletedByLoginEvent.__name__:
-                    await self.service.delete(event.value.login)
+                    user = mapper.to(TwichUser).map(event)
+                    await self.repository.delete(user)
                 case _:
                     pass

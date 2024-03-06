@@ -4,12 +4,12 @@ stream.py: File, containing twich stream elastic repository implementation.
 
 
 from typing import Collection
-from domain.exceptions.stream import StreamNotFoundException
-from domain.exceptions.repositories.stream import ITwichStreamRepository
-from domain.models.stream import TwichStream
-from infrastructure.connections.elastic.database import ElasticSearchDatabase
-from infrastructure.mappers.twich.elastic.stream_mapper import TwichStreamMapper
-from infrastructure.models.twich.elastic.stream_model import TwichStreamDAO
+from automapper import mapper
+from domain.exceptions import ObjectNotFoundException
+from domain.interfaces.repositories import ITwichStreamRepository
+from domain.models import TwichStream
+from infrastructure.persistence.connections.elastic.database import ElasticSearchDatabase
+from infrastructure.persistence.models.elastic.stream import TwichStreamDAO
 
 
 class TwichStreamElasticRepository(ITwichStreamRepository):
@@ -17,7 +17,7 @@ class TwichStreamElasticRepository(ITwichStreamRepository):
     TwichStreamElasticRepository: Elastic implementation of ITwichStreamRepository.
 
     Args:
-        ITwichStreamRepository (_type_): Repository abstract class.
+        ITwichStreamRepository: Repository abstract class.
     """
 
     def __init__(self, db: ElasticSearchDatabase) -> None:
@@ -31,15 +31,15 @@ class TwichStreamElasticRepository(ITwichStreamRepository):
         self.db: ElasticSearchDatabase = db
         TwichStreamDAO.init()
 
-    async def create_or_update(self, stream: TwichStream) -> None:
+    async def add_or_update(self, stream: TwichStream) -> None:
         """
-        create_or_update: Create or update twich stream.
+        add_or_update: Add or update twich stream.
 
         Args:
             stream (TwichStream): Twich stream.
         """
 
-        stream_persistence = TwichStreamMapper.to_persistence(stream)
+        stream_persistence = mapper.to(TwichStreamDAO).map(stream)
         stream_persistence.meta.id = stream_persistence.id
         stream_persistence.save()
 
@@ -54,19 +54,19 @@ class TwichStreamElasticRepository(ITwichStreamRepository):
         """
 
         return [
-            TwichStreamMapper.to_domain(stream_persistence)
+            mapper.to(TwichStream).map(stream_persistence)
             for stream_persistence in TwichStreamDAO.search().query()
         ]
 
-    async def delete_stream_by_user_login(self, user_login: str) -> None:
+    async def delete(self, stream: TwichStream) -> None:
         """
-        delete_stream_by_user_login: Delete twich stream by user login.
+        delete: Delete twich stream by user login.
 
         Args:
-            user_login (str): Login of the user.
+            stream (TwichStream): Twich stream.
         """
 
-        TwichStreamDAO.search().query('match', user_login=user_login).delete()
+        TwichStreamDAO.search().query('match', user_login=stream.user_login).delete()
 
         return
 
@@ -91,6 +91,6 @@ class TwichStreamElasticRepository(ITwichStreamRepository):
         )
 
         if len(streams) == 0:
-            raise StreamNotFoundException
+            raise ObjectNotFoundException('Stream is not found.')
 
-        return TwichStreamMapper.to_domain(next(iter(streams)))
+        return mapper.to(TwichStream).map(next(iter(streams)))

@@ -13,7 +13,7 @@ from domain.exceptions import (
     TwichRequestUnauthorizedException,
 )
 from domain.models import TwichGame
-from infrastructure.parsers.dependencies import TwichAPIToken
+from infrastructure.parsers.aiohttp.dependencies import TwichAPIToken
 
 
 class TwichGameParser:

@@ -3,8 +3,7 @@ stream_logger.py: File, containing stream logger.
 """
 
 
-import logging
-from logging import Formatter, Logger, StreamHandler, getLogger
+from logging import Formatter, Logger, StreamHandler, getLogger, INFO
 from common.interfaces import ILogger
 
 
@@ -36,15 +35,12 @@ class StreamLogger(ILogger):
         """
 
         self._logger: Logger = getLogger(name)
-        self._logger.setLevel(logging.INFO)
+        self._logger.setLevel(INFO)
 
         stream_handler: StreamHandler = StreamHandler()
-        stream_handler.setLevel(logging.INFO)
+        stream_handler.setLevel(INFO)
 
-        format_string: str = (
-            '[%(asctime)s] [Filename: %(filename)s] [Lineno: %(lineno)s] '
-            '[Logger: %(name)s] [%(levelname)s] > %(message)s'
-        )
+        format_string: str = '[%(asctime)s] [Logger: %(name)s] [%(levelname)s] > %(message)s'
         format_date: str = '%Y-%m-%d %H:%M:%S'
         formatter: Formatter = Formatter(format_string, format_date)
 

@@ -4,12 +4,12 @@ stream.py: File, containing twich stream mongo repository implementation.
 
 
 from typing import Optional
-from domain.exceptions.stream import StreamNotFoundException
-from domain.exceptions.repositories.stream import ITwichStreamRepository
-from domain.models.stream import TwichStream
-from infrastructure.connections.mongo.database import MongoDatabase
-from infrastructure.mappers.twich.mongo.stream_mapper import TwichStreamMapper
-from infrastructure.models.twich.mongo.stream_model import TwichStreamDAO
+from automapper import mapper
+from domain.exceptions import ObjectNotFoundException
+from domain.interfaces.repositories import ITwichStreamRepository
+from domain.models import TwichStream
+from infrastructure.persistence.connections.mongo.database import MongoDatabase
+from infrastructure.persistence.models.mongo.stream import TwichStreamDAO
 
 
 class TwichStreamMongoRepository(ITwichStreamRepository):
@@ -30,15 +30,15 @@ class TwichStreamMongoRepository(ITwichStreamRepository):
 
         self.db: MongoDatabase = db
 
-    async def create_or_update(self, stream: TwichStream) -> None:
+    async def add_or_update(self, stream: TwichStream) -> None:
         """
-        create_or_update: Create or update twich stream.
+        add_or_update: Add or update twich stream.
 
         Args:
             stream (TwichStream): Twich stream.
         """
 
-        stream_persistence = TwichStreamMapper.to_persistence(stream)
+        stream_persistence = mapper.to(TwichStreamDAO).map(stream)
         stream_persistence.save()
 
         return
@@ -52,19 +52,19 @@ class TwichStreamMongoRepository(ITwichStreamRepository):
         """
 
         return [
-            TwichStreamMapper.to_domain(stream_persistence)
+            mapper.to(TwichStream).map(stream_persistence)
             for stream_persistence in TwichStreamDAO.objects
         ]
 
-    async def delete_stream_by_user_login(self, user_login: str) -> None:
+    async def delete(self, stream: TwichStream) -> None:
         """
-        delete_stream_by_user_login: Delete twich stream by user login.
+        delete: Delete twich stream by user login.
 
         Args:
-            user_login (str): Login of the user.
+            stream (TwichStream): Twich stream.
         """
 
-        for stream_persistence in TwichStreamDAO.objects(user_login=user_login):
+        for stream_persistence in TwichStreamDAO.objects(user_login=stream.user_login):
             stream_persistence.delete()
 
         return
@@ -85,6 +85,6 @@ class TwichStreamMongoRepository(ITwichStreamRepository):
         ).first()
 
         if not stream_persistence:
-            raise StreamNotFoundException
+            raise ObjectNotFoundException('Stream is not found.')
 
-        return TwichStreamMapper.to_domain(stream_persistence)
+        return mapper.to(TwichStream).map(stream_persistence)

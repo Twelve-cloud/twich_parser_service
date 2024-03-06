@@ -4,16 +4,14 @@ user_publisher.py: File, containing kafka publisher class for twich user.
 
 
 from threading import Thread
-from common.config.base.settings import settings as base_settings
-from common.config.twich.settings import settings as twich_settings
+from common.config import settings
 from domain.events.user import (
-    PublicParseUserCalledEvent,
-    TwichUserCreatedOrUpdatedEvent,
+    TwichUserCreatedEvent,
     TwichUserDeletedByLoginEvent,
+    TwichUserDomainEvent,
 )
-from domain.interfaces.publishers.base import E
-from domain.exceptions.publishers.user import ITwichUserPublisher
-from infrastructure.connections.kafka.producer import KafkaProducerConnection
+from domain.interfaces.publishers import ITwichUserPublisher
+from infrastructure.publishers.connections.kafka.producer import KafkaProducerConnection
 
 
 class TwichUserKafkaPublisher(ITwichUserPublisher):
@@ -34,7 +32,7 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
 
         self.producer = kafka_producer.producer
 
-    async def publish(self, events: list[E]) -> None:
+    async def publish(self, events: list[TwichUserDomainEvent]) -> None:
         """
         publish: Call handlers for every event.
 
@@ -43,35 +41,16 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
         """
 
         for event in events:
-            if isinstance(event, PublicParseUserCalledEvent):
-                await self.publish_parse_user_called_event(event)
-            elif isinstance(event, TwichUserCreatedOrUpdatedEvent):
-                await self.publish_created_or_updated_event(event)
+            if isinstance(event, TwichUserCreatedEvent):
+                await self.publish_user_created_event(event)
             elif isinstance(event, TwichUserDeletedByLoginEvent):
                 await self.publish_user_deleted_by_login_event(event)
 
         return
 
-    async def publish_parse_user_called_event(
+    async def publish_user_created_event(
         self,
-        event: PublicParseUserCalledEvent,
-    ) -> None:
-        """
-        publish_parse_user_called_event: Publish public parse user called event.
-
-        Args:
-            event (PublicParseUserCalledEvent): Public parse user called event.
-        """
-
-        Thread(
-            target=self.producer.send,
-            args=(base_settings.KAFKA_PARSING_TOPIC, event),
-            daemon=True,
-        ).start()
-
-    async def publish_created_or_updated_event(
-        self,
-        event: TwichUserCreatedOrUpdatedEvent,
+        event: TwichUserCreatedEvent,
     ) -> None:
         """
         publish_created_or_updated_event: Publish user created/updated event.
@@ -82,7 +61,7 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
 
         Thread(
             target=self.producer.send,
-            args=(twich_settings.KAFKA_USER_TOPIC, event),
+            args=(settings.KAFKA_USER_TOPIC, event),
             daemon=True,
         ).start()
 
@@ -99,6 +78,6 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
 
         Thread(
             target=self.producer.send,
-            args=(twich_settings.KAFKA_USER_TOPIC, event),
+            args=(settings.KAFKA_USER_TOPIC, event),
             daemon=True,
         ).start()

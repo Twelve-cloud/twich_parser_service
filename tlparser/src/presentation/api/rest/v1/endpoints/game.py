@@ -5,44 +5,29 @@ game.py: File, containing endpoinds for a twich game.
 
 from typing import Annotated
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, Path, Response, status
-from fastapi.responses import JSONResponse
-from fastapi_cache.decorator import cache
-from application.dtos.fastapi_schemas.twich.game_schema import TwichGameSchema
+from fastapi import APIRouter, Depends, Path, status
+from application.dtos.requests.game import (
+    DeleteTwichGameByNameRequest,
+    GetTwichGameByNameRequest,
+    ParseTwichGameRequest,
+)
+from application.dtos.responses.game import (
+    DeleteTwichGameByNameResponse,
+    GetTwichGameByNameResponse,
+    ParseTwichGameResponse,
+)
+from application.services.decorators import ServiceDecorator
 from container import Container
-from presentation.api.rest.v1.metadata.twich.game_metadata import TwichGameMetadata
-from presentation.controllers.twich.game_controller import TwichGameController
+from presentation.api.rest.v1.metadata.game import TwichGameMetadata
+
+
+# from fastapi_cache.decorator import cache
 
 
 router: APIRouter = APIRouter(
     prefix='/twich',
     tags=['twich'],
 )
-
-
-@router.post(
-    path='/game/{game_name}',
-    status_code=status.HTTP_200_OK,
-    **TwichGameMetadata.parse_game,
-)
-@inject
-async def parse_game(
-    game_name: Annotated[str, Path(min_length=1, max_length=128)],
-    controller: TwichGameController = Depends(Provide[Container.twich_game_w_controller]),
-) -> Response:
-    """
-    parse_game: Produce message to kafka to parse games.
-
-    Args:
-        game_name (str): Identifier of the game.
-
-    Returns:
-        Response: HTTP status code 200.
-    """
-
-    await controller.parse_game(game_name)
-
-    return JSONResponse(content={}, status_code=status.HTTP_200_OK)
 
 
 @router.get(
@@ -54,46 +39,50 @@ async def parse_game(
 @inject
 async def private_parse_game(
     game_name: Annotated[str, Path(min_length=1, max_length=128)],
-    controller: TwichGameController = Depends(Provide[Container.twich_game_w_controller]),
-) -> TwichGameSchema:
+    service_decorator: ServiceDecorator = Depends(
+        Provide[Container.twich_game_w_service_decorator]
+    ),
+) -> ParseTwichGameResponse:
     """
     private_parse_game: Parse twich game and return result as TwichGameSchema.
 
     Args:
         game_name (str): Identifier of the game.
-        controller (TwichGameController): Twich game controller.
+        service_decorator (ServiceDecorator): Twich game service_decorator.
 
     Returns:
         TwichGameSchema: Response as TwichGameSchema instance.
     """
 
-    return await controller.private_parse_game(game_name)
+    request: ParseTwichGameRequest = ParseTwichGameRequest(name=game_name)
+    return await service_decorator.private_parse_game(request)
 
 
 @router.delete(
     path='/game/{game_name}',
-    status_code=status.HTTP_204_NO_CONTENT,
+    status_code=status.HTTP_200_OK,
     **TwichGameMetadata.delete_game_by_name,
 )
 @inject
 async def delete_game_by_name(
     game_name: Annotated[str, Path(min_length=1, max_length=128)],
-    controller: TwichGameController = Depends(Provide[Container.twich_game_w_controller]),
-) -> Response:
+    service_decorator: ServiceDecorator = Depends(
+        Provide[Container.twich_game_w_service_decorator]
+    ),
+) -> DeleteTwichGameByNameResponse:
     """
     delete_game_by_name: Delete twich game.
 
      Args:
         game_name (str): Identifier of the game.
-        controller (TwichGameController): Twich game controller.
+        service_decorator (ServiceDecorator): Twich game service_decorator.
 
     Returns:
         Response: HTTP status code 204.
     """
 
-    await controller.delete_game_by_name(game_name)
-
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    request: DeleteTwichGameByNameRequest = DeleteTwichGameByNameRequest(name=game_name)
+    return await service_decorator.delete_game_by_name(request)
 
 
 @router.get(
@@ -104,19 +93,21 @@ async def delete_game_by_name(
 # @cache(expire=60)
 @inject
 async def get_all_games(
-    controller: TwichGameController = Depends(Provide[Container.twich_game_r_controller]),
-) -> list[TwichGameSchema]:
+    service_decorator: ServiceDecorator = Depends(
+        Provide[Container.twich_game_r_service_decorator]
+    ),
+) -> list[GetTwichGameByNameResponse]:
     """
     get_all_games: Return all twich games.
 
     Args:
-        controller (TwichGameController): Twich game controller.
+        service_decorator (ServiceDecorator): Twich game service_decorator.
 
     Returns:
         list[TwichGameSchema]: List of twich games.
     """
 
-    return await controller.get_all_games()
+    return await service_decorator.get_all_games()
 
 
 @router.get(
@@ -128,17 +119,20 @@ async def get_all_games(
 @inject
 async def get_game_by_name(
     game_name: Annotated[str, Path(min_length=1, max_length=128)],
-    controller: TwichGameController = Depends(Provide[Container.twich_game_r_controller]),
-) -> TwichGameSchema:
+    service_decorator: ServiceDecorator = Depends(
+        Provide[Container.twich_game_r_service_decorator]
+    ),
+) -> GetTwichGameByNameResponse:
     """
     get_game_by_name: Return game by name.
 
     Args:
         game_name (str): Identifier of the game.
-        controller (TwichGameController): Twich game controller.
+        service_decorator (ServiceDecorator): Twich game service_decorator.
 
     Returns:
         TwichGameSchema: TwichGameSchema instance.
     """
 
-    return await controller.get_game_by_name(game_name)
+    request: GetTwichGameByNameRequest = GetTwichGameByNameRequest(name=game_name)
+    return await service_decorator.get_game_by_name(request)

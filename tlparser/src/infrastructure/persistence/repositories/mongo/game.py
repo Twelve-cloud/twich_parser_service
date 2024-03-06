@@ -4,12 +4,12 @@ game.py: File, containing twich game mongo repository implementation.
 
 
 from typing import Optional
-from domain.exceptions.game import GameNotFoundException
-from domain.exceptions.repositories.game import ITwichGameRepository
-from domain.models.game import TwichGame
-from infrastructure.connections.mongo.database import MongoDatabase
-from infrastructure.mappers.twich.mongo.game_mapper import TwichGameMapper
-from infrastructure.models.twich.mongo.game_model import TwichGameDAO
+from automapper import mapper
+from domain.exceptions import ObjectNotFoundException
+from domain.interfaces.repositories import ITwichGameRepository
+from domain.models import TwichGame
+from infrastructure.persistence.connections.mongo.database import MongoDatabase
+from infrastructure.persistence.models.mongo.game import TwichGameDAO
 
 
 class TwichGameMongoRepository(ITwichGameRepository):
@@ -32,13 +32,13 @@ class TwichGameMongoRepository(ITwichGameRepository):
 
     async def add_or_update(self, game: TwichGame) -> None:
         """
-        create_or_update: Create or update twich game.
+        add_or_update: Add or update twich game.
 
         Args:
             game (TwichGame): Twich game.
         """
 
-        game_persistence = TwichGameMapper.to_persistence(game)
+        game_persistence = mapper.to(TwichGameDAO).map(game)
         game_persistence.save()
 
         return
@@ -52,18 +52,18 @@ class TwichGameMongoRepository(ITwichGameRepository):
         """
 
         return [
-            TwichGameMapper.to_domain(game_persistence) for game_persistence in TwichGameDAO.objects
+            mapper.to(TwichGame).map(game_persistence) for game_persistence in TwichGameDAO.objects
         ]
 
-    async def delete_game_by_name(self, name: str) -> None:
+    async def delete(self, game: TwichGame) -> None:
         """
-        delete_game_by_name: Delete twich game by name.
+        delete: Delete twich game by name.
 
         Args:
-            name (str): Name of the game.
+            game (TwichGame): Twich game.
         """
 
-        for game_persistence in TwichGameDAO.objects(name=name):
+        for game_persistence in TwichGameDAO.objects(name=game.name):
             game_persistence.delete()
 
         return
@@ -82,6 +82,6 @@ class TwichGameMongoRepository(ITwichGameRepository):
         game_persistence: Optional[TwichGameDAO] = TwichGameDAO.objects(name=name).first()
 
         if not game_persistence:
-            raise GameNotFoundException
+            raise ObjectNotFoundException('Game is not found.')
 
-        return TwichGameMapper.to_domain(game_persistence)
+        return mapper.to(TwichGame).map(game_persistence)

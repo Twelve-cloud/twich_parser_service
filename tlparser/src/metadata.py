@@ -3,7 +3,7 @@ metadata.py: File, containing metadata for a entire project.
 """
 
 
-from common.utils.decorators import ReadOnlyClassProperty
+from common.utils import ReadOnlyClassProperty
 
 
 class ProjectMetadata:

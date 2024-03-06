@@ -4,12 +4,12 @@ game.py: File, containing twich game elastic repository implementation.
 
 
 from typing import Collection
-from domain.exceptions.game import GameNotFoundException
-from domain.exceptions.repositories.game import ITwichGameRepository
-from domain.models.game import TwichGame
-from infrastructure.connections.elastic.database import ElasticSearchDatabase
-from infrastructure.mappers.twich.elastic.game_mapper import TwichGameMapper
-from infrastructure.models.twich.elastic.game_model import TwichGameDAO
+from automapper import mapper
+from domain.exceptions import ObjectNotFoundException
+from domain.interfaces.repositories import ITwichGameRepository
+from domain.models import TwichGame
+from infrastructure.persistence.connections.elastic.database import ElasticSearchDatabase
+from infrastructure.persistence.models.elastic.game import TwichGameDAO
 
 
 class TwichGameElasticRepository(ITwichGameRepository):
@@ -17,7 +17,7 @@ class TwichGameElasticRepository(ITwichGameRepository):
     TwichGameElasticRepository: Elastic implementation of ITwichGameRepository.
 
     Args:
-        ITwichGameRepository (_type_): Repository abstract class.
+        ITwichGameRepository: Repository abstract class.
     """
 
     def __init__(self, db: ElasticSearchDatabase) -> None:
@@ -31,15 +31,15 @@ class TwichGameElasticRepository(ITwichGameRepository):
         self.db: ElasticSearchDatabase = db
         TwichGameDAO.init()
 
-    async def create_or_update(self, game: TwichGame) -> None:
+    async def add_or_update(self, game: TwichGame) -> None:
         """
-        create_or_update: Create or update twich game.
+        add_or_update: Add or update twich game.
 
         Args:
             game (TwichGame): Twich game.
         """
 
-        game_persistence = TwichGameMapper.to_persistence(game)
+        game_persistence = mapper.to(TwichGameDAO).map(game)
         game_persistence.meta.id = game_persistence.id
         game_persistence.save()
 
@@ -54,22 +54,19 @@ class TwichGameElasticRepository(ITwichGameRepository):
         """
 
         return [
-            TwichGameMapper.to_domain(game_persistence)
+            mapper.to(TwichGame).map(game_persistence)
             for game_persistence in TwichGameDAO.search().query()
         ]
 
-    async def delete_game_by_name(self, name: str) -> None:
+    async def delete(self, game: TwichGame) -> None:
         """
-        delete_game_by_name: Delete twich game by name.
+        delete: Delete twich game by name.
 
         Args:
-            name (str): Name of the game.
-
-        Returns:
-            TwichGameDeletedByNameEvent: Twich game deleted event.
+            game (TwichGame): Twich game.
         """
 
-        TwichGameDAO.search().query('match', name=name).delete()
+        TwichGameDAO.search().query('match', name=game.name).delete()
 
         return
 
@@ -87,6 +84,6 @@ class TwichGameElasticRepository(ITwichGameRepository):
         games: Collection[TwichGameDAO] = TwichGameDAO.search().query('match', name=name).execute()
 
         if len(games) == 0:
-            raise GameNotFoundException
+            raise ObjectNotFoundException('Game is not found.')
 
-        return TwichGameMapper.to_domain(next(iter(games)))
+        return mapper.to(TwichGame).map(next(iter(games)))

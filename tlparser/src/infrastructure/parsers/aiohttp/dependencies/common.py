@@ -53,7 +53,7 @@ async def get_twich_api_token() -> AsyncGenerator[TwichAPIToken, None]:
             headers={
                 'Content-Type': settings.TWICH_API_CONTENT_TYPE,
             },
-            json={
+            data={
                 'client_id': settings.TWICH_CLIENT_ID,
                 'client_secret': settings.TWICH_CLIENT_SECRET,
                 'grant_type': settings.TWICH_API_GRANT_TYPE,

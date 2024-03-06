@@ -4,46 +4,29 @@ container.py: File, containing container that describe all dependencies in the p
 
 
 from dependency_injector.containers import DeclarativeContainer, WiringConfiguration
-from dependency_injector.providers import Factory, Singleton, Resource
-from application.services.lamoda.products import LamodaProductsService
-from application.services.twich.game import TwichGameService
-from application.services.twich.stream import TwichStreamService
-from application.services.twich.user import TwichUserService
-from common.config.base.settings import settings
-from common.config.lamoda.settings import settings as lamoda_settings
-from common.config.twich.settings import settings as twich_settings
-from domain.dependencies.token import get_twich_api_token
-from domain.services.lamoda.products import LamodaProductsDomainService
-from domain.services.game import TwichGameDomainService
-from domain.services.stream import TwichStreamDomainService
-from domain.services.user import TwichUserDomainService
-from infrastructure.connections.elastic.database import ElasticSearchDatabase
-from infrastructure.connections.kafka.producer import KafkaProducerConnection
-from infrastructure.connections.mongo.database import MongoDatabase
-from infrastructure.publishers.lamoda.kafka.products_publisher import LamodaProductsKafkaPublisher
-from infrastructure.publishers.twich.kafka.game_publisher import TwichGameKafkaPublisher
-from infrastructure.publishers.twich.kafka.stream_publisher import TwichStreamKafkaPublisher
-from infrastructure.publishers.twich.kafka.user_publisher import TwichUserKafkaPublisher
-from infrastructure.repositories.lamoda.elastic.products_repository import (
-    LamodaProductsElasticRepository,
-)
-from infrastructure.repositories.lamoda.mongo.products_repository import (
-    LamodaProductsMongoRepository,
-)
-from infrastructure.repositories.twich.elastic.game import TwichGameElasticRepository
-from infrastructure.repositories.twich.elastic.stream import TwichStreamElasticRepository
-from infrastructure.repositories.twich.elastic.user import TwichUserElasticRepository
-from infrastructure.repositories.twich.mongo.game import TwichGameMongoRepository
-from infrastructure.repositories.twich.mongo.stream import TwichStreamMongoRepository
-from infrastructure.repositories.twich.mongo.user import TwichUserMongoRepository
-from presentation.controllers.lamoda.products_controller import LamodaProductsController
-from presentation.controllers.twich.game_controller import TwichGameController
-from presentation.controllers.twich.stream_controller import TwichStreamController
-from presentation.controllers.twich.user_controller import TwichUserController
-from presentation.dispatchers.lamoda.kafka.products_dispatcher import LamodaProductsKafkaDispatcher
-from presentation.dispatchers.twich.kafka.game_dispatcher import TwichGameKafkaDispatcher
-from presentation.dispatchers.twich.kafka.stream_dispatcher import TwichStreamKafkaDispatcher
-from presentation.dispatchers.twich.kafka.user_dispatcher import TwichUserKafkaDispatcher
+from dependency_injector.providers import Factory, Resource, Singleton
+from application.exceptions.handlers import DomainExceptionHandler
+from application.services import TwichGameService, TwichStreamService, TwichUserService
+from application.services.decorators import ServiceDecorator
+from common.config import settings
+from infrastructure.loggers.logging import StreamLogger
+from infrastructure.parsers.aiohttp import TwichGameParser, TwichStreamParser, TwichUserParser
+from infrastructure.parsers.aiohttp.dependencies import get_twich_api_token
+from infrastructure.persistence.connections.elastic.database import ElasticSearchDatabase
+from infrastructure.persistence.connections.mongo.database import MongoDatabase
+from infrastructure.persistence.repositories.elastic.game import TwichGameElasticRepository
+from infrastructure.persistence.repositories.elastic.stream import TwichStreamElasticRepository
+from infrastructure.persistence.repositories.elastic.user import TwichUserElasticRepository
+from infrastructure.persistence.repositories.mongo.game import TwichGameMongoRepository
+from infrastructure.persistence.repositories.mongo.stream import TwichStreamMongoRepository
+from infrastructure.persistence.repositories.mongo.user import TwichUserMongoRepository
+from infrastructure.publishers.connections.kafka.producer import KafkaProducerConnection
+from infrastructure.publishers.kafka.game import TwichGameKafkaPublisher
+from infrastructure.publishers.kafka.stream import TwichStreamKafkaPublisher
+from infrastructure.publishers.kafka.user import TwichUserKafkaPublisher
+from presentation.dispatchers.kafka.game import TwichGameKafkaDispatcher
+from presentation.dispatchers.kafka.stream import TwichStreamKafkaDispatcher
+from presentation.dispatchers.kafka.user import TwichUserKafkaDispatcher
 
 
 class Container(DeclarativeContainer):
@@ -56,12 +39,11 @@ class Container(DeclarativeContainer):
 
     wiring_config: WiringConfiguration = WiringConfiguration(
         modules=[
-            'presentation.api.rest.v1.endpoints.lamoda.products',
-            'presentation.api.rest.v1.endpoints.twich.game',
-            'presentation.api.rest.v1.endpoints.twich.user',
-            'presentation.api.rest.v1.endpoints.twich.stream',
-            'presentation.api.graphql.queries.twich.game_queries',
-            'presentation.api.graphql.mutations.twich.game_mutations',
+            'presentation.api.rest.v1.endpoints.game',
+            'presentation.api.rest.v1.endpoints.user',
+            'presentation.api.rest.v1.endpoints.stream',
+            # 'presentation.api.graphql.queries.twich.game_queries',
+            # 'presentation.api.graphql.mutations.twich.game_mutations',
         ],
     )
 
@@ -73,22 +55,18 @@ class Container(DeclarativeContainer):
 
     # ------------------------------------- Domain Services ---------------------------------------
 
-    lamoda_products_domain_service: Factory = Factory(
-        LamodaProductsDomainService,
-    )
-
-    twich_game_domain_service: Factory = Factory(
-        TwichGameDomainService,
+    twich_game_parser: Factory = Factory(
+        TwichGameParser,
         token=twich_api_token,
     )
 
-    twich_user_domain_service: Factory = Factory(
-        TwichUserDomainService,
+    twich_user_parser: Factory = Factory(
+        TwichUserParser,
         token=twich_api_token,
     )
 
-    twich_stream_domain_service: Factory = Factory(
-        TwichStreamDomainService,
+    twich_stream_parser: Factory = Factory(
+        TwichStreamParser,
         token=twich_api_token,
     )
 
@@ -101,11 +79,6 @@ class Container(DeclarativeContainer):
     )
 
     # ---------------------------------- Publishers ------------------------------------------------
-
-    lamoda_products_kafka_publisher: Factory = Factory(
-        LamodaProductsKafkaPublisher,
-        kafka_producer=kafka_producer,
-    )
 
     twich_game_kafka_publisher: Factory = Factory(
         TwichGameKafkaPublisher,
@@ -143,11 +116,6 @@ class Container(DeclarativeContainer):
 
     # ---------------------------------- Repositories ----------------------------------------------
 
-    lamoda_products_mongo_repository: Factory = Factory(
-        LamodaProductsMongoRepository,
-        db=mongo,
-    )
-
     twich_game_mongo_repository: Factory = Factory(
         TwichGameMongoRepository,
         db=mongo,
@@ -161,11 +129,6 @@ class Container(DeclarativeContainer):
     twich_stream_mongo_repository: Factory = Factory(
         TwichStreamMongoRepository,
         db=mongo,
-    )
-
-    lamoda_products_elastic_repository: Factory = Factory(
-        LamodaProductsElasticRepository,
-        db=elastic,
     )
 
     twich_game_elastic_repository: Factory = Factory(
@@ -185,134 +148,121 @@ class Container(DeclarativeContainer):
 
     # ----------------------------------- Services -------------------------------------------------
 
-    lamoda_products_mongo_service: Factory = Factory(
-        LamodaProductsService,
-        domain_service=lamoda_products_domain_service,
-        repository=lamoda_products_mongo_repository,
-        publisher=lamoda_products_kafka_publisher,
-    )
-
-    lamoda_products_elastic_service: Factory = Factory(
-        LamodaProductsService,
-        domain_service=lamoda_products_domain_service,
-        repository=lamoda_products_elastic_repository,
-        publisher=lamoda_products_kafka_publisher,
-    )
-
     twich_game_mongo_service: Factory = Factory(
         TwichGameService,
-        domain_service=twich_game_domain_service,
+        parser=twich_game_parser,
         repository=twich_game_mongo_repository,
         publisher=twich_game_kafka_publisher,
     )
 
     twich_game_elastic_service: Factory = Factory(
         TwichGameService,
-        domain_service=twich_game_domain_service,
+        parser=twich_game_parser,
         repository=twich_game_elastic_repository,
         publisher=twich_game_kafka_publisher,
     )
 
     twich_user_mongo_service: Factory = Factory(
         TwichUserService,
-        domain_service=twich_user_domain_service,
+        parser=twich_user_parser,
         repository=twich_user_mongo_repository,
         publisher=twich_user_kafka_publisher,
     )
 
     twich_user_elastic_service: Factory = Factory(
         TwichUserService,
-        domain_service=twich_user_domain_service,
+        parser=twich_user_parser,
         repository=twich_user_elastic_repository,
         publisher=twich_user_kafka_publisher,
     )
 
     twich_stream_mongo_service: Factory = Factory(
         TwichStreamService,
-        domain_service=twich_stream_domain_service,
+        parser=twich_stream_parser,
         repository=twich_stream_mongo_repository,
         publisher=twich_stream_kafka_publisher,
     )
 
     twich_stream_elastic_service: Factory = Factory(
         TwichStreamService,
-        domain_service=twich_stream_domain_service,
+        parser=twich_stream_parser,
         repository=twich_stream_elastic_repository,
         publisher=twich_stream_kafka_publisher,
     )
 
     # --------------------------------- Dispatchers ------------------------------------------------
 
-    lamoda_products_kafka_dispatcher: Singleton = Singleton(
-        LamodaProductsKafkaDispatcher,
-        bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
-        api_version=settings.KAFKA_CONSUMER_API_VERSION,
-        topic=lamoda_settings.KAFKA_PRODUCT_TOPIC,
-        service=lamoda_products_elastic_service,
-    )
-
     twich_game_kafka_dispatcher: Singleton = Singleton(
         TwichGameKafkaDispatcher,
         bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
         api_version=settings.KAFKA_CONSUMER_API_VERSION,
-        topic=twich_settings.KAFKA_GAME_TOPIC,
-        service=twich_game_elastic_service,
+        topic=settings.KAFKA_GAME_TOPIC,
+        repository=twich_game_elastic_repository,
     )
 
     twich_user_kafka_dispatcher: Singleton = Singleton(
         TwichUserKafkaDispatcher,
         bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
         api_version=settings.KAFKA_CONSUMER_API_VERSION,
-        topic=twich_settings.KAFKA_USER_TOPIC,
-        service=twich_user_elastic_service,
+        topic=settings.KAFKA_USER_TOPIC,
+        repository=twich_user_elastic_repository,
     )
 
     twich_stream_kafka_dispatcher: Singleton = Singleton(
         TwichStreamKafkaDispatcher,
         bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
         api_version=settings.KAFKA_CONSUMER_API_VERSION,
-        topic=twich_settings.KAFKA_STREAM_TOPIC,
-        service=twich_stream_elastic_service,
+        topic=settings.KAFKA_STREAM_TOPIC,
+        repository=twich_stream_elastic_repository,
+    )
+
+    # ---------------------------------- Loggers ---------------------------------------------------
+
+    logger: Factory = Factory(
+        StreamLogger,
+    )
+
+    # ---------------------------------- Exception handlers ----------------------------------------
+
+    exception_handler: Factory = Factory(
+        DomainExceptionHandler,
+        logger=logger,
     )
 
     # ---------------------------------- Controllers -----------------------------------------------
 
-    lamoda_products_w_controller: Factory = Factory(
-        LamodaProductsController,
-        service=lamoda_products_mongo_service,
-    )
-
-    lamoda_products_r_controller: Factory = Factory(
-        LamodaProductsController,
-        service=lamoda_products_elastic_service,
-    )
-
-    twich_game_w_controller: Factory = Factory(
-        TwichGameController,
+    twich_game_w_service_decorator: Factory = Factory(
+        ServiceDecorator,
         service=twich_game_mongo_service,
+        exception_handler=exception_handler,
     )
 
-    twich_game_r_controller: Factory = Factory(
-        TwichGameController,
+    twich_game_r_service_decorator: Factory = Factory(
+        ServiceDecorator,
         service=twich_game_elastic_service,
+        exception_handler=exception_handler,
     )
 
-    twich_user_w_controller: Factory = Factory(
-        TwichUserController,
+    twich_user_w_service_decorator: Factory = Factory(
+        ServiceDecorator,
         service=twich_user_mongo_service,
+        exception_handler=exception_handler,
     )
 
-    twich_user_r_controller: Factory = Factory(
-        TwichUserController,
+    twich_user_r_service_decorator: Factory = Factory(
+        ServiceDecorator,
         service=twich_user_elastic_service,
+        exception_handler=exception_handler,
     )
 
-    twich_stream_w_controller: Factory = Factory(
-        TwichStreamController,
+    twich_stream_w_service_decorator: Factory = Factory(
+        ServiceDecorator,
         service=twich_stream_mongo_service,
+        exception_handler=exception_handler,
     )
 
-    twich_stream_r_controller: Factory = Factory(
-        TwichStreamController,
+    twich_stream_r_service_decorator: Factory = Factory(
+        ServiceDecorator,
         service=twich_stream_elastic_service,
+        exception_handler=exception_handler,
     )

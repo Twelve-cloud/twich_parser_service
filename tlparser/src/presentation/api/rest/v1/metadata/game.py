@@ -3,7 +3,7 @@ game_metadata.py: File, containing metadata for a twich game.
 """
 
 
-from common.utils.decorators import ReadOnlyClassProperty
+from common.utils import ReadOnlyClassProperty
 
 
 class TwichGameMetadata:

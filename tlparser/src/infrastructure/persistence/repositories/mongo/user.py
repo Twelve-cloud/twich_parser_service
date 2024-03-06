@@ -4,12 +4,12 @@ user.py: File, containing twich user mongo repository implementation.
 
 
 from typing import Optional
-from domain.exceptions.user import UserNotFoundException
-from domain.exceptions.repositories.user import ITwichUserRepository
-from domain.models.user import TwichUser
-from infrastructure.connections.mongo.database import MongoDatabase
-from infrastructure.mappers.twich.mongo.user_mapper import TwichUserMapper
-from infrastructure.models.twich.mongo.user_model import TwichUserDAO
+from automapper import mapper
+from domain.exceptions import ObjectNotFoundException
+from domain.interfaces.repositories import ITwichUserRepository
+from domain.models import TwichUser
+from infrastructure.persistence.connections.mongo.database import MongoDatabase
+from infrastructure.persistence.models.mongo.user import TwichUserDAO
 
 
 class TwichUserMongoRepository(ITwichUserRepository):
@@ -30,15 +30,15 @@ class TwichUserMongoRepository(ITwichUserRepository):
 
         self.db: MongoDatabase = db
 
-    async def create_or_update(self, user: TwichUser) -> None:
+    async def add_or_update(self, user: TwichUser) -> None:
         """
-        create_or_update: Create or update twich user.
+        add_or_update: Add or update twich user.
 
         Args:
             user (TwichUser): Twich user.
         """
 
-        user_persistence = TwichUserMapper.to_persistence(user)
+        user_persistence = mapper.to(TwichUserDAO).map(user)
         user_persistence.save()
 
         return
@@ -52,21 +52,18 @@ class TwichUserMongoRepository(ITwichUserRepository):
         """
 
         return [
-            TwichUserMapper.to_domain(user_persistence) for user_persistence in TwichUserDAO.objects
+            mapper.to(TwichUser).map(user_persistence) for user_persistence in TwichUserDAO.objects
         ]
 
-    async def delete_user_by_login(self, login: str) -> None:
+    async def delete(self, user: TwichUser) -> None:
         """
-        delete_user_by_login: Delete twich user by login.
+        delete: Delete twich user by login.
 
         Args:
-            user_login (str): Login of the user.
-
-        Returns:
-            TwichUserDeletedByLoginEvent: Twich user deleted event.
+            user (TwichUser): Twich user.
         """
 
-        for user_persistence in TwichUserDAO.objects(login=login):
+        for user_persistence in TwichUserDAO.objects(login=user.login):
             user_persistence.delete()
 
         return
@@ -85,6 +82,6 @@ class TwichUserMongoRepository(ITwichUserRepository):
         user_persistence: Optional[TwichUserDAO] = TwichUserDAO.objects(login=login).first()
 
         if not user_persistence:
-            raise UserNotFoundException
+            raise ObjectNotFoundException('User is not found.')
 
-        return TwichUserMapper.to_domain(user_persistence)
+        return mapper.to(TwichUser).map(user_persistence)

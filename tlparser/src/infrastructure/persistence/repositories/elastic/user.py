@@ -4,12 +4,12 @@ user.py: File, containing twich user elastic repository implementation.
 
 
 from typing import Collection
-from domain.exceptions.user import UserNotFoundException
-from domain.exceptions.repositories.user import ITwichUserRepository
-from domain.models.user import TwichUser
-from infrastructure.connections.elastic.database import ElasticSearchDatabase
-from infrastructure.mappers.twich.elastic.user_mapper import TwichUserMapper
-from infrastructure.models.twich.elastic.user_model import TwichUserDAO
+from automapper import mapper
+from domain.exceptions import ObjectNotFoundException
+from domain.interfaces.repositories import ITwichUserRepository
+from domain.models import TwichUser
+from infrastructure.persistence.connections.elastic.database import ElasticSearchDatabase
+from infrastructure.persistence.models.elastic.user import TwichUserDAO
 
 
 class TwichUserElasticRepository(ITwichUserRepository):
@@ -17,7 +17,7 @@ class TwichUserElasticRepository(ITwichUserRepository):
     TwichUserElasticRepository: Elastic implementation of ITwichUserRepository.
 
     Args:
-        ITwichUserRepository (_type_): Repository abstract class.
+        ITwichUserRepository: Repository abstract class.
     """
 
     def __init__(self, db: ElasticSearchDatabase) -> None:
@@ -31,15 +31,15 @@ class TwichUserElasticRepository(ITwichUserRepository):
         self.db: ElasticSearchDatabase = db
         TwichUserDAO.init()
 
-    async def create_or_update(self, user: TwichUser) -> None:
+    async def add_or_update(self, user: TwichUser) -> None:
         """
-        create_or_update: Create or update twich user.
+        add_or_update: Add or update twich user.
 
         Args:
             user (TwichUser): Twich user.
         """
 
-        user_persistence = TwichUserMapper.to_persistence(user)
+        user_persistence = mapper.to(TwichUserDAO).map(user)
         user_persistence.meta.id = user_persistence.id
         user_persistence.save()
 
@@ -54,22 +54,19 @@ class TwichUserElasticRepository(ITwichUserRepository):
         """
 
         return [
-            TwichUserMapper.to_domain(user_persistence)
+            mapper.to(TwichUser).map(user_persistence)
             for user_persistence in TwichUserDAO.search().query()
         ]
 
-    async def delete_user_by_login(self, login: str) -> None:
+    async def delete(self, user: TwichUser) -> None:
         """
-        delete_user_by_login: Delete twich user by login.
+        delete: Delete twich user by login.
 
         Args:
-            user_login (str): Login of the user.
-
-        Returns:
-            TwichUserDeletedByLoginEvent: Twich user deleted event.
+            user (TwichUser): Twich user.
         """
 
-        TwichUserDAO.search().query('match', login=login).delete()
+        TwichUserDAO.search().query('match', login=user.login).delete()
 
         return
 
@@ -81,7 +78,7 @@ class TwichUserElasticRepository(ITwichUserRepository):
             user_login (str): Login of the user.
 
         Returns:
-            TwichUser: Twich user .
+            TwichUser: Twich user.
         """
 
         users: Collection[TwichUserDAO] = (
@@ -94,6 +91,6 @@ class TwichUserElasticRepository(ITwichUserRepository):
         )
 
         if len(users) == 0:
-            raise UserNotFoundException
+            raise ObjectNotFoundException('User is not found.')
 
-        return TwichUserMapper.to_domain(next(iter(users)))
+        return mapper.to(TwichUser).map(next(iter(users)))
