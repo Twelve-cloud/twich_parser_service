@@ -7,6 +7,6 @@ from common.utils.decorators import ReadOnlyClassProperty, Singleton
 
 
 __all__: list[str] = [
-    'Singleton',
     'ReadOnlyClassProperty',
+    'Singleton',
 ]

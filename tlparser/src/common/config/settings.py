@@ -8,18 +8,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """
-    Settings: Class, that represents settings for an entire project.
-
-    Args:
-        BaseSettings: Base class for a settings class.
-    """
-
     PROJECT_NAME: str
+    BACKEND_CORS_ORIGINS: list[str]
+
     API_NAME: str
     API_VERSION: str
     API_SEM_VERSION: str
-    BACKEND_CORS_ORIGINS: list[str]
 
     DB_MONGO_NAME: str
     DB_MONGO_USERNAME: str
