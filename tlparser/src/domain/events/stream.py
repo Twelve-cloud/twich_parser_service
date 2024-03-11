@@ -3,33 +3,19 @@ stream.py: File, containing twich stream domain events.
 """
 
 
+from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
-from domain.events import BaseDomainEvent
+from domain.events import DomainEvent
 
 
-@dataclass
-class TwichStreamDomainEvent(BaseDomainEvent):
-    """
-    TwichStreamDomainEvent: Class that represents base domain event class for twich streams.
-
-    Args:
-        BaseDomainEvent: Base domain event class.
-    """
-
+@dataclass(frozen=True)
+class TwichStreamDomainEvent(DomainEvent, ABC):
     pass
 
 
-@dataclass
+@dataclass(frozen=True)
 class TwichStreamCreatedEvent(TwichStreamDomainEvent):
-    """
-    TwichStreamCreatedEvent: Class that represents domain event.
-    That domain event represents that twich stream has been created.
-
-    Args:
-        TwichStreamDomainEvent: Base domain event class for twich streams.
-    """
-
     id: int
     user_id: int
     user_name: str
@@ -45,26 +31,6 @@ class TwichStreamCreatedEvent(TwichStreamDomainEvent):
     parsed_at: datetime
 
 
-@dataclass
+@dataclass(frozen=True)
 class TwichStreamDeletedEvent(TwichStreamDomainEvent):
-    """
-    TwichStreamDeletedEvent: Class that represents domain event.
-    That domain event represents that twich stream has been deleted.
-
-    Args:
-        TwichStreamDomainEvent: Base domain event class for twich streams.
-    """
-
     id: int
-    user_id: int
-    user_name: str
-    user_login: str
-    game_id: int
-    game_name: str
-    language: str
-    title: str
-    tags: list[str]
-    started_at: datetime
-    viewer_count: int
-    type: str
-    parsed_at: datetime

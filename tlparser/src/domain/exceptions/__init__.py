@@ -3,7 +3,7 @@ __init__.py: File, containing other exception modules to simplify import.
 """
 
 
-from domain.exceptions.base import BaseDomainException
+from domain.exceptions.base import DomainException
 from domain.exceptions.common import (
     ObjectNotFoundException,
     ParserException,
@@ -15,7 +15,7 @@ from domain.exceptions.common import (
 
 
 __all__: list[str] = [
-    'BaseDomainException',
+    'DomainException',
     'ObjectNotFoundException',
     'ParserException',
     'TwichGetObjectBadRequestException',

@@ -3,7 +3,7 @@ __init__.py: File, containing other event modules to simplify import.
 """
 
 
-from domain.events.base import BaseDomainEvent
+from domain.events.base import DomainEvent
 from domain.events.game import (
     TwichGameCreatedEvent,
     TwichGameDeletedEvent,
@@ -22,7 +22,7 @@ from domain.events.user import (
 
 
 __all__: list[str] = [
-    'BaseDomainEvent',
+    'DomainEvent',
     'TwichGameCreatedEvent',
     'TwichGameDeletedEvent',
     'TwichGameDomainEvent',

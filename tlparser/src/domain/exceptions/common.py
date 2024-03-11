@@ -3,124 +3,35 @@ common.py: File, containing common domain exceptions.
 """
 
 
-from domain.exceptions import BaseDomainException
+from dataclasses import dataclass
+from domain.exceptions import DomainException
 
 
-class TwichTokenNotObtainedException(BaseDomainException):
-    """
-    TwichTokenNotObtainedException: Class, that represents Twich token exception.
-    It means that getting access token from twich does not succeed.
-
-    Args:
-        BaseDomainException: Base domain exception class.
-    """
-
-    def __init__(self, message: str) -> None:
-        """
-        __init__: Initialize twich token not obtained exception.
-
-        Args:
-            message (str): Short error message.
-        """
-
-        super().__init__(message)
+@dataclass(frozen=True)
+class TwichTokenNotObtainedException(DomainException):
+    pass
 
 
-class TwichRequestUnauthorizedException(BaseDomainException):
-    """
-    TwichRequestUnauthorizedException: Class, that represents Twich request unauthorized exception.
-    It means that request to twich API (for parsing) is unauthorized.
-
-    Args:
-        BaseDomainException: Base domain exception class.
-    """
-
-    def __init__(self, message: str) -> None:
-        """
-        __init__: Initialize twich request unauthorized exception.
-
-        Args:
-            message (str): Short error message.
-        """
-
-        super().__init__(message)
+@dataclass(frozen=True)
+class TwichRequestUnauthorizedException(DomainException):
+    pass
 
 
-class TwichGetObjectBadRequestException(BaseDomainException):
-    """
-    TwichGetObjectBadRequestException: Class, that represents TwichAPI bad request exception.
-    It means that request to Twich API (for parsing) fails because of input data.
-
-    Args:
-        BaseDomainException: Base domain exception class.
-    """
-
-    def __init__(self, message: str) -> None:
-        """
-        __init__: Initialize twich get object bad request exception.
-
-        Args:
-            message (str): Short error message.
-        """
-
-        super().__init__(message)
+@dataclass(frozen=True)
+class TwichGetObjectBadRequestException(DomainException):
+    pass
 
 
-class TwichRequestTimeoutException(BaseDomainException):
-    """
-    TwichRequestTimeoutException: Class, that represents Twich request timeout exception.
-    It means that request to Twich API (for parsing) is out of time.
-
-    Args:
-        BaseDomainException: Base domain exception class.
-    """
-
-    def __init__(self, message: str) -> None:
-        """
-        __init__: Initialize twich request timeout exception.
-
-        Args:
-            message (str): Short error message.
-        """
-
-        super().__init__(message)
+@dataclass(frozen=True)
+class TwichRequestTimeoutException(DomainException):
+    pass
 
 
-class ObjectNotFoundException(BaseDomainException):
-    """
-    ObjectNotFoundException: Class, that represents object not found exception.
-    It means that request to Twich API for parsing could not parse object because it does not exist.
-
-    Args:
-        BaseDomainException: Base domain exception class.
-    """
-
-    def __init__(self, message: str) -> None:
-        """
-        __init__: Initialize object not found exception.
-
-        Args:
-            message (str): Short error message.
-        """
-
-        super().__init__(message)
+@dataclass(frozen=True)
+class ObjectNotFoundException(DomainException):
+    pass
 
 
-class ParserException(BaseDomainException):
-    """
-    ParserException: Class, that represents parser exception.
-    It means that parser produces error during parsing.
-
-    Args:
-        BaseDomainException: Base domain exception class.
-    """
-
-    def __init__(self, message: str) -> None:
-        """
-        __init__: Initialize parser exception.
-
-        Args:
-            message (str): Short error message.
-        """
-
-        super().__init__(message)
+@dataclass(frozen=True)
+class ParserException(DomainException):
+    pass

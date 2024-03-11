@@ -3,14 +3,13 @@ base.py: File, containing base domain event.
 """
 
 
-from dataclasses import dataclass
+from abc import ABC
+from dataclasses import dataclass, field
+from datetime import datetime
+from uuid import UUID, uuid4
 
 
-@dataclass
-class BaseDomainEvent:
-    """
-    BaseDomainEvent: Class, that represents base domain event for all domain events.
-    It contains common data for every domain event.
-    """
-
-    pass
+@dataclass(frozen=True)
+class DomainEvent(ABC):
+    event_id: UUID = field(default_factory=uuid4, init=False)
+    event_timestamp: datetime = field(default_factory=datetime.utcnow, init=False)

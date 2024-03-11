@@ -3,33 +3,19 @@ game.py: File, containing twich game domain events.
 """
 
 
+from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
-from domain.events import BaseDomainEvent
+from domain.events import DomainEvent
 
 
-@dataclass
-class TwichGameDomainEvent(BaseDomainEvent):
-    """
-    TwichGameDomainEvent: Class that represents base domain event class for twich games.
-
-    Args:
-        BaseDomainEvent: Base domain event class.
-    """
-
+@dataclass(frozen=True)
+class TwichGameDomainEvent(DomainEvent, ABC):
     pass
 
 
-@dataclass
+@dataclass(frozen=True)
 class TwichGameCreatedEvent(TwichGameDomainEvent):
-    """
-    TwichGameCreatedEvent: Class that represents domain event.
-    That domain event represents that twich game has been created.
-
-    Args:
-        TwichGameDomainEvent: Base domain event class for twich games.
-    """
-
     id: int
     name: str
     igdb_id: str
@@ -37,18 +23,6 @@ class TwichGameCreatedEvent(TwichGameDomainEvent):
     parsed_at: datetime
 
 
-@dataclass
+@dataclass(frozen=True)
 class TwichGameDeletedEvent(TwichGameDomainEvent):
-    """
-    TwichGameDeletedEvent: Class that represents domain event.
-    That domain event represents that twich game has been deleted.
-
-    Args:
-        TwichGameDomainEvent: Base domain event class for twich games.
-    """
-
     id: int
-    name: str
-    igdb_id: str
-    box_art_url: str
-    parsed_at: datetime
