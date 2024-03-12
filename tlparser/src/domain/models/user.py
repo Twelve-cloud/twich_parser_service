@@ -8,8 +8,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from automapper import mapper
 from domain.events import (
-    TwichUserCreatedEvent,
-    TwichUserDeletedEvent,
+    TwichUserCreated,
+    TwichUserDeleted,
     TwichUserDomainEvent,
 )
 from domain.models import AggregateRoot, DomainModel
@@ -55,13 +55,13 @@ class TwichUser(DomainModel, AggregateRoot[TwichUserDomainEvent]):
             parsed_at=parsed_at,
         )
 
-        event: TwichUserCreatedEvent = mapper.to(TwichUserCreatedEvent).map(user)
+        event: TwichUserCreated = mapper.to(TwichUserCreated).map(user)
         user.register_event(event)
 
         return user
 
     def delete(self) -> None:
-        event: TwichUserDeletedEvent = mapper.to(TwichUserDeletedEvent).map(self)
+        event: TwichUserDeleted = mapper.to(TwichUserDeleted).map(self)
         self.register_event(event)
 
         return

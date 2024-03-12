@@ -15,7 +15,7 @@ class TwichStreamDomainEvent(DomainEvent, ABC):
 
 
 @dataclass(frozen=True)
-class TwichStreamCreatedEvent(TwichStreamDomainEvent):
+class TwichStreamCreated(TwichStreamDomainEvent):
     id: int
     user_id: int
     user_name: str
@@ -32,5 +32,5 @@ class TwichStreamCreatedEvent(TwichStreamDomainEvent):
 
 
 @dataclass(frozen=True)
-class TwichStreamDeletedEvent(TwichStreamDomainEvent):
+class TwichStreamDeleted(TwichStreamDomainEvent):
     id: int

@@ -8,8 +8,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from automapper import mapper
 from domain.events import (
-    TwichGameCreatedEvent,
-    TwichGameDeletedEvent,
+    TwichGameCreated,
+    TwichGameDeleted,
     TwichGameDomainEvent,
 )
 from domain.models import AggregateRoot, DomainModel
@@ -40,13 +40,13 @@ class TwichGame(DomainModel, AggregateRoot[TwichGameDomainEvent]):
             parsed_at=parsed_at,
         )
 
-        event: TwichGameCreatedEvent = mapper.to(TwichGameCreatedEvent).map(game)
+        event: TwichGameCreated = mapper.to(TwichGameCreated).map(game)
         game.register_event(event)
 
         return game
 
     def delete(self) -> None:
-        event: TwichGameDeletedEvent = mapper.to(TwichGameDeletedEvent).map(self)
+        event: TwichGameDeleted = mapper.to(TwichGameDeleted).map(self)
         self.register_event(event)
 
         return

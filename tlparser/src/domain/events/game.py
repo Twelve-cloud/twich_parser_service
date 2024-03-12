@@ -15,7 +15,7 @@ class TwichGameDomainEvent(DomainEvent, ABC):
 
 
 @dataclass(frozen=True)
-class TwichGameCreatedEvent(TwichGameDomainEvent):
+class TwichGameCreated(TwichGameDomainEvent):
     id: int
     name: str
     igdb_id: str
@@ -24,5 +24,5 @@ class TwichGameCreatedEvent(TwichGameDomainEvent):
 
 
 @dataclass(frozen=True)
-class TwichGameDeletedEvent(TwichGameDomainEvent):
+class TwichGameDeleted(TwichGameDomainEvent):
     id: int

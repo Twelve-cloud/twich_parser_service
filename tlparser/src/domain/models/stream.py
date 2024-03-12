@@ -8,8 +8,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from automapper import mapper
 from domain.events import (
-    TwichStreamCreatedEvent,
-    TwichStreamDeletedEvent,
+    TwichStreamCreated,
+    TwichStreamDeleted,
     TwichStreamDomainEvent,
 )
 from domain.models import AggregateRoot, DomainModel
@@ -64,13 +64,13 @@ class TwichStream(DomainModel, AggregateRoot[TwichStreamDomainEvent]):
             parsed_at=parsed_at,
         )
 
-        event: TwichStreamCreatedEvent = mapper.to(TwichStreamCreatedEvent).map(stream)
+        event: TwichStreamCreated = mapper.to(TwichStreamCreated).map(stream)
         stream.register_event(event)
 
         return stream
 
     def delete(self) -> None:
-        event: TwichStreamDeletedEvent = mapper.to(TwichStreamDeletedEvent).map(self)
+        event: TwichStreamDeleted = mapper.to(TwichStreamDeleted).map(self)
         self.register_event(event)
 
         return

@@ -15,7 +15,7 @@ class TwichUserDomainEvent(DomainEvent, ABC):
 
 
 @dataclass(frozen=True)
-class TwichUserCreatedEvent(TwichUserDomainEvent):
+class TwichUserCreated(TwichUserDomainEvent):
     id: int
     login: str
     description: str
@@ -29,5 +29,5 @@ class TwichUserCreatedEvent(TwichUserDomainEvent):
 
 
 @dataclass(frozen=True)
-class TwichUserDeletedEvent(TwichUserDomainEvent):
+class TwichUserDeleted(TwichUserDomainEvent):
     id: int
