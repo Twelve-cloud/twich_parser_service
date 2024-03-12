@@ -4,14 +4,14 @@ game.py: File, containing twich game queries.
 
 
 from dataclasses import dataclass
-from application.queries import BaseQuery
+from application.queries import Query
 
 
 @dataclass(frozen=True)
-class GetTwichGameByNameQuery(BaseQuery):
+class GetTwichGameByNameQuery(Query):
     name: str
 
 
 @dataclass(frozen=True)
-class GetAllTwichGamesQuery(BaseQuery):
+class GetAllTwichGamesQuery(Query):
     pass

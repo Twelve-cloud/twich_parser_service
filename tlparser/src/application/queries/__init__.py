@@ -3,7 +3,7 @@ __init__.py: File, containing other query modules to simplify import.
 """
 
 
-from application.queries.base import BaseQuery
+from application.queries.base import Query
 from application.queries.game import (
     GetAllTwichGamesQuery,
     GetTwichGameByNameQuery,
@@ -19,7 +19,7 @@ from application.queries.user import (
 
 
 __all__: list[str] = [
-    'BaseQuery',
+    'Query',
     'GetAllTwichGamesQuery',
     'GetTwichGameByNameQuery',
     'GetAllTwichStreamsQuery',

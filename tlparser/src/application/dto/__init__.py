@@ -3,7 +3,7 @@ __init__.py: File, containing other dto modules to simplify import.
 """
 
 
-from application.dto.base import BaseDTO
+from application.dto.base import DTO
 from application.dto.game import (
     TwichGameDTO,
     TwichGamesDTO,
@@ -23,7 +23,7 @@ from application.dto.user import (
 
 
 __all__: list[str] = [
-    'BaseDTO',
+    'DTO',
     'TwichGameDTO',
     'TwichGamesDTO',
     'TwichStreamDTO',

@@ -8,5 +8,5 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class BaseDTO(ABC):
+class DTO(ABC):
     pass

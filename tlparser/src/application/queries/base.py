@@ -8,5 +8,5 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class BaseQuery(ABC):
+class Query(ABC):
     pass

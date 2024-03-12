@@ -3,7 +3,7 @@ __init__.py: File, containing other command modules to simplify import.
 """
 
 
-from application.commands.base import BaseCommand
+from application.commands.base import Command
 from application.commands.game import (
     DeleteTwichGameCommand,
     ParseTwichGameCommand,
@@ -19,7 +19,7 @@ from application.commands.user import (
 
 
 __all__: list[str] = [
-    'BaseCommand',
+    'Command',
     'DeleteTwichGameCommand',
     'ParseTwichGameCommand',
     'DeleteTwichStreamCommand',

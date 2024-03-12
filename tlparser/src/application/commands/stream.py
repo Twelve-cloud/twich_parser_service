@@ -4,14 +4,14 @@ stream.py: File, containing twich stream commands.
 
 
 from dataclasses import dataclass
-from application.commands import BaseCommand
+from application.commands import Command
 
 
 @dataclass(frozen=True)
-class ParseTwichStreamCommand(BaseCommand):
+class ParseTwichStreamCommand(Command):
     user_login: str
 
 
 @dataclass(frozen=True)
-class DeleteTwichStreamCommand(BaseCommand):
+class DeleteTwichStreamCommand(Command):
     user_login: str

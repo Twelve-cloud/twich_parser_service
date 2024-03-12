@@ -8,5 +8,5 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class BaseCommand(ABC):
+class Command(ABC):
     pass

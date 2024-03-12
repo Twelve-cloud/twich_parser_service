@@ -5,11 +5,11 @@ game.py: File, containing twich game dto.
 
 from dataclasses import dataclass
 from datetime import datetime
-from application.dto import BaseDTO
+from application.dto import DTO
 
 
 @dataclass(frozen=True)
-class TwichGameDTO(BaseDTO):
+class TwichGameDTO(DTO):
     id: int
     name: str
     igdb_id: str
@@ -18,5 +18,5 @@ class TwichGameDTO(BaseDTO):
 
 
 @dataclass(frozen=True)
-class TwichGamesDTO(BaseDTO):
+class TwichGamesDTO(DTO):
     games: list[TwichGameDTO]

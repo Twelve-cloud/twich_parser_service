@@ -5,11 +5,11 @@ stream.py: File, containing twich stream dto.
 
 from dataclasses import dataclass
 from datetime import datetime
-from application.dto import BaseDTO
+from application.dto import DTO
 
 
 @dataclass(frozen=True)
-class TwichStreamDTO(BaseDTO):
+class TwichStreamDTO(DTO):
     id: int
     user_id: int
     user_name: str
@@ -26,5 +26,5 @@ class TwichStreamDTO(BaseDTO):
 
 
 @dataclass(frozen=True)
-class TwichStreamsDTO(BaseDTO):
+class TwichStreamsDTO(DTO):
     streams: list[TwichStreamDTO]

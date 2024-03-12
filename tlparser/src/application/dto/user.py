@@ -5,11 +5,11 @@ user.py: File, containing twich user dto.
 
 from dataclasses import dataclass
 from datetime import datetime
-from application.dto import BaseDTO
+from application.dto import DTO
 
 
 @dataclass(frozen=True)
-class TwichUserDTO(BaseDTO):
+class TwichUserDTO(DTO):
     id: int
     login: str
     description: str
@@ -23,5 +23,5 @@ class TwichUserDTO(BaseDTO):
 
 
 @dataclass(frozen=True)
-class TwichUsersDTO(BaseDTO):
+class TwichUsersDTO(DTO):
     users: list[TwichUserDTO]
