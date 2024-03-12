@@ -24,4 +24,4 @@ class TwichUser(DTO):
 
 @dataclass(frozen=True)
 class TwichUsers(DTO):
-    users: list[TwichUser]
+    data: list[TwichUser]

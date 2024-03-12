@@ -19,4 +19,4 @@ class TwichGame(DTO):
 
 @dataclass(frozen=True)
 class TwichGames(DTO):
-    games: list[TwichGame]
+    data: list[TwichGame]

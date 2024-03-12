@@ -27,4 +27,4 @@ class TwichStream(DTO):
 
 @dataclass(frozen=True)
 class TwichStreams(DTO):
-    streams: list[TwichStream]
+    data: list[TwichStream]
