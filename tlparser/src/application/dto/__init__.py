@@ -5,31 +5,31 @@ __init__.py: File, containing other dto modules to simplify import.
 
 from application.dto.base import DTO
 from application.dto.game import (
-    TwichGameDTO,
-    TwichGamesDTO,
+    TwichGame,
+    TwichGames,
 )
 from application.dto.stream import (
-    TwichStreamDTO,
-    TwichStreamsDTO,
+    TwichStream,
+    TwichStreams,
 )
 from application.dto.success import (
-    FailureDTO,
-    SuccessDTO,
+    Failure,
+    Success,
 )
 from application.dto.user import (
-    TwichUserDTO,
-    TwichUsersDTO,
+    TwichUser,
+    TwichUsers,
 )
 
 
 __all__: list[str] = [
     'DTO',
-    'TwichGameDTO',
-    'TwichGamesDTO',
-    'TwichStreamDTO',
-    'TwichStreamsDTO',
-    'FailureDTO',
-    'SuccessDTO',
-    'TwichUserDTO',
-    'TwichUsersDTO',
+    'TwichGame',
+    'TwichGames',
+    'TwichStream',
+    'TwichStreams',
+    'Failure',
+    'Success',
+    'TwichUser',
+    'TwichUsers',
 ]

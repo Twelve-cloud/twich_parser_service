@@ -8,10 +8,10 @@ from application.queries import Query
 
 
 @dataclass(frozen=True)
-class GetTwichUserByLoginQuery(Query):
+class GetTwichUserByLogin(Query):
     login: str
 
 
 @dataclass(frozen=True)
-class GetAllTwichUsersQuery(Query):
+class GetAllTwichUsers(Query):
     pass

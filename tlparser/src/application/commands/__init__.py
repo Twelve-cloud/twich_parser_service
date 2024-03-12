@@ -5,25 +5,25 @@ __init__.py: File, containing other command modules to simplify import.
 
 from application.commands.base import Command
 from application.commands.game import (
-    DeleteTwichGameCommand,
-    ParseTwichGameCommand,
+    DeleteTwichGame,
+    ParseTwichGame,
 )
 from application.commands.stream import (
-    DeleteTwichStreamCommand,
-    ParseTwichStreamCommand,
+    DeleteTwichStream,
+    ParseTwichStream,
 )
 from application.commands.user import (
-    DeleteTwichUserCommand,
-    ParseTwichUserCommand,
+    DeleteTwichUser,
+    ParseTwichUser,
 )
 
 
 __all__: list[str] = [
     'Command',
-    'DeleteTwichGameCommand',
-    'ParseTwichGameCommand',
-    'DeleteTwichStreamCommand',
-    'ParseTwichStreamCommand',
-    'DeleteTwichUserCommand',
-    'ParseTwichUserCommand',
+    'DeleteTwichGame',
+    'ParseTwichGame',
+    'DeleteTwichStream',
+    'ParseTwichStream',
+    'DeleteTwichUser',
+    'ParseTwichUser',
 ]

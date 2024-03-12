@@ -8,10 +8,10 @@ from application.commands import Command
 
 
 @dataclass(frozen=True)
-class ParseTwichStreamCommand(Command):
+class ParseTwichStream(Command):
     user_login: str
 
 
 @dataclass(frozen=True)
-class DeleteTwichStreamCommand(Command):
+class DeleteTwichStream(Command):
     user_login: str

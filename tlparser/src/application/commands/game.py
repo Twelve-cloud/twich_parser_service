@@ -8,10 +8,10 @@ from application.commands import Command
 
 
 @dataclass(frozen=True)
-class ParseTwichGameCommand(Command):
+class ParseTwichGame(Command):
     name: str
 
 
 @dataclass(frozen=True)
-class DeleteTwichGameCommand(Command):
+class DeleteTwichGame(Command):
     name: str

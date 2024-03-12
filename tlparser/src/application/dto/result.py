@@ -8,10 +8,10 @@ from application.dto import DTO
 
 
 @dataclass(frozen=True)
-class SuccessDTO(DTO):
+class Success(DTO):
     status: str
 
 
 @dataclass(frozen=True)
-class FailureDTO(DTO):
+class Failure(DTO):
     status: str

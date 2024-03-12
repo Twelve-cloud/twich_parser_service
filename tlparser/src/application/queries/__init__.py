@@ -5,25 +5,25 @@ __init__.py: File, containing other query modules to simplify import.
 
 from application.queries.base import Query
 from application.queries.game import (
-    GetAllTwichGamesQuery,
-    GetTwichGameByNameQuery,
+    GetAllTwichGames,
+    GetTwichGameByName,
 )
 from application.queries.stream import (
-    GetAllTwichStreamsQuery,
-    GetTwichStreamByUserLoginQuery,
+    GetAllTwichStreams,
+    GetTwichStreamByUserLogin,
 )
 from application.queries.user import (
-    GetAllTwichUsersQuery,
-    GetTwichUserByLoginQuery,
+    GetAllTwichUsers,
+    GetTwichUserByLogin,
 )
 
 
 __all__: list[str] = [
     'Query',
-    'GetAllTwichGamesQuery',
-    'GetTwichGameByNameQuery',
-    'GetAllTwichStreamsQuery',
-    'GetTwichStreamByUserLoginQuery',
-    'GetAllTwichUsersQuery',
-    'GetTwichUserByLoginQuery',
+    'GetAllTwichGames',
+    'GetTwichGameByName',
+    'GetAllTwichStreams',
+    'GetTwichStreamByUserLogin',
+    'GetAllTwichUsers',
+    'GetTwichUserByLogin',
 ]
