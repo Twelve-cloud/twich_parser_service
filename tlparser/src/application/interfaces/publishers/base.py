@@ -3,7 +3,8 @@ base.py: File, containing base publisher interface.
 """
 
 
-from abc import ABC as Interface, abstractmethod
+from abc import ABC as Interface
+from abc import abstractmethod
 from typing import Generic, TypeVar
 from domain.events import DomainEvent
 

@@ -3,7 +3,8 @@ command_handler.py: File, containing command handler interface.
 """
 
 
-from abc import ABC as Interface, abstractmethod
+from abc import ABC as Interface
+from abc import abstractmethod
 from typing import Generic, TypeVar
 from application.commands import Command
 from application.dto import Failure, Success

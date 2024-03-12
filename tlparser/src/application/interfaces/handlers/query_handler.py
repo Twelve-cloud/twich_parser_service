@@ -3,7 +3,8 @@ query_handler.py: File, containing query handler interface.
 """
 
 
-from abc import ABC as Interface, abstractmethod
+from abc import ABC as Interface
+from abc import abstractmethod
 from typing import Generic, TypeVar
 from application.dto import DTO
 from application.queries import Query
