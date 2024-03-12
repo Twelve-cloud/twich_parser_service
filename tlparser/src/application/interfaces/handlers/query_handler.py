@@ -14,5 +14,5 @@ R = TypeVar('R', bound=DTO)
 
 
 class IQueryHandler(Generic[Q, R], Interface):
-    def handle(self, query: Q) -> R:
+    async def handle(self, query: Q) -> R:
         raise NotImplementedError
