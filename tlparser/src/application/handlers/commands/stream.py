@@ -4,10 +4,13 @@ stream.py: File, containing command handler for a twich stream.
 
 
 from application.commands import (
-    DeleteTwichStreamCommand,
-    ParseTwichStreamCommand,
+    DeleteTwichStream,
+    ParseTwichStream,
 )
-from application.dto import FailureDTO, SuccessDTO
+from application.dto import (
+    Failure,
+    Success,
+)
 from application.interfaces.handlers import ICommandHandler
 from application.interfaces.parsers import ITwichStreamParser
 from application.interfaces.publishers import ITwichStreamPublisher
@@ -15,7 +18,7 @@ from application.interfaces.repositories import ITwichStreamRepository
 from domain.models import TwichStream
 
 
-class ParseTwichStreamCommandHandler(ICommandHandler[ParseTwichStreamCommand]):
+class ParseTwichStreamHandler(ICommandHandler[ParseTwichStream]):
     def __init__(
         self,
         parser: ITwichStreamParser,
@@ -26,15 +29,15 @@ class ParseTwichStreamCommandHandler(ICommandHandler[ParseTwichStreamCommand]):
         self.publisher: ITwichStreamPublisher = publisher
         self.repository: ITwichStreamRepository = repository
 
-    async def handle(self, command: ParseTwichStreamCommand) -> SuccessDTO | FailureDTO:
+    async def handle(self, command: ParseTwichStream) -> Success | Failure:
         stream: TwichStream = await self.parser.parse_stream(command.user_login)
         await self.repository.add_or_update(stream)
         await self.publisher.publish(stream.pull_events())
 
-        return SuccessDTO(status='Success')
+        return Success(status='Success')
 
 
-class DeleteTwichStreamCommandHandler(ICommandHandler[DeleteTwichStreamCommand]):
+class DeleteTwichStreamHandler(ICommandHandler[DeleteTwichStream]):
     def __init__(
         self,
         publisher: ITwichStreamPublisher,
@@ -43,10 +46,10 @@ class DeleteTwichStreamCommandHandler(ICommandHandler[DeleteTwichStreamCommand])
         self.publisher: ITwichStreamPublisher = publisher
         self.repository: ITwichStreamRepository = repository
 
-    async def handle(self, command: DeleteTwichStreamCommand) -> SuccessDTO | FailureDTO:
+    async def handle(self, command: DeleteTwichStream) -> Success | Failure:
         stream: TwichStream = await self.repository.get_stream_by_user_login(command.user_login)
         stream.delete()
         await self.repository.delete(stream)
         await self.publisher.publish(stream.pull_events())
 
-        return SuccessDTO(status='Success')
+        return Success(status='Success')
