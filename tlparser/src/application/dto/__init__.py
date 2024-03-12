@@ -13,6 +13,7 @@ from application.dto.stream import (
     TwichStreamsDTO,
 )
 from application.dto.success import (
+    FailureDTO,
     SuccessDTO,
 )
 from application.dto.user import (
@@ -27,6 +28,7 @@ __all__: list[str] = [
     'TwichGamesDTO',
     'TwichStreamDTO',
     'TwichStreamsDTO',
+    'FailureDTO',
     'SuccessDTO',
     'TwichUserDTO',
     'TwichUsersDTO',
