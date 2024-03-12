@@ -7,10 +7,7 @@ from automapper import mapper
 from application import dto
 from application.interfaces.handlers import IQueryHandler
 from application.interfaces.repositories import ITwichUserRepository
-from application.queries import (
-    GetAllTwichUsers,
-    GetTwichUserByLogin,
-)
+from application.queries import GetAllTwichUsers, GetTwichUserByLogin
 from domain.models import TwichUser
 
 

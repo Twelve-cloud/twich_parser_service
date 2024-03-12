@@ -3,14 +3,8 @@ stream.py: File, containing command handler for a twich stream.
 """
 
 
-from application.commands import (
-    DeleteTwichStream,
-    ParseTwichStream,
-)
-from application.dto import (
-    Failure,
-    Success,
-)
+from application import dto
+from application.commands import DeleteTwichStream, ParseTwichStream
 from application.interfaces.handlers import ICommandHandler
 from application.interfaces.parsers import ITwichStreamParser
 from application.interfaces.publishers import ITwichStreamPublisher
@@ -29,12 +23,12 @@ class ParseTwichStreamHandler(ICommandHandler[ParseTwichStream]):
         self.publisher: ITwichStreamPublisher = publisher
         self.repository: ITwichStreamRepository = repository
 
-    async def handle(self, command: ParseTwichStream) -> Success | Failure:
+    async def handle(self, command: ParseTwichStream) -> dto.Result:
         stream: TwichStream = await self.parser.parse_stream(command.user_login)
         await self.repository.add_or_update(stream)
         await self.publisher.publish(stream.pull_events())
 
-        return Success(status='Success')
+        return dto.Result([{'id': stream.id}, {'status': 'success'}])
 
 
 class DeleteTwichStreamHandler(ICommandHandler[DeleteTwichStream]):
@@ -46,10 +40,10 @@ class DeleteTwichStreamHandler(ICommandHandler[DeleteTwichStream]):
         self.publisher: ITwichStreamPublisher = publisher
         self.repository: ITwichStreamRepository = repository
 
-    async def handle(self, command: DeleteTwichStream) -> Success | Failure:
+    async def handle(self, command: DeleteTwichStream) -> dto.Result:
         stream: TwichStream = await self.repository.get_stream_by_user_login(command.user_login)
         stream.delete()
         await self.repository.delete(stream)
         await self.publisher.publish(stream.pull_events())
 
-        return Success(status='Success')
+        return dto.Result([{'status': 'success'}])

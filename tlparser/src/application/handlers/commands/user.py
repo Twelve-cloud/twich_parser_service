@@ -3,14 +3,8 @@ user.py: File, containing command handler for a twich user.
 """
 
 
-from application.commands import (
-    DeleteTwichUser,
-    ParseTwichUser,
-)
-from application.dto import (
-    Failure,
-    Success,
-)
+from application import dto
+from application.commands import DeleteTwichUser, ParseTwichUser
 from application.interfaces.handlers import ICommandHandler
 from application.interfaces.parsers import ITwichUserParser
 from application.interfaces.publishers import ITwichUserPublisher
@@ -29,12 +23,12 @@ class ParseTwichUserHandler(ICommandHandler[ParseTwichUser]):
         self.publisher: ITwichUserPublisher = publisher
         self.repository: ITwichUserRepository = repository
 
-    async def handle(self, command: ParseTwichUser) -> Success | Failure:
+    async def handle(self, command: ParseTwichUser) -> dto.Result:
         user: TwichUser = await self.parser.parse_user(command.login)
         await self.repository.add_or_update(user)
         await self.publisher.publish(user.pull_events())
 
-        return Success(status='Success')
+        return dto.Result([{'id': user.id}, {'status': 'success'}])
 
 
 class DeleteTwichUserHandler(ICommandHandler[DeleteTwichUser]):
@@ -46,10 +40,10 @@ class DeleteTwichUserHandler(ICommandHandler[DeleteTwichUser]):
         self.publisher: ITwichUserPublisher = publisher
         self.repository: ITwichUserRepository = repository
 
-    async def handle(self, command: DeleteTwichUser) -> Success | Failure:
+    async def handle(self, command: DeleteTwichUser) -> dto.Result:
         user: TwichUser = await self.repository.get_user_by_login(command.login)
         user.delete()
         await self.repository.delete(user)
         await self.publisher.publish(user.pull_events())
 
-        return Success(status='Success')
+        return dto.Result([{'status': 'success'}])

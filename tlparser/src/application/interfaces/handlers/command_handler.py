@@ -7,7 +7,7 @@ from abc import ABC as Interface
 from abc import abstractmethod
 from typing import Generic, TypeVar
 from application.commands import Command
-from application.dto import Failure, Success
+from application.dto import Result
 
 
 C = TypeVar('C', bound=Command)
@@ -15,5 +15,5 @@ C = TypeVar('C', bound=Command)
 
 class ICommandHandler(Interface, Generic[C]):
     @abstractmethod
-    async def handle(self, command: C) -> Success | Failure:
+    async def handle(self, command: C) -> Result:
         raise NotImplementedError
