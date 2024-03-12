@@ -3,80 +3,35 @@ common.py: File, containing common application exceptions.
 """
 
 
-from application.exceptions import BaseApplicationException
+from dataclasses import dataclass
+from application.exceptions import ApplicationException
 
 
-class TwichException(BaseApplicationException):
-    """
-    TwichException: Class that represents twich exception.
-
-    Args:
-        BaseApplicationException: Base application exception class.
-    """
-
-    def __init__(self, message: str) -> None:
-        """
-        __init__: Initialize twich exception.
-
-        Args:
-            message (str): Message why exception has been occured.
-        """
-
-        super().__init__(message)
+@dataclass(frozen=True)
+class TwichTokenNotObtainedException(ApplicationException):
+    pass
 
 
-class RequestTimeoutException(BaseApplicationException):
-    """
-    RequestTimeoutException: Class that represents request timeout exception.
-
-    Args:
-        BaseApplicationException: Base application exception class.
-    """
-
-    def __init__(self, message: str) -> None:
-        """
-        __init__: Initialize request timeout exception.
-
-        Args:
-            message (str): Message why exception has been occured.
-        """
-
-        super().__init__(message)
+@dataclass(frozen=True)
+class TwichRequestUnauthorizedException(ApplicationException):
+    pass
 
 
-class NotFoundException(BaseApplicationException):
-    """
-    NotFoundException: Class that represents not found exception.
-
-    Args:
-        BaseApplicationException: Base application exception class.
-    """
-
-    def __init__(self, message: str) -> None:
-        """
-        __init__: Initialize not found exception.
-
-        Args:
-            message (str): Message why exception has been occured.
-        """
-
-        super().__init__(message)
+@dataclass(frozen=True)
+class TwichGetObjectBadRequestException(ApplicationException):
+    pass
 
 
-class ServiceUnavailableException(BaseApplicationException):
-    """
-    ServiceUnavailableException: Class that represents service unavailable exception.
+@dataclass(frozen=True)
+class TwichRequestTimeoutException(ApplicationException):
+    pass
 
-    Args:
-        BaseApplicationException: Base application exception class.
-    """
 
-    def __init__(self, message: str) -> None:
-        """
-        __init__: Initialize service unavailable exception.
+@dataclass(frozen=True)
+class ObjectNotFoundException(ApplicationException):
+    pass
 
-        Args:
-            message (str): Message why exception has been occured.
-        """
 
-        super().__init__(message)
+@dataclass(frozen=True)
+class ParserException(ApplicationException):
+    pass
