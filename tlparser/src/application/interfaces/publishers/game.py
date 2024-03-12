@@ -3,6 +3,7 @@ game.py: File, containing publisher interface for a twich game.
 """
 
 
+from abc import abstractmethod
 from application.interfaces.publishers import IPublisher
 from domain.events import (
     TwichGameCreated,
@@ -12,8 +13,10 @@ from domain.events import (
 
 
 class ITwichGamePublisher(IPublisher[TwichGameDomainEvent]):
+    @abstractmethod
     async def publish_game_created_event(self, event: TwichGameCreated) -> None:
         raise NotImplementedError
 
+    @abstractmethod
     async def publish_game_deleted_event(self, event: TwichGameDeleted) -> None:
         raise NotImplementedError

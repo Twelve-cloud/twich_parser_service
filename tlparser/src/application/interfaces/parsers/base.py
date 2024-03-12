@@ -3,7 +3,7 @@ base.py: File, containing base twich parser interface.
 """
 
 
-from interface import Interface
+from abc import ABC as Interface
 
 
 class ITwichParser(Interface):
