@@ -8,19 +8,19 @@ from interface import Interface
 
 class ILogger(Interface):
     def _configure_logger(self, name: str) -> None:
-        pass
+        raise NotImplementedError
 
     def info(self, message: str) -> None:
-        pass
+        raise NotImplementedError
 
     def debug(self, message: str) -> None:
-        pass
+        raise NotImplementedError
 
     def warning(self, message: str) -> None:
-        pass
+        raise NotImplementedError
 
     def error(self, message: str) -> None:
-        pass
+        raise NotImplementedError
 
     def critical(self, message: str) -> None:
-        pass
+        raise NotImplementedError
