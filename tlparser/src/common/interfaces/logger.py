@@ -3,7 +3,8 @@ logger.py: File, containing logger interface.
 """
 
 
-from abc import ABC as Interface, abstractmethod
+from abc import ABC as Interface
+from abc import abstractmethod
 
 
 class ILogger(Interface):
