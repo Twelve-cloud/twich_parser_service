@@ -1,5 +1,5 @@
 """
-query_bus.py: File, containing command bus interface.
+base.py: File, containing query bus interface.
 """
 
 
@@ -7,7 +7,7 @@ from abc import ABC as Interface
 from abc import abstractmethod
 from typing import Generic, TypeVar
 from application.dto import DTO
-from application.interfaces.handlers import IQueryHandler
+from application.interfaces.handlers.query import IQueryHandler
 from application.queries import Query
 
 

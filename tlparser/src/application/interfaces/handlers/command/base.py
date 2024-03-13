@@ -1,5 +1,5 @@
 """
-command_handler.py: File, containing command handler interface.
+base.py: File, containing command handler interface.
 """
 
 

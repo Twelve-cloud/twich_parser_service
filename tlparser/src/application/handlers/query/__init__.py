@@ -3,15 +3,15 @@ __init__.py: File, containing other query handler modules to simplify import.
 """
 
 
-from application.handlers.queries.game import (
+from application.handlers.query.game import (
     GetAllTwichGamesHandler,
     GetTwichGameByNameHandler,
 )
-from application.handlers.queries.stream import (
+from application.handlers.query.stream import (
     GetAllTwichStreamsHandler,
     GetTwichStreamByUserLoginHandler,
 )
-from application.handlers.queries.user import (
+from application.handlers.query.user import (
     GetAllTwichUsersHandler,
     GetTwichUserByLoginHandler,
 )

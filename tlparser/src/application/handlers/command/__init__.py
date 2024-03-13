@@ -3,15 +3,15 @@ __init__.py: File, containing other command handler modules to simplify import.
 """
 
 
-from application.handlers.commands.game import (
+from application.handlers.command.game import (
     DeleteTwichGameHandler,
     ParseTwichGameHandler,
 )
-from application.handlers.commands.stream import (
+from application.handlers.command.stream import (
     DeleteTwichStreamHandler,
     ParseTwichStreamHandler,
 )
-from application.handlers.commands.user import (
+from application.handlers.command.user import (
     DeleteTwichUserHandler,
     ParseTwichUserHandler,
 )

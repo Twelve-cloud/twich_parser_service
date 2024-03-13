@@ -1,5 +1,5 @@
 """
-query_handler.py: File, containing query handler interface.
+base.py: File, containing query handler interface.
 """
 
 

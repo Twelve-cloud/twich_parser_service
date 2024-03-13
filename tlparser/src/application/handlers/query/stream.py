@@ -5,7 +5,7 @@ stream.py: File, containing twich stream query handlers.
 
 from automapper import mapper
 from application import dto
-from application.interfaces.handlers import IQueryHandler
+from application.interfaces.handlers.query import IQueryHandler
 from application.interfaces.repositories import ITwichStreamRepository
 from application.queries import GetAllTwichStreams, GetTwichStreamByUserLogin
 from domain.models import TwichStream

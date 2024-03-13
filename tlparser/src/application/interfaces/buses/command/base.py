@@ -1,5 +1,5 @@
 """
-command_bus.py: File, containing command bus interface.
+base.py: File, containing command bus interface.
 """
 
 
@@ -8,7 +8,7 @@ from abc import abstractmethod
 from typing import Generic, TypeVar
 from application.commands import Command
 from application.dto import Result
-from application.interfaces.handlers import ICommandHandler
+from application.interfaces.handlers.command import ICommandHandler
 
 
 C = TypeVar('C', bound=Command)
