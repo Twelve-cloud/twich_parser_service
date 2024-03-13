@@ -1,5 +1,5 @@
 """
-__init__.py: File, containing other event modules to simplify import.
+__init__.py: File, containing other domain event modules to simplify import.
 """
 
 
