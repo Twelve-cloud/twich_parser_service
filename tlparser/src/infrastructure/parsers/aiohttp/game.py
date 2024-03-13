@@ -6,12 +6,12 @@ game.py: File, containing parser for a twich game.
 from datetime import datetime
 from typing import Optional
 from aiohttp import ClientSession
-from common.config import settings
 from application.exceptions import (
     ObjectNotFoundException,
     TwichGetObjectBadRequestException,
     TwichRequestUnauthorizedException,
 )
+from common.config import settings
 from domain.models import TwichGame
 from infrastructure.parsers.aiohttp.dependencies import TwichAPIToken
 
