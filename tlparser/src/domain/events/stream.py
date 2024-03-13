@@ -6,7 +6,7 @@ stream.py: File, containing twich stream domain events.
 from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
-from domain.events import DomainEvent
+from domain.events.base import DomainEvent
 
 
 @dataclass(frozen=True)

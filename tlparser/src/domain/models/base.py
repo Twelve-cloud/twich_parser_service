@@ -6,11 +6,8 @@ base.py: File, containing base domain model and aggregate root.
 from abc import ABC
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Generic, TypeVar
-from domain.events import DomainEvent
-
-
-EventType = TypeVar('EventType', bound=DomainEvent)
+from typing import Generic
+from domain.events import DE
 
 
 @dataclass(frozen=False)
@@ -28,26 +25,26 @@ class DomainModel(ABC):
 
 
 @dataclass(frozen=False)
-class AggregateRoot(Generic[EventType], ABC):
+class AggregateRoot(Generic[DE], ABC):
     """
     AggregateRoot: Class, representing aggregate root. This class is abstract.
     All domain models that are aggregate root should be inherited from this class.
 
     Bases:
-        1) Generic[EventType]: This class makes aggregate root class generic.
+        1) Generic[DE]: This class makes aggregate root class generic.
            Every domain model that is aggregate root might produce events.
            So, when inheriting this class, event type can be specified.
         2) ABC: Abstract Base Class. It is a marker that this class should not be instantiated.
     """
 
-    _events: list[EventType] = field(default_factory=list, init=False)
+    _events: list[DE] = field(default_factory=list, init=False)
 
-    def register_event(self, event: EventType) -> None:
+    def register_event(self, event: DE) -> None:
         """
         register_event: Registers event in local storage.
 
         Args:
-            event (EventType): Event that should be registered.
+            event (DE): Event that should be registered.
         """
 
         self._events.append(event)
@@ -63,25 +60,25 @@ class AggregateRoot(Generic[EventType], ABC):
 
         return
 
-    def get_events(self) -> list[EventType]:
+    def get_events(self) -> list[DE]:
         """
         get_events: Returns events from local storage.
 
         Returns:
-            list[EventType]: List of events.
+            list[DE]: List of events.
         """
 
         return self._events
 
-    def pull_events(self) -> list[EventType]:
+    def pull_events(self) -> list[DE]:
         """
         pull_events: Clears events from local storage and returns them.
 
         Returns:
-            list[EventType]: List of events.
+            list[DE]: List of events.
         """
 
-        events: list[EventType] = self.get_events().copy()
+        events: list[DE] = self.get_events().copy()
         self.clear_events()
 
         return events

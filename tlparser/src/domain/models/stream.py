@@ -12,7 +12,7 @@ from domain.events import (
     TwichStreamDeleted,
     TwichStreamDomainEvent,
 )
-from domain.models import AggregateRoot, DomainModel
+from domain.models.base import AggregateRoot, DomainModel
 
 
 @dataclass(frozen=False)
