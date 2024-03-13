@@ -3,7 +3,7 @@ stream_logger.py: File, containing stream logger.
 """
 
 
-from logging import Formatter, Logger, StreamHandler, getLogger, INFO
+from logging import INFO, Formatter, Logger, StreamHandler, getLogger
 from common.interfaces import ILogger
 
 
