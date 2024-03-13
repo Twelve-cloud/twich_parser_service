@@ -17,9 +17,9 @@ class TwichUserDomainEvent(DomainEvent, ABC):
     You can create an instance of this class, but ABC shows that you should not do this.
 
 
-    Args:
-        DomainEvent: Base domain event. Every domain event should be inherited from this class.
-        ABC: Abstract Base Class. It is a marker that this class should not be instantiated.
+    Bases:
+        1) DomainEvent: Base domain event. Every domain event should be inherited from this class.
+        2) ABC: Abstract Base Class. It is a marker that this class should not be instantiated.
     """
 
     pass
@@ -30,8 +30,8 @@ class TwichUserCreated(TwichUserDomainEvent):
     """
     TwichUserCreated: Class, representing that twich user has been created.
 
-    Args:
-        TwichUserDomainEvent: Domain event for all twich user domain events.
+    Bases:
+        1) TwichUserDomainEvent: Domain event for all twich user domain events.
     """
 
     id: int
@@ -51,8 +51,8 @@ class TwichUserDeleted(TwichUserDomainEvent):
     """
     TwichUserDeleted: Class, representing that twich user has been deleted.
 
-    Args:
-        TwichUserDomainEvent: Domain event for all twich user domain events.
+    Bases:
+        1) TwichUserDomainEvent: Domain event for all twich user domain events.
     """
 
     id: int

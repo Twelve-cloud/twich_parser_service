@@ -17,9 +17,9 @@ class TwichGameDomainEvent(DomainEvent, ABC):
     You can create an instance of this class, but ABC shows that you should not do this.
 
 
-    Args:
-        DomainEvent: Base domain event. Every domain event should be inherited from this class.
-        ABC: Abstract Base Class. It is a marker that this class should not be instantiated.
+    Bases:
+        1) DomainEvent: Base domain event. Every domain event should be inherited from this class.
+        2) ABC: Abstract Base Class. It is a marker that this class should not be instantiated.
     """
 
     pass
@@ -30,8 +30,8 @@ class TwichGameCreated(TwichGameDomainEvent):
     """
     TwichGameCreated: Class, representing that twich game has been created.
 
-    Args:
-        TwichGameDomainEvent: Domain event for all twich game domain events.
+    Bases:
+        1) TwichGameDomainEvent: Domain event for all twich game domain events.
     """
 
     id: int
@@ -46,8 +46,8 @@ class TwichGameDeleted(TwichGameDomainEvent):
     """
     TwichGameDeleted: Class, representing that twich game has been deleted.
 
-    Args:
-        TwichGameDomainEvent: Domain event for all twich game domain events.
+    Bases:
+        1) TwichGameDomainEvent: Domain event for all twich game domain events.
     """
 
     id: int

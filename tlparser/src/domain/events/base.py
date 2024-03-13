@@ -16,8 +16,8 @@ class DomainEvent(ABC):
     All domain events should be inherited from this class.
     You can create an instance of this class, but ABC shows that you should not do this.
 
-    Args:
-        ABC: Abstract Base Class. It is a marker that this class should not be instantiated.
+    Bases:
+        1) ABC: Abstract Base Class. It is a marker that this class should not be instantiated.
     """
 
     event_id: UUID = field(default_factory=uuid4, init=False)

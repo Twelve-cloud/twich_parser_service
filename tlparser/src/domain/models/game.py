@@ -17,6 +17,15 @@ from domain.models import AggregateRoot, DomainModel
 
 @dataclass(frozen=False)
 class TwichGame(DomainModel, AggregateRoot[TwichGameDomainEvent]):
+    """
+    TwichGame: Class, representing twich game domain model. This class is an aggregate root.
+
+    Bases:
+        1) DomainModel: Base domain model. Every domain model should be inherited from this class.
+        2) AggregateRoot[TwichGameDomainEvent]: Aggregate root.
+           Every domain model that is aggregate root should be inhehited from this class.
+    """
+
     id: int
     name: str
     igdb_id: str
@@ -32,6 +41,21 @@ class TwichGame(DomainModel, AggregateRoot[TwichGameDomainEvent]):
         parsed_at: datetime,
         **kwargs: dict,
     ) -> TwichGame:
+        """
+        create: Classmethod that creates a twich game instance.
+        It also produces event that twich game has been created.
+
+        Args:
+            id (int): ID of the twich game.
+            name (str): Name of the twich game.
+            igdb_id (str): ID of the twich game that is used by igdb.
+            box_art_url (str): URL to the game's box art.
+            parsed_at (datetime): Date and time when twich game has been parsed.
+
+        Returns:
+            TwichGame: Twich game instance.
+        """
+
         game: TwichGame = cls(
             id=id,
             name=name,
@@ -46,6 +70,11 @@ class TwichGame(DomainModel, AggregateRoot[TwichGameDomainEvent]):
         return game
 
     def delete(self) -> None:
+        """
+        delete: Deletes a twich game instance.
+        It also produces event that twich game has been deleted.
+        """
+
         event: TwichGameDeleted = mapper.to(TwichGameDeleted).map(self)
         self.register_event(event)
 

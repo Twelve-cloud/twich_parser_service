@@ -17,9 +17,9 @@ class TwichStreamDomainEvent(DomainEvent, ABC):
     You can create an instance of this class, but ABC shows that you should not do this.
 
 
-    Args:
-        DomainEvent: Base domain event. Every domain event should be inherited from this class.
-        ABC: Abstract Base Class. It is a marker that this class should not be instantiated.
+    Bases:
+        1) DomainEvent: Base domain event. Every domain event should be inherited from this class.
+        2) ABC: Abstract Base Class. It is a marker that this class should not be instantiated.
     """
 
     pass
@@ -30,8 +30,8 @@ class TwichStreamCreated(TwichStreamDomainEvent):
     """
     TwichStreamCreated: Class, representing that twich stream has been created.
 
-    Args:
-        TwichStreamDomainEvent: Domain event for all twich stream domain events.
+    Bases:
+        1) TwichStreamDomainEvent: Domain event for all twich stream domain events.
     """
 
     id: int
@@ -54,8 +54,8 @@ class TwichStreamDeleted(TwichStreamDomainEvent):
     """
     TwichStreamDeleted: Class, representing that twich stream has been deleted.
 
-    Args:
-        TwichStreamDomainEvent: Domain event for all twich stream domain events.
+    Bases:
+        1) TwichStreamDomainEvent: Domain event for all twich stream domain events.
     """
 
     id: int
