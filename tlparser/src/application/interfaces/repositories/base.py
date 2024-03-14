@@ -17,7 +17,7 @@ class IRepository(Interface, Generic[DM]):
 
     Bases:
         1) Interface: Abstract Base Class. It is a marker that this class provides interface only.
-        2) Generic: Generic class. This class makes repository interface generic.
+        2) Generic[DM]: Generic class. This class makes repository interface generic.
     """
 
     @abstractmethod
