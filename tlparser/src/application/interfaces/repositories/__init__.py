@@ -1,5 +1,5 @@
 """
-__init__.py: File, containing other repository modules to simplify import.
+__init__.py: File, containing other repository interface modules to simplify import.
 """
 
 

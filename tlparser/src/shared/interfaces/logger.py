@@ -14,7 +14,7 @@ class ILogger(Interface):
     Interface base class is Abstract Base Class. It is called Interface to make intention explicit.
 
     Bases:
-        1) Interface: Abstract Base Class. It is a marker this class provide interface only.
+        1) Interface: Abstract Base Class. It is a marker that this class provides interface only.
     """
 
     @abstractmethod
