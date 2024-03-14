@@ -1,5 +1,5 @@
 """
-settings.py: File, containing settings.
+settings.py: File, containing settings for a project.
 """
 
 
@@ -8,6 +8,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    """
+    Settings: Class, representing settings for a whole project.
+
+    Bases:
+        1) BaseSettings: Base class for all settings classes.
+    """
+
     PROJECT_NAME: str
     BACKEND_CORS_ORIGINS: list[str]
 
