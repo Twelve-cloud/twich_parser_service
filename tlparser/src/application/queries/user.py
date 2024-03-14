@@ -13,7 +13,7 @@ class GetTwichUserByLogin(Query):
     GetTwichUserByLogin: Class, representing get twich user by login query.
 
     Bases:
-        1) Query: Base query class. Every query should be inherited from this class.
+        1) Query: Base query. Every query should be inherited from this class.
     """
 
     login: str
@@ -25,7 +25,7 @@ class GetAllTwichUsers(Query):
     GetAllTwichUsers: Class, representing get all twich users query.
 
     Bases:
-        1) Query: Base query class. Every query should be inherited from this class.
+        1) Query: Base query. Every query should be inherited from this class.
     """
 
     pass

@@ -13,7 +13,7 @@ class ParseTwichStream(Command):
     ParseTwichStream: Class, representing parse twich stream command.
 
     Bases:
-        1) Command: Base command class. Every command should be inherited from this class.
+        1) Command: Base command. Every command should be inherited from this class.
     """
 
     user_login: str
@@ -25,7 +25,7 @@ class DeleteTwichStream(Command):
     DeleteTwichStream: Class, representing delete twich stream command.
 
     Bases:
-        1) Command: Base command class. Every command should be inherited from this class.
+        1) Command: Base command. Every command should be inherited from this class.
     """
 
     user_login: str

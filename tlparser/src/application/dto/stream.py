@@ -14,7 +14,7 @@ class TwichStream(DTO):
     TwichStream: Class, representing twich stream dto.
 
     Bases:
-        1) DTO: Base DTO class. Every DTO should be inherited from this class.
+        1) DTO: Base DTO. Every DTO should be inherited from this class.
     """
 
     id: int
@@ -38,7 +38,7 @@ class TwichStreams(DTO):
     TwichStreams: Class, representing twich streams dto.
 
     Bases:
-        1) DTO: Base DTO class. Every DTO should be inherited from this class.
+        1) DTO: Base DTO. Every DTO should be inherited from this class.
     """
 
     data: list[TwichStream]

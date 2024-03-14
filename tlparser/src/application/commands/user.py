@@ -13,7 +13,7 @@ class ParseTwichUser(Command):
     ParseTwichUser: Class, representing parse twich user command.
 
     Bases:
-        1) Command: Base command class. Every command should be inherited from this class.
+        1) Command: Base command. Every command should be inherited from this class.
     """
 
     login: str
@@ -25,7 +25,7 @@ class DeleteTwichUser(Command):
     DeleteTwichUser: Class, representing delete twich user command.
 
     Bases:
-        1) Command: Base command class. Every command should be inherited from this class.
+        1) Command: Base command. Every command should be inherited from this class.
     """
 
     login: str

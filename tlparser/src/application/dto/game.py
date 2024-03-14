@@ -14,7 +14,7 @@ class TwichGame(DTO):
     TwichGame: Class, representing twich game dto.
 
     Bases:
-        1) DTO: Base DTO class. Every DTO should be inherited from this class.
+        1) DTO: Base DTO. Every DTO should be inherited from this class.
     """
 
     id: int
@@ -30,7 +30,7 @@ class TwichGames(DTO):
     TwichGames: Class, representing twich games dto.
 
     Bases:
-        1) DTO: Base DTO class. Every DTO should be inherited from this class.
+        1) DTO: Base DTO. Every DTO should be inherited from this class.
     """
 
     data: list[TwichGame]

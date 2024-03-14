@@ -13,7 +13,7 @@ class ParseTwichGame(Command):
     ParseTwichGame: Class, representing parse twich game command.
 
     Bases:
-        1) Command: Base command class. Every command should be inherited from this class.
+        1) Command: Base command. Every command should be inherited from this class.
     """
 
     name: str
@@ -25,7 +25,7 @@ class DeleteTwichGame(Command):
     DeleteTwichGame: Class, representing delete twich game command.
 
     Bases:
-        1) Command: Base command class. Every command should be inherited from this class.
+        1) Command: Base command. Every command should be inherited from this class.
     """
 
     name: str

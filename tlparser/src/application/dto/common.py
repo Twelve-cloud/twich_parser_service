@@ -18,7 +18,7 @@ class Result(DTO):
     It is used to return result (like Failure/Success) from commands.
 
     Bases:
-        1) DTO: Base DTO class. Every DTO should be inherited from this class.
+        1) DTO: Base DTO. Every DTO should be inherited from this class.
     """
 
     result: list[dict[str, Any]]

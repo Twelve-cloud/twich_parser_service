@@ -13,7 +13,7 @@ class GetTwichGameByName(Query):
     GetTwichGameByName: Class, representing get twich game by name query.
 
     Bases:
-        1) Query: Base query class. Every query should be inherited from this class.
+        1) Query: Base query. Every query should be inherited from this class.
     """
 
     name: str
@@ -25,7 +25,7 @@ class GetAllTwichGames(Query):
     GetAllTwichGames: Class, representing get all twich games query.
 
     Bases:
-        1) Query: Base query class. Every query should be inherited from this class.
+        1) Query: Base query. Every query should be inherited from this class.
     """
 
     pass

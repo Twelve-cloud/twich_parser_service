@@ -14,7 +14,7 @@ class TwichUser(DTO):
     TwichUser: Class, representing twich user dto.
 
     Bases:
-        1) DTO: Base DTO class. Every DTO should be inherited from this class.
+        1) DTO: Base DTO. Every DTO should be inherited from this class.
     """
 
     id: int
@@ -35,7 +35,7 @@ class TwichUsers(DTO):
     TwichUsers: Class, representing twich users dto.
 
     Bases:
-        1) DTO: Base DTO class. Every DTO should be inherited from this class.
+        1) DTO: Base DTO. Every DTO should be inherited from this class.
     """
 
     data: list[TwichUser]
