@@ -22,6 +22,7 @@ class ITwichGameRepository(IRepository[TwichGame]):
     async def get_game_by_name(self, name: str) -> TwichGame:
         """
         get_game_by_name: Should return twich game model instance by its name.
+        Must be overriden.
 
         Args:
             name (str): Name of the game.

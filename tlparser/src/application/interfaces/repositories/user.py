@@ -22,6 +22,7 @@ class ITwichUserRepository(IRepository[TwichUser]):
     async def get_user_by_login(self, login: str) -> TwichUser:
         """
         get_user_by_login: Should return twich user model instance by its login.
+        Must be overriden.
 
         Args:
             login (str): Login of the user.

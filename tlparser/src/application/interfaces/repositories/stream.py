@@ -22,6 +22,7 @@ class ITwichStreamRepository(IRepository[TwichStream]):
     async def get_stream_by_user_login(self, user_login: str) -> TwichStream:
         """
         get_stream_by_user_login: Should return twich stream model instance by its user login.
+        Must be overriden.
 
         Args:
             user_login (str): Login of the user.

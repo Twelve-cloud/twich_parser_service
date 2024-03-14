@@ -39,6 +39,7 @@ class IRepository(Interface, Generic[DM]):
     async def delete(self, instance: DM) -> None:
         """
         delete: Should delete domain model instance.
+        Must be overriden.
 
         Args:
             instance (DM): Domain model instance.
@@ -53,6 +54,7 @@ class IRepository(Interface, Generic[DM]):
     async def all(self) -> list[DM]:
         """
         all: Should return all domain model instances.
+        Must be overriden.
 
         Raises:
             NotImplementedError: Raises to prevent calling this method by super.
@@ -67,6 +69,7 @@ class IRepository(Interface, Generic[DM]):
     async def get_by_id(self, id: int) -> DM:
         """
         get_by_id: Should return domain model instance by its id.
+        Must be overriden.
 
         Args:
             id (int): ID of the domain model instance.
