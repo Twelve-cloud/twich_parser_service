@@ -15,7 +15,7 @@ class ITwichUserRepository(IRepository[TwichUser]):
 
     Bases:
         1) IRepository[TwichUser]: Base repository interface.
-           Every repository should be inherited from this class.
+           Every repository interface should be inherited from this class.
     """
 
     @abstractmethod

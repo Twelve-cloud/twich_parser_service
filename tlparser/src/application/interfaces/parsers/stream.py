@@ -14,7 +14,8 @@ class ITwichStreamParser(IParser):
     This class is an interface.
 
     Bases:
-        1) IParser: Base parser interface. Every parser should be inherited from this class.
+        1) IParser: Base parser interface.
+           Every parser interface should be inherited from this class.
     """
 
     @abstractmethod

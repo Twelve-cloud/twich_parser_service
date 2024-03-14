@@ -15,7 +15,7 @@ class ITwichStreamRepository(IRepository[TwichStream]):
 
     Bases:
         1) IRepository[TwichStream]: Base repository interface.
-           Every repository should be inherited from this class.
+           Every repository interface should be inherited from this class.
     """
 
     @abstractmethod

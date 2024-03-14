@@ -15,7 +15,7 @@ class ITwichGameRepository(IRepository[TwichGame]):
 
     Bases:
         1) IRepository[TwichGame]: Base repository interface.
-           Every repository should be inherited from this class.
+           Every repository interface should be inherited from this class.
     """
 
     @abstractmethod
