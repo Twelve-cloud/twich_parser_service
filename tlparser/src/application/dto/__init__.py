@@ -4,7 +4,10 @@ __init__.py: File, containing other dto modules to simplify import.
 
 
 from application.dto.base import DTO
-from application.dto.common import Result
+from application.dto.common import (
+    RD,
+    Result,
+)
 from application.dto.game import (
     TwichGame,
     TwichGames,
@@ -21,6 +24,7 @@ from application.dto.user import (
 
 __all__: list[str] = [
     'DTO',
+    'RD',
     'Result',
     'TwichGame',
     'TwichGames',
