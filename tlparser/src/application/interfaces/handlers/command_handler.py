@@ -18,7 +18,7 @@ class ICommandHandler(Interface, Generic[C]):
 
     Bases:
         1) Interface: Abstract Base Class. It is a marker that this class provides interface only.
-        2) Generic[C]: Generic class. This class makes repository interface generic.
+        2) Generic[C]: Generic class. This class makes command handler interface generic.
     """
 
     @abstractmethod

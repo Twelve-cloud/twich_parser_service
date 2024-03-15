@@ -18,7 +18,7 @@ class IQueryHandler(Interface, Generic[Q, RD]):
 
     Bases:
         1) Interface: Abstract Base Class. It is a marker that this class provides interface only.
-        2) Generic[Q, RD]: Generic class. This class makes repository interface generic.
+        2) Generic[Q, RD]: Generic class. This class makes query handler interface generic.
     """
 
     @abstractmethod
