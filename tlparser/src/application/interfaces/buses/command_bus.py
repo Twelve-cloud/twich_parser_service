@@ -7,8 +7,8 @@ from abc import ABC as Interface
 from abc import abstractmethod
 from typing import Generic
 from application.commands import C
-from application.interfaces.handlers import CH
 from application.dto import Result
+from application.interfaces.handlers import CH
 
 
 class ICommandBus(Interface, Generic[C, CH]):
