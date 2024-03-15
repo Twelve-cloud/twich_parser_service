@@ -3,11 +3,9 @@ __init__.py: File, containing other dto modules to simplify import.
 """
 
 
+from typing import TypeVar
 from application.dto.base import DTO
-from application.dto.common import (
-    RD,
-    Result,
-)
+from application.dto.common import Result
 from application.dto.game import (
     TwichGame,
     TwichGames,
@@ -22,9 +20,11 @@ from application.dto.user import (
 )
 
 
+RD = TypeVar('RD', bound=DTO)
+
+
 __all__: list[str] = [
     'DTO',
-    'RD',
     'Result',
     'TwichGame',
     'TwichGames',
@@ -32,4 +32,5 @@ __all__: list[str] = [
     'TwichStreams',
     'TwichUser',
     'TwichUsers',
+    'RD',
 ]

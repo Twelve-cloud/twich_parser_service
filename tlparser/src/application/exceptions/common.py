@@ -1,5 +1,5 @@
 """
-common.py: File, containing common things related to application exceptions.
+common.py: File, containing common application exceptions.
 """
 
 

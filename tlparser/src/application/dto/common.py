@@ -1,14 +1,11 @@
 """
-common.py: File, containing common things related to dto.
+common.py: File, containing common dto.
 """
 
 
 from dataclasses import dataclass
-from typing import Any, TypeVar
+from typing import Any
 from application.dto.base import DTO
-
-
-RD = TypeVar('RD', bound=DTO)
 
 
 @dataclass(frozen=True)
