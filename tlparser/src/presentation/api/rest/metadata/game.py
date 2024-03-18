@@ -3,7 +3,7 @@ game_metadata.py: File, containing metadata for a twich game.
 """
 
 
-from common.utils import ReadOnlyClassProperty
+from shared.utils import ReadOnlyClassProperty
 
 
 class TwichGameMetadata:
@@ -11,13 +11,9 @@ class TwichGameMetadata:
     TwichGameMetadata: Class, containing metadata for twich game.
     """
 
-    parse_game_summary: str = 'Produce message to kafka to parse twich game.'
-    parse_game_description: str = 'Produce message to kafka to parse twich game.'
-    parse_game_response_description: str = 'Message has been produced to kafka.'
-
-    private_parse_game_summary: str = 'Parse game of the twich platform.'
-    private_parse_game_description: str = 'Parse game of the twich platform.'
-    private_parse_game_response_description: str = 'Twich game has been parsed.'
+    parse_game_summary: str = 'Parse game of the twich platform.'
+    parse_game_description: str = 'Parse game of the twich platform.'
+    parse_game_response_description: str = 'Twich game has been parsed.'
 
     delete_game_by_name_summary: str = 'Delete twich game by name.'
     delete_game_by_name_description: str = 'Delete twich game by name.'
@@ -44,21 +40,6 @@ class TwichGameMetadata:
             'summary': cls.parse_game_summary,
             'description': cls.parse_game_description,
             'response_description': cls.parse_game_response_description,
-        }
-
-    @ReadOnlyClassProperty
-    def private_parse_game(cls) -> dict:
-        """
-        private_parse_game: Return private parse game metadata.
-
-        Returns:
-            dict: Private parse game metadata.
-        """
-
-        return {
-            'summary': cls.private_parse_game_summary,
-            'description': cls.private_parse_game_description,
-            'response_description': cls.private_parse_game_response_description,
         }
 
     @ReadOnlyClassProperty

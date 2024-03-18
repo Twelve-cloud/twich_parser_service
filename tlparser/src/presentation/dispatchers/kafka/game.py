@@ -8,8 +8,8 @@ from pickle import loads
 from threading import Thread
 from automapper import mapper
 from kafka import KafkaConsumer
-from domain.events import TwichGameCreatedEvent, TwichGameDeletedEvent
-from domain.interfaces.repositories import ITwichGameRepository
+from domain.events import TwichGameCreated, TwichGameDeleted
+from application.interfaces.repositories import ITwichGameRepository
 from domain.models import TwichGame
 
 
@@ -55,11 +55,11 @@ class TwichGameKafkaDispatcher:
 
         for event in self.consumer:
             match event.value.__class__.__name__:
-                case TwichGameCreatedEvent.__name__:
-                    game: TwichGame = mapper.to(TwichGame).map(event)
+                case TwichGameCreated.__name__:
+                    game: TwichGame = mapper.to(TwichGame).map(event.value)
                     await self.repository.add_or_update(game)
-                case TwichGameDeletedEvent.__name__:
-                    game = mapper.to(TwichGame).map(event)
+                case TwichGameDeleted.__name__:
+                    game = self.repository.get_by_id(event.value.id)
                     await self.repository.delete(game)
                 case _:
                     pass

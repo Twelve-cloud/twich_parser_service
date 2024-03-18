@@ -3,7 +3,7 @@ stream_metadata.py: File, containing metadata for a twich stream.
 """
 
 
-from common.utils import ReadOnlyClassProperty
+from shared.utils import ReadOnlyClassProperty
 
 
 class TwichStreamMetadata:

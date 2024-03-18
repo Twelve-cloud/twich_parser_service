@@ -3,7 +3,7 @@ user_metadata.py: File, containing metadata for a twich user.
 """
 
 
-from common.utils import ReadOnlyClassProperty
+from shared.utils import ReadOnlyClassProperty
 
 
 class TwichUserMetadata:

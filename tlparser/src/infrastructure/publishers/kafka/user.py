@@ -4,10 +4,10 @@ user_publisher.py: File, containing kafka publisher class for twich user.
 
 
 from threading import Thread
-from common.config import settings
+from shared.config import settings
 from domain.events.user import (
-    TwichUserCreatedEvent,
-    TwichUserDeletedEvent,
+    TwichUserCreated,
+    TwichUserDeleted,
     TwichUserDomainEvent,
 )
 from application.interfaces.publishers import ITwichUserPublisher
@@ -20,21 +20,21 @@ class TwichUserKafkaPublisher(ITwichUserPublisher):
 
     async def publish(self, events: list[TwichUserDomainEvent]) -> None:
         for event in events:
-            if isinstance(event, TwichUserCreatedEvent):
+            if isinstance(event, TwichUserCreated):
                 await self.publish_user_created_event(event)
-            elif isinstance(event, TwichUserDeletedEvent):
+            elif isinstance(event, TwichUserDeleted):
                 await self.publish_user_deleted_event(event)
 
         return
 
-    async def publish_user_created_event(self, event: TwichUserCreatedEvent) -> None:
+    async def publish_user_created_event(self, event: TwichUserCreated) -> None:
         Thread(
             target=self.producer.send,
             args=(settings.KAFKA_USER_TOPIC, event),
             daemon=True,
         ).start()
 
-    async def publish_user_deleted_event(self, event: TwichUserDeletedEvent) -> None:
+    async def publish_user_deleted_event(self, event: TwichUserDeleted) -> None:
         Thread(
             target=self.producer.send,
             args=(settings.KAFKA_USER_TOPIC, event),

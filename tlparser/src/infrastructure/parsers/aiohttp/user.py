@@ -11,7 +11,7 @@ from application.exceptions import (
     TwichGetObjectBadRequestException,
     TwichRequestUnauthorizedException,
 )
-from common.config import settings
+from shared.config import settings
 from domain.models import TwichUser
 from infrastructure.parsers.aiohttp.dependencies import TwichAPIToken
 

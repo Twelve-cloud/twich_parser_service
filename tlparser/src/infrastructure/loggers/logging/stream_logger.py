@@ -4,7 +4,7 @@ stream_logger.py: File, containing stream logger.
 
 
 from logging import INFO, Formatter, Logger, StreamHandler, getLogger
-from common.interfaces import ILogger
+from shared.interfaces import ILogger
 
 
 class StreamLogger(ILogger):

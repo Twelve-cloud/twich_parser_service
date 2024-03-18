@@ -15,6 +15,16 @@ class TwichGameDAO(Document):
         Document (_type_): Base superclass for TwichGameDAO class.
     """
 
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        igdb_id: str,
+        box_art_url: str,
+        parsed_at: datetime
+    ) -> None:
+        super().__init__(id=id, name=name, igdb_id=igdb_id, box_art_url=box_art_url, parsed_at=parsed_at)
+
     id: IntField = IntField(
         min_value=0,
         primary_key=True,

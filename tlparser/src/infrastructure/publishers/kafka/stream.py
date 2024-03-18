@@ -4,10 +4,10 @@ stream_publisher.py: File, containing kafka publisher class for twich stream.
 
 
 from threading import Thread
-from common.config import settings
+from shared.config import settings
 from domain.events.stream import (
-    TwichStreamCreatedEvent,
-    TwichStreamDeletedEvent,
+    TwichStreamCreated,
+    TwichStreamDeleted,
     TwichStreamDomainEvent,
 )
 from application.interfaces.publishers import ITwichStreamPublisher
@@ -20,21 +20,21 @@ class TwichStreamKafkaPublisher(ITwichStreamPublisher):
 
     async def publish(self, events: list[TwichStreamDomainEvent]) -> None:
         for event in events:
-            if isinstance(event, TwichStreamCreatedEvent):
+            if isinstance(event, TwichStreamCreated):
                 await self.publish_stream_created_event(event)
-            elif isinstance(event, TwichStreamDeletedEvent):
+            elif isinstance(event, TwichStreamDeleted):
                 await self.publish_stream_deleted_event(event)
 
         return
 
-    async def publish_stream_created_event(self, event: TwichStreamCreatedEvent) -> None:
+    async def publish_stream_created_event(self, event: TwichStreamCreated) -> None:
         Thread(
             target=self.producer.send,
             args=(settings.KAFKA_STREAM_TOPIC, event),
             daemon=True,
         ).start()
 
-    async def publish_stream_deleted_event(self, event: TwichStreamDeletedEvent) -> None:
+    async def publish_stream_deleted_event(self, event: TwichStreamDeleted) -> None:
         Thread(
             target=self.producer.send,
             args=(settings.KAFKA_STREAM_TOPIC, event),

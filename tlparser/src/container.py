@@ -3,15 +3,42 @@ container.py: File, containing container that describe all dependencies in the p
 """
 
 
-from dependency_injector.containers import DeclarativeContainer, WiringConfiguration
-from dependency_injector.providers import Factory, Resource, Singleton
-from application.exceptions.handlers import DomainExceptionHandler
-from application.services import TwichGameService, TwichStreamService, TwichUserService
-from application.services.decorators import ServiceDecorator
-from common.config import settings
+from dependency_injector.containers import (
+    DeclarativeContainer,
+    WiringConfiguration,
+)
+from dependency_injector.providers import (
+    Factory,
+    Resource,
+    Singleton,
+)
+from application.handlers.command import (
+    DeleteTwichGameHandler,
+    ParseTwichGameHandler,
+    DeleteTwichStreamHandler,
+    ParseTwichStreamHandler,
+    DeleteTwichUserHandler,
+    ParseTwichUserHandler,
+)
+from application.handlers.query import (
+    GetAllTwichGamesHandler,
+    GetTwichGameByNameHandler,
+    GetAllTwichStreamsHandler,
+    GetTwichStreamByUserLoginHandler,
+    GetAllTwichUsersHandler,
+    GetTwichUserByLoginHandler,
+)
+from shared.config import settings
+from infrastructure.buses.command import InMemoryCommandBus
+from infrastructure.buses.query import InMemoryQueryBus
 from infrastructure.loggers.logging import StreamLogger
-from infrastructure.parsers.aiohttp import TwichGameParser, TwichStreamParser, TwichUserParser
+from infrastructure.parsers.aiohttp import (
+    TwichGameParser,
+    TwichStreamParser,
+    TwichUserParser,
+)
 from infrastructure.parsers.aiohttp.dependencies import get_twich_api_token
+# change below
 from infrastructure.persistence.connections.elastic.database import ElasticSearchDatabase
 from infrastructure.persistence.connections.mongo.database import MongoDatabase
 from infrastructure.persistence.repositories.elastic.game import TwichGameElasticRepository
@@ -27,6 +54,7 @@ from infrastructure.publishers.kafka.user import TwichUserKafkaPublisher
 from presentation.dispatchers.kafka.game import TwichGameKafkaDispatcher
 from presentation.dispatchers.kafka.stream import TwichStreamKafkaDispatcher
 from presentation.dispatchers.kafka.user import TwichUserKafkaDispatcher
+from presentation.api.rest.v1.controllers.game import TwichGameController, TwichGameReadController
 
 
 class Container(DeclarativeContainer):
@@ -39,9 +67,9 @@ class Container(DeclarativeContainer):
 
     wiring_config: WiringConfiguration = WiringConfiguration(
         modules=[
-            'presentation.api.rest.v1.endpoints.game',
-            'presentation.api.rest.v1.endpoints.user',
-            'presentation.api.rest.v1.endpoints.stream',
+            'presentation.api.rest.v1.controllers.game',
+            # 'presentation.api.rest.v1.endpoints.user',
+            # 'presentation.api.rest.v1.endpoints.stream',
             # 'presentation.api.graphql.queries.twich.game_queries',
             # 'presentation.api.graphql.mutations.twich.game_mutations',
         ],
@@ -53,7 +81,7 @@ class Container(DeclarativeContainer):
         get_twich_api_token,
     )
 
-    # ------------------------------------- Domain Services ---------------------------------------
+    # ------------------------------------- Parsers ---------------------------------------
 
     twich_game_parser: Factory = Factory(
         TwichGameParser,
@@ -146,48 +174,87 @@ class Container(DeclarativeContainer):
         db=elastic,
     )
 
-    # ----------------------------------- Services -------------------------------------------------
+    # ----------------------------------- Command Handlers ----------------------------------------
 
-    twich_game_mongo_service: Factory = Factory(
-        TwichGameService,
+    parse_game_handler: Factory = Factory(
+        ParseTwichGameHandler,
         parser=twich_game_parser,
         repository=twich_game_mongo_repository,
         publisher=twich_game_kafka_publisher,
     )
 
-    twich_game_elastic_service: Factory = Factory(
-        TwichGameService,
-        parser=twich_game_parser,
+    delete_game_handler: Factory = Factory(
+        DeleteTwichGameHandler,
         repository=twich_game_elastic_repository,
         publisher=twich_game_kafka_publisher,
     )
 
-    twich_user_mongo_service: Factory = Factory(
-        TwichUserService,
+    parse_stream_handler: Factory = Factory(
+        ParseTwichStreamHandler,
         parser=twich_user_parser,
         repository=twich_user_mongo_repository,
         publisher=twich_user_kafka_publisher,
     )
 
-    twich_user_elastic_service: Factory = Factory(
-        TwichUserService,
-        parser=twich_user_parser,
+    delete_stream_handler: Factory = Factory(
+        DeleteTwichStreamHandler,
         repository=twich_user_elastic_repository,
         publisher=twich_user_kafka_publisher,
     )
 
-    twich_stream_mongo_service: Factory = Factory(
-        TwichStreamService,
+    parse_user_handler: Factory = Factory(
+        ParseTwichUserHandler,
         parser=twich_stream_parser,
         repository=twich_stream_mongo_repository,
         publisher=twich_stream_kafka_publisher,
     )
 
-    twich_stream_elastic_service: Factory = Factory(
-        TwichStreamService,
-        parser=twich_stream_parser,
+    delete_user_handler: Factory = Factory(
+        DeleteTwichUserHandler,
         repository=twich_stream_elastic_repository,
         publisher=twich_stream_kafka_publisher,
+    )
+
+    # ----------------------------------- Query handlers -------------------------------------------
+
+    get_all_games_handler: Factory = Factory(
+        GetAllTwichGamesHandler,
+        repository=twich_game_mongo_repository,
+    )
+
+    get_twich_game_by_name_handler: Factory = Factory(
+        GetTwichGameByNameHandler,
+        repository=twich_game_elastic_repository,
+    )
+
+    get_all_twich_streams_handler: Factory = Factory(
+        GetAllTwichStreamsHandler,
+        repository=twich_user_mongo_repository,
+    )
+
+    twich_twich_stream_by_user_login_handler: Factory = Factory(
+        GetTwichStreamByUserLoginHandler,
+        repository=twich_user_elastic_repository,
+    )
+
+    get_all_twich_users_handler: Factory = Factory(
+        GetAllTwichUsersHandler,
+        repository=twich_stream_mongo_repository,
+    )
+
+    get_twich_user_by_login_handler: Factory = Factory(
+        GetTwichUserByLoginHandler,
+        repository=twich_stream_elastic_repository,
+    )
+
+    # --------------------------------- Buses ------------------------------------------------------
+
+    in_memory_command_bus: Factory = Factory(
+        InMemoryCommandBus,
+    )
+
+    in_memory_query_bus: Factory = Factory(
+        InMemoryQueryBus,
     )
 
     # --------------------------------- Dispatchers ------------------------------------------------
@@ -222,47 +289,14 @@ class Container(DeclarativeContainer):
         StreamLogger,
     )
 
-    # ---------------------------------- Exception handlers ----------------------------------------
+    # ------------------------------- Controllers --------------------------------------------------
 
-    exception_handler: Factory = Factory(
-        DomainExceptionHandler,
-        logger=logger,
+    twich_game_controller: Factory = Factory(
+        TwichGameController,
+        command_bus=in_memory_command_bus,
     )
 
-    # ---------------------------------- Controllers -----------------------------------------------
-
-    twich_game_w_service_decorator: Factory = Factory(
-        ServiceDecorator,
-        service=twich_game_mongo_service,
-        exception_handler=exception_handler,
-    )
-
-    twich_game_r_service_decorator: Factory = Factory(
-        ServiceDecorator,
-        service=twich_game_elastic_service,
-        exception_handler=exception_handler,
-    )
-
-    twich_user_w_service_decorator: Factory = Factory(
-        ServiceDecorator,
-        service=twich_user_mongo_service,
-        exception_handler=exception_handler,
-    )
-
-    twich_user_r_service_decorator: Factory = Factory(
-        ServiceDecorator,
-        service=twich_user_elastic_service,
-        exception_handler=exception_handler,
-    )
-
-    twich_stream_w_service_decorator: Factory = Factory(
-        ServiceDecorator,
-        service=twich_stream_mongo_service,
-        exception_handler=exception_handler,
-    )
-
-    twich_stream_r_service_decorator: Factory = Factory(
-        ServiceDecorator,
-        service=twich_stream_elastic_service,
-        exception_handler=exception_handler,
+    twich_game_read_controller: Factory = Factory(
+        TwichGameReadController,
+        query_bus=in_memory_query_bus,
     )

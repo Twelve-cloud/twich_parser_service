@@ -6,7 +6,7 @@ common.py: File, containing common dependencies.
 from typing import AsyncGenerator
 from aiohttp import ClientSession
 from application.exceptions import TwichTokenNotObtainedException
-from common.config import settings
+from shared.config import settings
 
 
 class TwichAPIToken:
