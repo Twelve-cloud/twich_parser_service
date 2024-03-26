@@ -86,7 +86,7 @@ class Application:
         )
         FastAPICache.init(RedisBackend(redis), prefix='fastapi-cache')
 
-    async def composite(self):
+    async def composite(self) -> None:
         self.container: Container = Container()
         self.container.twich_game_kafka_dispatcher()
         self.container.twich_user_kafka_dispatcher()
@@ -97,7 +97,6 @@ class Application:
         command_bus: ICommandBus = self.container.in_memory_command_bus()
         command_bus.register(DeleteTwichGame, delete_game_handler)
         command_bus.register(ParseTwichGame, parse_game_handler)
-        print(command_bus.handlers)
         controller = self.container.twich_game_controller(command_bus=command_bus)
 
         self.app.include_router(controller.router, prefix=f'/{settings.API_NAME}')
@@ -106,6 +105,7 @@ class Application:
 application: Application = Application()
 app: FastAPI = application.app
 
+
 @app.on_event('startup')
-async def composite():
+async def composite() -> None:
     await application.composite()

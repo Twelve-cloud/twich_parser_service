@@ -3,7 +3,8 @@ settings.py: File, containing settings for a project.
 """
 
 
-from pydantic import BaseSettings
+from typing import ClassVar
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -57,8 +58,7 @@ class Settings(BaseSettings):
     KAFKA_STREAM_TOPIC: str
     KAFKA_USER_TOPIC: str
 
-    class Config:
-        case_sensitive: bool = True
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(case_sensitive=True)
 
 
 settings: Settings = Settings()

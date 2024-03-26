@@ -59,7 +59,7 @@ class TwichGameKafkaDispatcher:
                     game: TwichGame = mapper.to(TwichGame).map(event.value)
                     await self.repository.add_or_update(game)
                 case TwichGameDeleted.__name__:
-                    game = self.repository.get_by_id(event.value.id)
+                    game = await self.repository.get_by_id(event.value.id)
                     await self.repository.delete(game)
                 case _:
                     pass

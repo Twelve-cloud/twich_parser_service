@@ -39,7 +39,6 @@ class TwichGameController:
             status_code=status.HTTP_200_OK,
             **TwichGameMetadata.delete_game_by_name,
         )
-        print(self.command_bus.handlers, 'IN CONTROLLER')
 
     async def parse_game(
         self,
