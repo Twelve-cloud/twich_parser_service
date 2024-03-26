@@ -17,15 +17,6 @@ from domain.models.base import AggregateRoot, DomainModel
 
 @dataclass(frozen=False)
 class TwichUser(DomainModel, AggregateRoot[TwichUserDomainEvent]):
-    """
-    TwichUser: Class, representing twich user domain model. This class is an aggregate root.
-
-    Bases:
-        1) DomainModel: Base domain model. Every domain model should be inherited from this class.
-        2) AggregateRoot[TwichUserDomainEvent]: Aggregate root.
-           Every domain model that is aggregate root should be inhehited from this class.
-    """
-
     id: int
     login: str
     description: str
@@ -51,26 +42,6 @@ class TwichUser(DomainModel, AggregateRoot[TwichUserDomainEvent]):
         parsed_at: datetime,
         **kwargs: dict,
     ) -> TwichUser:
-        """
-        create: Classmethod that creates a twich user instance.
-        It also produces event that twich user has been created.
-
-        Args:
-            id (int): ID of the user.
-            login (str): Login of the user.
-            description (str): Description of the user profile.
-            display_name (str): Display name of the user.
-            type (str): Type of the user.
-            broadcaster_type (str): Broadcaster type of the user.
-            profile_image_url (str): URL to the user profile image.
-            offline_image_url (str): URL to the user profile image when user is offline.
-            created_at (datetime): Date and time when user has been created.
-            parsed_at (datetime): Date and time when user has been parsed.
-
-        Returns:
-            TwichUser: Twich user instance.
-        """
-
         user: TwichUser = cls(
             id=id,
             login=login,
@@ -90,11 +61,6 @@ class TwichUser(DomainModel, AggregateRoot[TwichUserDomainEvent]):
         return user
 
     def delete(self) -> None:
-        """
-        delete: Deletes a twich user instance.
-        It also produces event that twich user has been deleted.
-        """
-
         event: TwichUserDeleted = mapper.to(TwichUserDeleted).map(self)
         self.register_event(event)
 

@@ -10,13 +10,6 @@ from application.dto.base import DTO
 
 @dataclass(frozen=True)
 class TwichGame(DTO):
-    """
-    TwichGame: Class, representing twich game dto.
-
-    Bases:
-        1) DTO: Base DTO. Every DTO should be inherited from this class.
-    """
-
     id: int
     name: str
     igdb_id: str
@@ -26,11 +19,4 @@ class TwichGame(DTO):
 
 @dataclass(frozen=True)
 class TwichGames(DTO):
-    """
-    TwichGames: Class, representing twich games dto.
-
-    Bases:
-        1) DTO: Base DTO. Every DTO should be inherited from this class.
-    """
-
     data: list[TwichGame]

@@ -11,29 +11,11 @@ from domain.events.base import DomainEvent
 
 @dataclass(frozen=True)
 class TwichStreamDomainEvent(DomainEvent, ABC):
-    """
-    TwichStreamDomainEvent: Class, representing twich stream domain event. This class is abstract.
-    All domain events related to twich stream should be inherited from this class.
-    You can create an instance of this class, but ABC shows that you should not do this.
-
-
-    Bases:
-        1) DomainEvent: Base domain event. Every domain event should be inherited from this class.
-        2) ABC: Abstract Base Class. It is a marker that this class should not be instantiated.
-    """
-
     pass
 
 
 @dataclass(frozen=True)
 class TwichStreamCreated(TwichStreamDomainEvent):
-    """
-    TwichStreamCreated: Class, representing that twich stream has been created.
-
-    Bases:
-        1) TwichStreamDomainEvent: Domain event for all twich stream domain events.
-    """
-
     id: int
     user_id: int
     user_name: str
@@ -51,11 +33,4 @@ class TwichStreamCreated(TwichStreamDomainEvent):
 
 @dataclass(frozen=True)
 class TwichStreamDeleted(TwichStreamDomainEvent):
-    """
-    TwichStreamDeleted: Class, representing that twich stream has been deleted.
-
-    Bases:
-        1) TwichStreamDomainEvent: Domain event for all twich stream domain events.
-    """
-
     id: int

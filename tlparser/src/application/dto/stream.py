@@ -10,13 +10,6 @@ from application.dto.base import DTO
 
 @dataclass(frozen=True)
 class TwichStream(DTO):
-    """
-    TwichStream: Class, representing twich stream dto.
-
-    Bases:
-        1) DTO: Base DTO. Every DTO should be inherited from this class.
-    """
-
     id: int
     user_id: int
     user_name: str
@@ -34,11 +27,4 @@ class TwichStream(DTO):
 
 @dataclass(frozen=True)
 class TwichStreams(DTO):
-    """
-    TwichStreams: Class, representing twich streams dto.
-
-    Bases:
-        1) DTO: Base DTO. Every DTO should be inherited from this class.
-    """
-
     data: list[TwichStream]

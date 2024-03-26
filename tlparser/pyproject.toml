@@ -85,7 +85,7 @@ exclude = '''(?x)(
     | tests/$
 )'''
 plugins = [
-  "pydantic.mypy"
+    "pydantic.mypy"
 ]
 
 [tool.black]
