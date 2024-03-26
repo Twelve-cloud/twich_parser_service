@@ -5,10 +5,10 @@ game.py: File, containing command handler for a twich game.
 
 from application import dto
 from application.commands import DeleteTwichGame, ParseTwichGame
-from application.interfaces.handlers import ICommandHandler
-from application.interfaces.parsers import ITwichGameParser
-from application.interfaces.publishers import ITwichGamePublisher
-from application.interfaces.repositories import ITwichGameRepository
+from application.interfaces.handler import ICommandHandler
+from application.interfaces.parser import ITwichGameParser
+from application.interfaces.publisher import ITwichGamePublisher
+from application.interfaces.repository import ITwichGameRepository
 from domain.models import TwichGame
 
 

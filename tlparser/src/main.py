@@ -45,7 +45,7 @@ from application.handlers.query import (
     GetAllTwichUsersHandler,
     GetTwichUserByLoginHandler,
 )
-from application.interfaces.buses import ICommandBus
+from application.interfaces.bus import ICommandBus
 
 # from presentation.api.graphql.routes import router as graphql_router
 

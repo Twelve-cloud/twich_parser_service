@@ -10,7 +10,7 @@ from domain.events.stream import (
     TwichStreamDeleted,
     TwichStreamDomainEvent,
 )
-from application.interfaces.publishers import ITwichStreamPublisher
+from application.interfaces.publisher import ITwichStreamPublisher
 from infrastructure.publishers.connections.kafka.producer import KafkaProducerConnection
 
 

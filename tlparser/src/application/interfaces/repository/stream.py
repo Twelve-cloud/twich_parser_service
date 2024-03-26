@@ -4,7 +4,7 @@ stream.py: File, containing repository interface for a twich stream.
 
 
 from abc import abstractmethod
-from application.interfaces.repositories.base import IRepository
+from application.interfaces.repository.base import IRepository
 from domain.models import TwichStream
 
 

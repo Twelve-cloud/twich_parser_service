@@ -5,10 +5,10 @@ user.py: File, containing command handler for a twich user.
 
 from application import dto
 from application.commands import DeleteTwichUser, ParseTwichUser
-from application.interfaces.handlers import ICommandHandler
-from application.interfaces.parsers import ITwichUserParser
-from application.interfaces.publishers import ITwichUserPublisher
-from application.interfaces.repositories import ITwichUserRepository
+from application.interfaces.handler import ICommandHandler
+from application.interfaces.parser import ITwichUserParser
+from application.interfaces.publisher import ITwichUserPublisher
+from application.interfaces.repository import ITwichUserRepository
 from domain.models import TwichUser
 
 

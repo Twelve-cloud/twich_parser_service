@@ -9,7 +9,7 @@ from threading import Thread
 from automapper import mapper
 from kafka import KafkaConsumer
 from domain.events import TwichGameCreated, TwichGameDeleted
-from application.interfaces.repositories import ITwichGameRepository
+from application.interfaces.repository import ITwichGameRepository
 from domain.models import TwichGame
 
 

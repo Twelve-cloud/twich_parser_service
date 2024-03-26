@@ -3,8 +3,8 @@ __init__.py: File, containing other command bus interface modules to simplify im
 """
 
 
-from application.interfaces.buses.command_bus import ICommandBus
-from application.interfaces.buses.query_bus import IQueryBus
+from application.interfaces.bus.command_bus import ICommandBus
+from application.interfaces.bus.query_bus import IQueryBus
 
 
 __all__: list[str] = [

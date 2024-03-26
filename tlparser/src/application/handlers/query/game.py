@@ -5,8 +5,8 @@ game.py: File, containing twich game query handlers.
 
 from automapper import mapper
 from application import dto
-from application.interfaces.handlers import IQueryHandler
-from application.interfaces.repositories import ITwichGameRepository
+from application.interfaces.handler import IQueryHandler
+from application.interfaces.repository import ITwichGameRepository
 from application.queries import GetAllTwichGames, GetTwichGameByName
 from domain.models import TwichGame
 

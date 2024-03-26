@@ -6,7 +6,7 @@ user.py: File, containing twich user mongo repository implementation.
 from typing import Optional
 from automapper import mapper
 from application.exceptions import ObjectNotFoundException
-from application.interfaces.repositories import ITwichUserRepository
+from application.interfaces.repository import ITwichUserRepository
 from domain.models import TwichUser
 from infrastructure.persistence.connections.mongo.database import MongoDatabase
 from infrastructure.persistence.models.mongo.user import TwichUserDAO

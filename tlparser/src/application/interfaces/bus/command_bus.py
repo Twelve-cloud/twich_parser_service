@@ -6,7 +6,7 @@ base.py: File, containing command bus interface.
 from abc import ABC as Interface
 from abc import abstractmethod
 from application.commands import Command
-from application.interfaces.handlers import ICommandHandler
+from application.interfaces.handler import ICommandHandler
 from application.dto import Result
 
 

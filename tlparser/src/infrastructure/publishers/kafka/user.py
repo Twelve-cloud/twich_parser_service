@@ -10,7 +10,7 @@ from domain.events.user import (
     TwichUserDeleted,
     TwichUserDomainEvent,
 )
-from application.interfaces.publishers import ITwichUserPublisher
+from application.interfaces.publisher import ITwichUserPublisher
 from infrastructure.publishers.connections.kafka.producer import KafkaProducerConnection
 
 

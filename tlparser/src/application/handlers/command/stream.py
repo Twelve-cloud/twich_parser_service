@@ -5,10 +5,10 @@ stream.py: File, containing command handler for a twich stream.
 
 from application import dto
 from application.commands import DeleteTwichStream, ParseTwichStream
-from application.interfaces.handlers import ICommandHandler
-from application.interfaces.parsers import ITwichStreamParser
-from application.interfaces.publishers import ITwichStreamPublisher
-from application.interfaces.repositories import ITwichStreamRepository
+from application.interfaces.handler import ICommandHandler
+from application.interfaces.parser import ITwichStreamParser
+from application.interfaces.publisher import ITwichStreamPublisher
+from application.interfaces.repository import ITwichStreamRepository
 from domain.models import TwichStream
 
 

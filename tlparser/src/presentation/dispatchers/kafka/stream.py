@@ -9,7 +9,7 @@ from threading import Thread
 from automapper import mapper
 from kafka import KafkaConsumer
 from domain.events.stream import TwichStreamCreated, TwichStreamDeleted
-from application.interfaces.repositories import ITwichStreamRepository
+from application.interfaces.repository import ITwichStreamRepository
 from domain.models import TwichStream
 
 

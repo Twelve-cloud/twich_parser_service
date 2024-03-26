@@ -5,8 +5,8 @@ user.py: File, containing twich user query handlers.
 
 from automapper import mapper
 from application import dto
-from application.interfaces.handlers import IQueryHandler
-from application.interfaces.repositories import ITwichUserRepository
+from application.interfaces.handler import IQueryHandler
+from application.interfaces.repository import ITwichUserRepository
 from application.queries import GetAllTwichUsers, GetTwichUserByLogin
 from domain.models import TwichUser
 

@@ -3,8 +3,8 @@ bus.py: File, containing in memory query bus implementation.
 """
 
 
-from application.interfaces.buses import IQueryBus
-from application.interfaces.handlers import IQueryHandler
+from application.interfaces.bus import IQueryBus
+from application.interfaces.handler import IQueryHandler
 from application.queries import Query
 from application.dto import DTO
 

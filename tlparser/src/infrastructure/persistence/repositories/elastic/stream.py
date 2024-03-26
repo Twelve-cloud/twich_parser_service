@@ -6,7 +6,7 @@ stream.py: File, containing twich stream elastic repository implementation.
 from typing import Collection
 from automapper import mapper
 from application.exceptions import ObjectNotFoundException
-from application.interfaces.repositories import ITwichStreamRepository
+from application.interfaces.repository import ITwichStreamRepository
 from domain.models import TwichStream
 from infrastructure.persistence.connections.elastic.database import ElasticSearchDatabase
 from infrastructure.persistence.models.elastic.stream import TwichStreamDAO

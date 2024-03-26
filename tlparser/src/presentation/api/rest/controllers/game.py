@@ -8,8 +8,8 @@ from fastapi import APIRouter, Path, status
 from fastapi.responses import JSONResponse
 from application.commands import DeleteTwichGame, ParseTwichGame
 from application.queries import GetAllTwichGames, GetTwichGameByName
-from application.interfaces.buses import ICommandBus
-from application.interfaces.buses import IQueryBus
+from application.interfaces.bus import ICommandBus
+from application.interfaces.bus import IQueryBus
 from presentation.api.rest.v1.metadata.game import TwichGameMetadata
 
 

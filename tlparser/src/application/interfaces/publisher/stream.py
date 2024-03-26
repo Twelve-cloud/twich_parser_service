@@ -4,7 +4,7 @@ stream.py: File, containing publisher interface for a twich stream.
 
 
 from abc import abstractmethod
-from application.interfaces.publishers import IPublisher
+from application.interfaces.publisher import IPublisher
 from domain.events import (
     TwichStreamCreated,
     TwichStreamDeleted,

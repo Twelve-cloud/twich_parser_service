@@ -6,7 +6,7 @@ base.py: File, containing query bus interface.
 from abc import ABC as Interface
 from abc import abstractmethod
 from application.dto import DTO
-from application.interfaces.handlers import IQueryHandler
+from application.interfaces.handler import IQueryHandler
 from application.queries import Query
 
 

@@ -6,7 +6,7 @@ game_publisher.py: File, containing kafka publisher class for twich game.
 from threading import Thread
 from shared.config import settings
 from domain.events import TwichGameCreated, TwichGameDeleted, TwichGameDomainEvent
-from application.interfaces.publishers import ITwichGamePublisher
+from application.interfaces.publisher import ITwichGamePublisher
 from infrastructure.publishers.connections.kafka.producer import KafkaProducerConnection
 
 

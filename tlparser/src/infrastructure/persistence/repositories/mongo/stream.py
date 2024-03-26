@@ -6,7 +6,7 @@ stream.py: File, containing twich stream mongo repository implementation.
 from typing import Optional
 from automapper import mapper
 from application.exceptions import ObjectNotFoundException
-from application.interfaces.repositories import ITwichStreamRepository
+from application.interfaces.repository import ITwichStreamRepository
 from domain.models import TwichStream
 from infrastructure.persistence.connections.mongo.database import MongoDatabase
 from infrastructure.persistence.models.mongo.stream import TwichStreamDAO
