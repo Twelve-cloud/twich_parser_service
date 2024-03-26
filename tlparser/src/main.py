@@ -12,7 +12,7 @@ from shared.config import settings
 from shared.utils import Singleton
 from container import Container
 from metadata import ProjectMetadata
-# from presentation.api.rest.routes import routers as rest_v1_routers
+# from presentation.api.rest.v1.routes import routers as rest_v1_routers
 from application.commands import (
     DeleteTwichGame,
     ParseTwichGame,
@@ -63,10 +63,10 @@ class Application:
 
         self.app: FastAPI = FastAPI(
             title=settings.PROJECT_NAME,
-            version=settings.API_SEM_VERSION,
-            openapi_url=f'/{settings.API_NAME}/{settings.API_VERSION}/openapi.json',
-            docs_url=f'/{settings.API_NAME}/{settings.API_VERSION}/docs',
-            redoc_url=f'/{settings.API_NAME}/{settings.API_VERSION}/redoc',
+            version='v1',
+            openapi_url=f'/{settings.API_NAME}/v1/openapi.json',
+            docs_url=f'/{settings.API_NAME}/v1/docs',
+            redoc_url=f'/{settings.API_NAME}/v1/redoc',
             **ProjectMetadata.metadata,
         )
 
@@ -97,9 +97,17 @@ class Application:
         command_bus: ICommandBus = self.container.in_memory_command_bus()
         command_bus.register(DeleteTwichGame, delete_game_handler)
         command_bus.register(ParseTwichGame, parse_game_handler)
-        controller = self.container.twich_game_controller(command_bus=command_bus)
+        controller = self.container.twich_game_v1_controller(command_bus=command_bus)
 
-        self.app.include_router(controller.router, prefix=f'/{settings.API_NAME}')
+        get_game_by_name_handler = self.container.get_twich_game_by_name_handler()
+        get_all_games_handler = self.container.get_all_games_handler()
+        query_bus = self.container.in_memory_query_bus()
+        query_bus.register(GetTwichGameByName, get_game_by_name_handler)
+        query_bus.register(GetAllTwichGames, get_all_games_handler)
+        read_controller = self.container.twich_game_read_v1_controller(query_bus=query_bus)
+
+        self.app.include_router(controller.router, prefix=f'/{settings.API_NAME}/v1')
+        self.app.include_router(read_controller.router, prefix=f'/{settings.API_NAME}/v1')
 
 
 application: Application = Application()

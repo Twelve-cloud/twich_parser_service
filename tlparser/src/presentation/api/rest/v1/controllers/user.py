@@ -10,7 +10,7 @@
 # from application.dtos.fastapi_schemas.twich.user_schema import TwichUserSchema
 # from application.services.decorators import ServiceDecorator
 # from container import Container
-# from presentation.api.rest.v1.metadata.twich.user_metadata import TwichUserMetadata
+# from presentation.api.rest.v1.v1.metadata.twich.user_metadata import TwichUserMetadata
 
 
 # # from fastapi_cache.decorator import cache

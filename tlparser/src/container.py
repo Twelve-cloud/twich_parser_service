@@ -68,8 +68,8 @@ class Container(DeclarativeContainer):
     wiring_config: WiringConfiguration = WiringConfiguration(
         modules=[
             'presentation.api.rest.v1.controllers.game',
-            # 'presentation.api.rest.v1.endpoints.user',
-            # 'presentation.api.rest.v1.endpoints.stream',
+            # 'presentation.api.rest.v1.v1.endpoints.user',
+            # 'presentation.api.rest.v1.v1.endpoints.stream',
             # 'presentation.api.graphql.queries.twich.game_queries',
             # 'presentation.api.graphql.mutations.twich.game_mutations',
         ],
@@ -185,7 +185,7 @@ class Container(DeclarativeContainer):
 
     delete_game_handler: Factory = Factory(
         DeleteTwichGameHandler,
-        repository=twich_game_elastic_repository,
+        repository=twich_game_mongo_repository,
         publisher=twich_game_kafka_publisher,
     )
 
@@ -198,7 +198,7 @@ class Container(DeclarativeContainer):
 
     delete_stream_handler: Factory = Factory(
         DeleteTwichStreamHandler,
-        repository=twich_user_elastic_repository,
+        repository=twich_user_mongo_repository,
         publisher=twich_user_kafka_publisher,
     )
 
@@ -211,7 +211,7 @@ class Container(DeclarativeContainer):
 
     delete_user_handler: Factory = Factory(
         DeleteTwichUserHandler,
-        repository=twich_stream_elastic_repository,
+        repository=twich_stream_mongo_repository,
         publisher=twich_stream_kafka_publisher,
     )
 
@@ -219,7 +219,7 @@ class Container(DeclarativeContainer):
 
     get_all_games_handler: Factory = Factory(
         GetAllTwichGamesHandler,
-        repository=twich_game_mongo_repository,
+        repository=twich_game_elastic_repository,
     )
 
     get_twich_game_by_name_handler: Factory = Factory(
@@ -229,7 +229,7 @@ class Container(DeclarativeContainer):
 
     get_all_twich_streams_handler: Factory = Factory(
         GetAllTwichStreamsHandler,
-        repository=twich_user_mongo_repository,
+        repository=twich_user_elastic_repository,
     )
 
     twich_twich_stream_by_user_login_handler: Factory = Factory(
@@ -239,7 +239,7 @@ class Container(DeclarativeContainer):
 
     get_all_twich_users_handler: Factory = Factory(
         GetAllTwichUsersHandler,
-        repository=twich_stream_mongo_repository,
+        repository=twich_stream_elastic_repository,
     )
 
     get_twich_user_by_login_handler: Factory = Factory(
@@ -291,12 +291,12 @@ class Container(DeclarativeContainer):
 
     # ------------------------------- Controllers --------------------------------------------------
 
-    twich_game_controller: Factory = Factory(
+    twich_game_v1_controller: Factory = Factory(
         TwichGameController,
         command_bus=in_memory_command_bus,
     )
 
-    twich_game_read_controller: Factory = Factory(
+    twich_game_read_v1_controller: Factory = Factory(
         TwichGameReadController,
         query_bus=in_memory_query_bus,
     )

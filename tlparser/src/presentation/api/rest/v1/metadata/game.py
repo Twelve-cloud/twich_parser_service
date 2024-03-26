@@ -43,7 +43,7 @@ class TwichGameMetadata:
         }
 
     @ReadOnlyClassProperty
-    def delete_game_by_name(cls) -> dict:
+    def delete_game(cls) -> dict:
         """
         delete_game_by_name: Return delete game metadata.
 

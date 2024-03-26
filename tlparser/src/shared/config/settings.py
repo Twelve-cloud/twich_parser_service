@@ -19,8 +19,6 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: list[str]
 
     API_NAME: str
-    API_VERSION: str
-    API_SEM_VERSION: str
 
     DB_MONGO_NAME: str
     DB_MONGO_USERNAME: str

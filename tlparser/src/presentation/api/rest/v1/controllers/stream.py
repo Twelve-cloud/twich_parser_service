@@ -10,7 +10,7 @@
 # from application.dtos.fastapi_schemas.twich.stream_schema import TwichStreamSchema
 # from application.services.decorators import ServiceDecorator
 # from container import Container
-# from presentation.api.rest.v1.metadata.twich.stream_metadata import TwichStreamMetadata
+# from presentation.api.rest.v1.v1.metadata.twich.stream_metadata import TwichStreamMetadata
 
 
 # # from fastapi_cache.decorator import cache
