@@ -6,8 +6,8 @@ base.py: File, containing command bus interface.
 from abc import ABC as Interface
 from abc import abstractmethod
 from application.commands import Command
-from application.interfaces.handler import ICommandHandler
 from application.dto import Result
+from application.interfaces.handler import ICommandHandler
 
 
 class ICommandBus(Interface):
