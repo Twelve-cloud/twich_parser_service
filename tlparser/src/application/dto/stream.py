@@ -23,8 +23,3 @@ class TwichStreamDTO(DTO):
     viewer_count: int
     type: str
     parsed_at: datetime
-
-
-@dataclass(frozen=True)
-class TwichStreamsDTO(DTO):
-    data: list[TwichStreamDTO]

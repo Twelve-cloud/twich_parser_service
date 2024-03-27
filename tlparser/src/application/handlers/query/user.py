@@ -4,7 +4,7 @@ user.py: File, containing twich user query handlers.
 
 
 from automapper import mapper
-from application.dto import TwichUserDTO, TwichUsersDTO
+from application.dto import TwichUserDTO
 from application.interfaces.handler import IQueryHandler
 from application.interfaces.repository import ITwichUserRepository
 from application.queries import GetAllTwichUsers, GetTwichUserByLogin
@@ -24,14 +24,14 @@ class GetTwichUserByLoginHandler(IQueryHandler[GetTwichUserByLogin, TwichUserDTO
         return mapper.to(TwichUserDTO).map(user)
 
 
-class GetAllTwichUsersHandler(IQueryHandler[GetAllTwichUsers, TwichUsersDTO]):
+class GetAllTwichUsersHandler(IQueryHandler[GetAllTwichUsers, list[TwichUserDTO]]):
     def __init__(
         self,
         repository: ITwichUserRepository,
     ) -> None:
         self.repository: ITwichUserRepository = repository
 
-    async def handle(self, query: GetAllTwichUsers) -> TwichUsersDTO:
+    async def handle(self, query: GetAllTwichUsers) -> TwichUserDTO:
         users: list[TwichUser] = await self.repository.all()
 
-        return TwichUsersDTO(data=[mapper.to(TwichUsersDTO).map(user) for user in users])
+        return [mapper.to(TwichUserDTO).map(user) for user in users]

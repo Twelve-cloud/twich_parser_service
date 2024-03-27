@@ -15,8 +15,3 @@ class TwichGameDTO(DTO):
     igdb_id: str
     box_art_url: str
     parsed_at: datetime
-
-
-@dataclass(frozen=True)
-class TwichGamesDTO(DTO):
-    data: list[TwichGameDTO]

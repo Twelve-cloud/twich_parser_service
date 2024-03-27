@@ -89,12 +89,12 @@ class TwichGameReadController:
         name: Annotated[str, Path(min_length=1, max_length=128)],
     ) -> JSONResponse:
         query: GetTwichGameByName = GetTwichGameByName(name=name)
-        game: dto.TwichGame = await self.query_bus.dispatch(query)
+        game: dto.TwichGameDTO = await self.query_bus.dispatch(query)
 
         return JSONResponse(content={'result': asdict(game)})
 
     async def get_all_games(self) -> JSONResponse:
         query: GetAllTwichGames = GetAllTwichGames()
-        games: dto.TwichGames = await self.query_bus.dispatch(query)
+        games: list[dto.TwichGameDTO] = await self.query_bus.dispatch(query)
 
         return JSONResponse(content={'result': [asdict(game) for game in games.data]})

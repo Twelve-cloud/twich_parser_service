@@ -20,8 +20,3 @@ class TwichUserDTO(DTO):
     offline_image_url: str
     created_at: datetime
     parsed_at: datetime
-
-
-@dataclass(frozen=True)
-class TwichUsersDTO(DTO):
-    data: list[TwichUserDTO]

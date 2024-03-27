@@ -4,7 +4,7 @@ game.py: File, containing twich game query handlers.
 
 
 from automapper import mapper
-from application.dto import TwichGameDTO, TwichGamesDTO
+from application.dto import TwichGameDTO
 from application.interfaces.handler import IQueryHandler
 from application.interfaces.repository import ITwichGameRepository
 from application.queries import GetAllTwichGames, GetTwichGameByName
@@ -24,14 +24,14 @@ class GetTwichGameByNameHandler(IQueryHandler[GetTwichGameByName, TwichGameDTO])
         return mapper.to(TwichGameDTO).map(game)
 
 
-class GetAllTwichGamesHandler(IQueryHandler[GetAllTwichGames, TwichGamesDTO]):
+class GetAllTwichGamesHandler(IQueryHandler[GetAllTwichGames, list[TwichGameDTO]]):
     def __init__(
         self,
         repository: ITwichGameRepository,
     ) -> None:
         self.repository: ITwichGameRepository = repository
 
-    async def handle(self, query: GetAllTwichGames) -> TwichGamesDTO:
+    async def handle(self, query: GetAllTwichGames) -> list[TwichGameDTO]:
         games: list[TwichGame] = await self.repository.all()
 
-        return TwichGamesDTO(data=[mapper.to(TwichGamesDTO).map(game) for game in games])
+        return [mapper.to(TwichGameDTO).map(game) for game in games]
