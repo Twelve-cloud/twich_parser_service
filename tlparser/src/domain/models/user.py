@@ -6,7 +6,6 @@ user.py: File, containing twich user domain model.
 from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
-from automapper import mapper
 from domain.events import (
     TwichUserCreated,
     TwichUserDeleted,
@@ -56,13 +55,25 @@ class TwichUser(DomainModel, AggregateRoot[TwichUserDomainEvent]):
             parsed_at=parsed_at,
         )
 
-        event: TwichUserCreated = mapper.to(TwichUserCreated).map(user)
+        event: TwichUserCreated = TwichUserCreated(
+            id=id,
+            login=login,
+            description=description,
+            display_name=display_name,
+            type=type,
+            broadcaster_type=broadcaster_type,
+            profile_image_url=profile_image_url,
+            offline_image_url=offline_image_url,
+            created_at=created_at,
+            parsed_at=parsed_at,
+        )
+
         user.register_event(event)
 
         return user
 
     def delete(self) -> None:
-        event: TwichUserDeleted = mapper.to(TwichUserDeleted).map(self)
+        event: TwichUserDeleted = TwichUserDeleted(id=self.id)
         self.register_event(event)
 
         return

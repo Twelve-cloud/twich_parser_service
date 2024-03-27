@@ -6,7 +6,6 @@ stream.py: File, containing twich stream domain model.
 from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
-from automapper import mapper
 from domain.events import (
     TwichStreamCreated,
     TwichStreamDeleted,
@@ -65,13 +64,28 @@ class TwichStream(DomainModel, AggregateRoot[TwichStreamDomainEvent]):
             parsed_at=parsed_at,
         )
 
-        event: TwichStreamCreated = mapper.to(TwichStreamCreated).map(stream)
+        event: TwichStreamCreated = TwichStreamCreated(
+            id=id,
+            user_id=user_id,
+            user_name=user_name,
+            user_login=user_login,
+            game_id=game_id,
+            game_name=game_name,
+            language=language,
+            title=title,
+            tags=tags,
+            started_at=started_at,
+            viewer_count=viewer_count,
+            type=type,
+            parsed_at=parsed_at,
+        )
+
         stream.register_event(event)
 
         return stream
 
     def delete(self) -> None:
-        event: TwichStreamDeleted = mapper.to(TwichStreamDeleted).map(self)
+        event: TwichStreamDeleted = TwichStreamDeleted(id=self.id)
         self.register_event(event)
 
         return

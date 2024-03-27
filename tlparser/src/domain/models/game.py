@@ -6,7 +6,6 @@ game.py: File, containing twich game domain model.
 from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
-from automapper import mapper
 from domain.events import (
     TwichGameCreated,
     TwichGameDeleted,
@@ -41,13 +40,20 @@ class TwichGame(DomainModel, AggregateRoot[TwichGameDomainEvent]):
             parsed_at=parsed_at,
         )
 
-        event: TwichGameCreated = mapper.to(TwichGameCreated).map(game)
+        event: TwichGameCreated = TwichGameCreated(
+            id=game.id,
+            name=game.name,
+            igdb_id=game.igdb_id,
+            box_art_url=game.box_art_url,
+            parsed_at=game.parsed_at,
+        )
+
         game.register_event(event)
 
         return game
 
     def delete(self) -> None:
-        event: TwichGameDeleted = mapper.to(TwichGameDeleted).map(self)
+        event: TwichGameDeleted = TwichGameDeleted(id=self.id)
         self.register_event(event)
 
         return

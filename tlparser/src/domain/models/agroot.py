@@ -3,9 +3,10 @@ base.py: File, containing aggregate root.
 """
 
 
+from __future__ import annotations
 from abc import ABC
 from dataclasses import dataclass, field
-from typing import Generic
+from typing import Any, Generic
 from domain.events import DE
 
 
@@ -31,3 +32,7 @@ class AggregateRoot(Generic[DE], ABC):
 
     def get_events(self) -> list[DE]:
         return self._events
+
+    @staticmethod
+    def as_dict(pairs: tuple[str, Any]) -> dict[str, Any]:
+        return {key: value for key, value in pairs if key != '_events'}
