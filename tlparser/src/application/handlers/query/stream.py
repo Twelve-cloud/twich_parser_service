@@ -3,7 +3,7 @@ stream.py: File, containing twich stream query handlers.
 """
 
 
-from automapper import mapper
+from dataclasses import asdict
 from application.dto import TwichStreamDTO
 from application.interfaces.handler import IQueryHandler
 from application.interfaces.repository import ITwichStreamRepository
@@ -21,7 +21,7 @@ class GetTwichStreamByUserLoginHandler(IQueryHandler[GetTwichStreamByUserLogin, 
     async def handle(self, query: GetTwichStreamByUserLogin) -> TwichStreamDTO:
         stream: TwichStream = await self.repository.get_stream_by_user_login(query.user_login)
 
-        return mapper.to(TwichStreamDTO).map(stream)
+        return TwichStreamDTO(**asdict(stream, dict_factory=TwichStream.as_dict))
 
 
 class GetAllTwichStreamsHandler(IQueryHandler[GetAllTwichStreams, list[TwichStreamDTO]]):
@@ -34,4 +34,6 @@ class GetAllTwichStreamsHandler(IQueryHandler[GetAllTwichStreams, list[TwichStre
     async def handle(self, query: GetAllTwichStreams) -> list[TwichStreamDTO]:
         streams: list[TwichStream] = await self.repository.all()
 
-        return [mapper.to(TwichStreamDTO).map(stream) for stream in streams]
+        return [
+            TwichStreamDTO(**asdict(stream, dict_factory=TwichStream.as_dict)) for stream in streams
+        ]

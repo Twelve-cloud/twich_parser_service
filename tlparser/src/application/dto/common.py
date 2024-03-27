@@ -10,4 +10,6 @@ from application.dto.base import DTO
 
 @dataclass(frozen=True)
 class ResultDTO(DTO):
-    data: list[dict[str, Any]]
+    data: dict[str, Any]
+    status: str
+    description: str

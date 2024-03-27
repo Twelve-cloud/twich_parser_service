@@ -28,7 +28,11 @@ class ParseTwichGameHandler(ICommandHandler[ParseTwichGame]):
         await self.repository.add_or_update(game)
         await self.publisher.publish(game.pull_events())
 
-        return ResultDTO([{'id': game.id}, {'status': 'success'}])
+        return ResultDTO(
+            data={'id': game.id},
+            status='OK',
+            description='Command has executed successfully.',
+        )
 
 
 class DeleteTwichGameHandler(ICommandHandler[DeleteTwichGame]):
@@ -46,4 +50,8 @@ class DeleteTwichGameHandler(ICommandHandler[DeleteTwichGame]):
         await self.repository.delete(game)
         await self.publisher.publish(game.pull_events())
 
-        return ResultDTO([{'status': 'success'}])
+        return ResultDTO(
+            data={},
+            status='OK',
+            description='Command has executed successfully.',
+        )

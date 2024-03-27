@@ -28,7 +28,11 @@ class ParseTwichStreamHandler(ICommandHandler[ParseTwichStream]):
         await self.repository.add_or_update(stream)
         await self.publisher.publish(stream.pull_events())
 
-        return ResultDTO([{'id': stream.id}, {'status': 'success'}])
+        return ResultDTO(
+            data={'id': stream.id},
+            status='OK',
+            description='Command has executed successfully.',
+        )
 
 
 class DeleteTwichStreamHandler(ICommandHandler[DeleteTwichStream]):
@@ -46,4 +50,8 @@ class DeleteTwichStreamHandler(ICommandHandler[DeleteTwichStream]):
         await self.repository.delete(stream)
         await self.publisher.publish(stream.pull_events())
 
-        return ResultDTO([{'status': 'success'}])
+        return ResultDTO(
+            data={},
+            status='OK',
+            description='Command has executed successfully.',
+        )

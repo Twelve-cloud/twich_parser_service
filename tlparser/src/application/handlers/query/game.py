@@ -3,7 +3,7 @@ game.py: File, containing twich game query handlers.
 """
 
 
-from automapper import mapper
+from dataclasses import asdict
 from application.dto import TwichGameDTO
 from application.interfaces.handler import IQueryHandler
 from application.interfaces.repository import ITwichGameRepository
@@ -21,7 +21,7 @@ class GetTwichGameByNameHandler(IQueryHandler[GetTwichGameByName, TwichGameDTO])
     async def handle(self, query: GetTwichGameByName) -> TwichGameDTO:
         game: TwichGame = await self.repository.get_game_by_name(query.name)
 
-        return mapper.to(TwichGameDTO).map(game)
+        return TwichGameDTO(**asdict(game, dict_factory=TwichGame.as_dict))
 
 
 class GetAllTwichGamesHandler(IQueryHandler[GetAllTwichGames, list[TwichGameDTO]]):
@@ -34,4 +34,4 @@ class GetAllTwichGamesHandler(IQueryHandler[GetAllTwichGames, list[TwichGameDTO]
     async def handle(self, query: GetAllTwichGames) -> list[TwichGameDTO]:
         games: list[TwichGame] = await self.repository.all()
 
-        return [mapper.to(TwichGameDTO).map(game) for game in games]
+        return [TwichGameDTO(**asdict(game, dict_factory=TwichGame.as_dict)) for game in games]

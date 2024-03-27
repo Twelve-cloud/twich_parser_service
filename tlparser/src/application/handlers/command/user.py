@@ -28,7 +28,11 @@ class ParseTwichUserHandler(ICommandHandler[ParseTwichUser]):
         await self.repository.add_or_update(user)
         await self.publisher.publish(user.pull_events())
 
-        return ResultDTO([{'id': user.id}, {'status': 'success'}])
+        return ResultDTO(
+            data={'id': user.id},
+            status='OK',
+            description='Command has executed successfully.',
+        )
 
 
 class DeleteTwichUserHandler(ICommandHandler[DeleteTwichUser]):
@@ -46,4 +50,8 @@ class DeleteTwichUserHandler(ICommandHandler[DeleteTwichUser]):
         await self.repository.delete(user)
         await self.publisher.publish(user.pull_events())
 
-        return ResultDTO([{'status': 'success'}])
+        return ResultDTO(
+            data={},
+            status='OK',
+            description='Command has executed successfully.',
+        )
