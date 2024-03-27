@@ -6,7 +6,7 @@ base.py: File, containing command bus interface.
 from abc import ABC as Interface
 from abc import abstractmethod
 from application.commands import Command
-from application.dto import Result
+from application.dto import ResultDTO
 from application.interfaces.handler import ICommandHandler
 
 
@@ -16,5 +16,5 @@ class ICommandBus(Interface):
         raise NotImplementedError
 
     @abstractmethod
-    async def dispatch(self, command: Command) -> Result:
+    async def dispatch(self, command: Command) -> ResultDTO:
         raise NotImplementedError
