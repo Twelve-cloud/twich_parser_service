@@ -9,7 +9,7 @@ from application.dto.base import DTO
 
 
 @dataclass(frozen=True)
-class TwichGame(DTO):
+class TwichGameDTO(DTO):
     id: int
     name: str
     igdb_id: str
@@ -18,5 +18,5 @@ class TwichGame(DTO):
 
 
 @dataclass(frozen=True)
-class TwichGames(DTO):
-    data: list[TwichGame]
+class TwichGamesDTO(DTO):
+    data: list[TwichGameDTO]

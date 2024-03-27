@@ -9,7 +9,7 @@ from application.dto.base import DTO
 
 
 @dataclass(frozen=True)
-class TwichStream(DTO):
+class TwichStreamDTO(DTO):
     id: int
     user_id: int
     user_name: str
@@ -26,5 +26,5 @@ class TwichStream(DTO):
 
 
 @dataclass(frozen=True)
-class TwichStreams(DTO):
-    data: list[TwichStream]
+class TwichStreamsDTO(DTO):
+    data: list[TwichStreamDTO]

@@ -3,7 +3,7 @@ game.py: File, containing command handler for a twich game.
 """
 
 
-from application import dto
+from application.dto import ResultDTO
 from application.commands import DeleteTwichGame, ParseTwichGame
 from application.interfaces.handler import ICommandHandler
 from application.interfaces.parser import ITwichGameParser
@@ -23,12 +23,12 @@ class ParseTwichGameHandler(ICommandHandler[ParseTwichGame]):
         self.publisher: ITwichGamePublisher = publisher
         self.repository: ITwichGameRepository = repository
 
-    async def handle(self, command: ParseTwichGame) -> dto.Result:
+    async def handle(self, command: ParseTwichGame) -> ResultDTO:
         game: TwichGame = await self.parser.parse_game(command.name)
         await self.repository.add_or_update(game)
         await self.publisher.publish(game.pull_events())
 
-        return dto.Result([{'id': game.id}, {'status': 'success'}])
+        return ResultDTO([{'id': game.id}, {'status': 'success'}])
 
 
 class DeleteTwichGameHandler(ICommandHandler[DeleteTwichGame]):
@@ -40,10 +40,10 @@ class DeleteTwichGameHandler(ICommandHandler[DeleteTwichGame]):
         self.publisher: ITwichGamePublisher = publisher
         self.repository: ITwichGameRepository = repository
 
-    async def handle(self, command: DeleteTwichGame) -> dto.Result:
+    async def handle(self, command: DeleteTwichGame) -> ResultDTO:
         game: TwichGame = await self.repository.get_game_by_name(command.name)
         game.delete()
         await self.repository.delete(game)
         await self.publisher.publish(game.pull_events())
 
-        return dto.Result([{'status': 'success'}])
+        return ResultDTO([{'status': 'success'}])

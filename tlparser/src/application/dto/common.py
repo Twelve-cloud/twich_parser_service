@@ -9,5 +9,5 @@ from application.dto.base import DTO
 
 
 @dataclass(frozen=True)
-class Result(DTO):
+class ResultDTO(DTO):
     data: list[dict[str, Any]]

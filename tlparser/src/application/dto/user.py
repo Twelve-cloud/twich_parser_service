@@ -9,7 +9,7 @@ from application.dto.base import DTO
 
 
 @dataclass(frozen=True)
-class TwichUser(DTO):
+class TwichUserDTO(DTO):
     id: int
     login: str
     description: str
@@ -23,5 +23,5 @@ class TwichUser(DTO):
 
 
 @dataclass(frozen=True)
-class TwichUsers(DTO):
-    data: list[TwichUser]
+class TwichUsersDTO(DTO):
+    data: list[TwichUserDTO]
