@@ -3,8 +3,8 @@ user.py: File, containing command handler for a twich user.
 """
 
 
-from application.dto import ResultDTO
 from application.commands import DeleteTwichUser, ParseTwichUser
+from application.dto import ResultDTO
 from application.interfaces.handler import ICommandHandler
 from application.interfaces.parser import ITwichUserParser
 from application.interfaces.publisher import ITwichUserPublisher

@@ -3,8 +3,8 @@ stream.py: File, containing command handler for a twich stream.
 """
 
 
-from application.dto import ResultDTO
 from application.commands import DeleteTwichStream, ParseTwichStream
+from application.dto import ResultDTO
 from application.interfaces.handler import ICommandHandler
 from application.interfaces.parser import ITwichStreamParser
 from application.interfaces.publisher import ITwichStreamPublisher

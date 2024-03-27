@@ -3,8 +3,8 @@ game.py: File, containing command handler for a twich game.
 """
 
 
-from application.dto import ResultDTO
 from application.commands import DeleteTwichGame, ParseTwichGame
+from application.dto import ResultDTO
 from application.interfaces.handler import ICommandHandler
 from application.interfaces.parser import ITwichGameParser
 from application.interfaces.publisher import ITwichGamePublisher
