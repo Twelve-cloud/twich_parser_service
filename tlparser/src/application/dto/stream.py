@@ -5,6 +5,7 @@ stream.py: File, containing twich stream dto.
 
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Sequence
 from application.dto.base import DTO
 
 
@@ -23,3 +24,8 @@ class TwichStreamDTO(DTO):
     viewer_count: int
     type: str
     parsed_at: datetime
+
+
+@dataclass(frozen=True)
+class TwichStreamsDTO(DTO):
+    data: Sequence[TwichStreamDTO]

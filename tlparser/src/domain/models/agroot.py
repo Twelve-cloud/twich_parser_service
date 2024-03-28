@@ -34,5 +34,5 @@ class AggregateRoot(Generic[DE], ABC):
         return self._events
 
     @staticmethod
-    def as_dict(pairs: tuple[str, Any]) -> dict[str, Any]:
+    def dict(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
         return {key: value for key, value in pairs if key != '_events'}

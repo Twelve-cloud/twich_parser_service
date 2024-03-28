@@ -5,6 +5,7 @@ game.py: File, containing twich game dto.
 
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Sequence
 from application.dto.base import DTO
 
 
@@ -15,3 +16,8 @@ class TwichGameDTO(DTO):
     igdb_id: str
     box_art_url: str
     parsed_at: datetime
+
+
+@dataclass(frozen=True)
+class TwichGamesDTO(DTO):
+    data: Sequence[TwichGameDTO]

@@ -67,6 +67,27 @@ treat_all_comments_as_code = true
 lines_between_sections = 0
 split_on_trailing_comma = true
 
+[tool.black]
+line-length = 100
+skip-string-normalization = true
+preview = true
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | data
+)/
+'''
+
 [tool.flake8]
 max-line-length = 100
 exclude = ['migrations', 'data', '.venv']
@@ -89,26 +110,10 @@ plugins = [
     "pydantic.mypy"
 ]
 
-[tool.black]
-line-length = 100
-skip-string-normalization = true
-preview = true
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-  | data
-)/
-'''
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
 
 [tool.pytest.ini_options]
 minversion = "7.2.0"
