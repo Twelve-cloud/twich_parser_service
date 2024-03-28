@@ -1,41 +1,31 @@
 """
-game_metadata.py: File, containing metadata for a twich game.
+game.py: File, containing twich game metadata.
 """
 
 
+from typing import ClassVar
 from shared.utils import ReadOnlyClassProperty
 
 
 class TwichGameMetadata:
-    """
-    TwichGameMetadata: Class, containing metadata for twich game.
-    """
+    parse_game_summary: ClassVar[str] = 'Parse game of the twich platform.'
+    parse_game_description: ClassVar[str] = 'Parse game of the twich platform.'
+    parse_game_response_description: ClassVar[str] = 'Twich game has been parsed.'
 
-    parse_game_summary: str = 'Parse game of the twich platform.'
-    parse_game_description: str = 'Parse game of the twich platform.'
-    parse_game_response_description: str = 'Twich game has been parsed.'
+    delete_game_summary: ClassVar[str] = 'Delete twich game by name.'
+    delete_game_description: ClassVar[str] = 'Delete twich game by name.'
+    delete_game_response_description: ClassVar[str] = 'Twich game has been deleted.'
 
-    delete_game_by_name_summary: str = 'Delete twich game by name.'
-    delete_game_by_name_description: str = 'Delete twich game by name.'
-    delete_game_by_name_response_description: str = 'Twich game has been deleted.'
+    get_game_by_name_summary: ClassVar[str] = 'Return twich game by name.'
+    get_game_by_name_description: ClassVar[str] = 'Return twich game by name.'
+    get_game_by_name_response_description: ClassVar[str] = 'Twich game has been returned.'
 
-    get_all_games_summary: str = 'Return all twich games.'
-    get_all_games_description: str = 'Return all twich games.'
-    get_all_games_response_description: str = 'All twich games have been returned.'
-
-    get_game_by_name_summary: str = 'Return twich game by name.'
-    get_game_by_name_description: str = 'Return twich game by name.'
-    get_game_by_name_response_description: str = 'Twich game has been returned.'
+    get_all_games_summary: ClassVar[str] = 'Return all twich games.'
+    get_all_games_description: ClassVar[str] = 'Return all twich games.'
+    get_all_games_response_description: ClassVar[str] = 'All twich games have been returned.'
 
     @ReadOnlyClassProperty
     def parse_game(cls) -> dict:
-        """
-        parse_game: Return parse game metadata.
-
-        Returns:
-            dict: Parse game metadata.
-        """
-
         return {
             'summary': cls.parse_game_summary,
             'description': cls.parse_game_description,
@@ -44,45 +34,24 @@ class TwichGameMetadata:
 
     @ReadOnlyClassProperty
     def delete_game(cls) -> dict:
-        """
-        delete_game_by_name: Return delete game metadata.
-
-        Returns:
-            dict: Delete game metadata.
-        """
-
         return {
-            'summary': cls.delete_game_by_name_summary,
-            'description': cls.delete_game_by_name_description,
-            'response_description': cls.delete_game_by_name_response_description,
-        }
-
-    @ReadOnlyClassProperty
-    def get_all_games(cls) -> dict:
-        """
-        get_all_games: Return all games metadata.
-
-        Returns:
-            dict: Get all games metadata.
-        """
-
-        return {
-            'summary': cls.get_all_games_summary,
-            'description': cls.get_all_games_description,
-            'response_description': cls.get_all_games_response_description,
+            'summary': cls.delete_game_summary,
+            'description': cls.delete_game_description,
+            'response_description': cls.delete_game_response_description,
         }
 
     @ReadOnlyClassProperty
     def get_game_by_name(cls) -> dict:
-        """
-        get_game_by_name: Return game by name metadata.
-
-        Returns:
-            dict: Get game by name metadata.
-        """
-
         return {
             'summary': cls.get_game_by_name_summary,
             'description': cls.get_game_by_name_description,
             'response_description': cls.get_game_by_name_response_description,
+        }
+
+    @ReadOnlyClassProperty
+    def get_all_games(cls) -> dict:
+        return {
+            'summary': cls.get_all_games_summary,
+            'description': cls.get_all_games_description,
+            'response_description': cls.get_all_games_response_description,
         }

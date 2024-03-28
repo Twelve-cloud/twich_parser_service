@@ -1,5 +1,5 @@
 """
-base.py: File, containing base schema.
+base.py: File, containing base request schema.
 """
 
 
@@ -7,5 +7,5 @@ from typing import ClassVar
 from pydantic import BaseModel, ConfigDict
 
 
-class Schema(BaseModel):
+class RequestSchema(BaseModel):
     model_config: ClassVar[ConfigDict] = ConfigDict(strict=False, frozen=True, extra='ignore')
