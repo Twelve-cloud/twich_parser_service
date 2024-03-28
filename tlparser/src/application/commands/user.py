@@ -14,4 +14,4 @@ class ParseTwichUser(Command):
 
 @dataclass(frozen=True)
 class DeleteTwichUser(Command):
-    login: str
+    id: int

@@ -45,7 +45,7 @@ class DeleteTwichGameHandler(ICommandHandler[DeleteTwichGame]):
         self.repository: ITwichGameRepository = repository
 
     async def handle(self, command: DeleteTwichGame) -> ResultDTO:
-        game: TwichGame = await self.repository.get_game_by_name(command.name)
+        game: TwichGame = await self.repository.get_by_id(command.id)
         game.delete()
         await self.repository.delete(game)
         await self.publisher.publish(game.pull_events())

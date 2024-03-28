@@ -14,4 +14,4 @@ class ParseTwichGame(Command):
 
 @dataclass(frozen=True)
 class DeleteTwichGame(Command):
-    name: str
+    id: int

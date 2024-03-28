@@ -45,7 +45,7 @@ class DeleteTwichStreamHandler(ICommandHandler[DeleteTwichStream]):
         self.repository: ITwichStreamRepository = repository
 
     async def handle(self, command: DeleteTwichStream) -> ResultDTO:
-        stream: TwichStream = await self.repository.get_stream_by_user_login(command.user_login)
+        stream: TwichStream = await self.repository.get_by_id(command.id)
         stream.delete()
         await self.repository.delete(stream)
         await self.publisher.publish(stream.pull_events())

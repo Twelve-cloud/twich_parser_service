@@ -45,7 +45,7 @@ class DeleteTwichUserHandler(ICommandHandler[DeleteTwichUser]):
         self.repository: ITwichUserRepository = repository
 
     async def handle(self, command: DeleteTwichUser) -> ResultDTO:
-        user: TwichUser = await self.repository.get_user_by_login(command.login)
+        user: TwichUser = await self.repository.get_by_id(command.id)
         user.delete()
         await self.repository.delete(user)
         await self.publisher.publish(user.pull_events())
