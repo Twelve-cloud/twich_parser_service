@@ -17,7 +17,10 @@ COPY pyproject.toml ./
 RUN poetry install --with dev
 
 # 5 layer
-COPY src scripts/entrypoint-uvicorn.dev.sh ./
+COPY src ./src
 
 # 6 layer
+COPY scripts/entrypoint-uvicorn.dev.sh ./
+
+# 7 layer
 RUN chmod +x entrypoint-uvicorn.dev.sh

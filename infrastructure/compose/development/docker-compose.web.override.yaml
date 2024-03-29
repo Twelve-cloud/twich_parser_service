@@ -15,6 +15,7 @@ services:
     - ./tlparser/env/development/.env.dev.web
     volumes:
       - ./tlparser/certs/development:/code/certs:ro/
+      - ./tlparser/src:/code/src/
     healthcheck:
       test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/api/v1/docs"]
       interval: 10s
