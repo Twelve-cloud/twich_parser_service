@@ -15,3 +15,8 @@ class ParseTwichStream(Command):
 @dataclass(frozen=True)
 class DeleteTwichStream(Command):
     id: int
+
+
+@dataclass(frozen=True)
+class DeleteTwichStreamByUserLogin(Command):
+    user_login: str

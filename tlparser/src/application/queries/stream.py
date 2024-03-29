@@ -8,6 +8,11 @@ from application.queries.base import Query
 
 
 @dataclass(frozen=True)
+class GetTwichStream(Query):
+    id: int
+
+
+@dataclass(frozen=True)
 class GetTwichStreamByUserLogin(Query):
     user_login: str
 

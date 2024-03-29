@@ -8,6 +8,11 @@ from application.queries.base import Query
 
 
 @dataclass(frozen=True)
+class GetTwichGame(Query):
+    id: int
+
+
+@dataclass(frozen=True)
 class GetTwichGameByName(Query):
     name: str
 
