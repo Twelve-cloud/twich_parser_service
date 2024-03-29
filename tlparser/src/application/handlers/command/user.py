@@ -3,7 +3,11 @@ user.py: File, containing command handler for a twich user.
 """
 
 
-from application.commands import DeleteTwichUser, ParseTwichUser
+from application.commands import (
+    DeleteTwichUser,
+    DeleteTwichUserByLogin,
+    ParseTwichUser,
+)
 from application.dto import ResultDTO
 from application.interfaces.handler import ICommandHandler
 from application.interfaces.parser import ITwichUserParser
@@ -46,6 +50,28 @@ class DeleteTwichUserHandler(ICommandHandler[DeleteTwichUser]):
 
     async def handle(self, command: DeleteTwichUser) -> ResultDTO:
         user: TwichUser = await self.repository.get_by_id(command.id)
+        user.delete()
+        await self.repository.delete(user)
+        await self.publisher.publish(user.pull_events())
+
+        return ResultDTO(
+            data={},
+            status='OK',
+            description='Command has executed successfully.',
+        )
+
+
+class DeleteTwichUserByLoginHandler(ICommandHandler[DeleteTwichUserByLogin]):
+    def __init__(
+        self,
+        publisher: ITwichUserPublisher,
+        repository: ITwichUserRepository,
+    ) -> None:
+        self.publisher: ITwichUserPublisher = publisher
+        self.repository: ITwichUserRepository = repository
+
+    async def handle(self, command: DeleteTwichUserByLogin) -> ResultDTO:
+        user: TwichUser = await self.repository.get_user_by_login(command.login)
         user.delete()
         await self.repository.delete(user)
         await self.publisher.publish(user.pull_events())

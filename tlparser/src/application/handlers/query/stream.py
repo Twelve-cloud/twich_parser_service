@@ -7,8 +7,25 @@ from dataclasses import asdict
 from application.dto import TwichStreamDTO, TwichStreamsDTO
 from application.interfaces.handler import IQueryHandler
 from application.interfaces.repository import ITwichStreamRepository
-from application.queries import GetAllTwichStreams, GetTwichStreamByUserLogin
+from application.queries import (
+    GetAllTwichStreams,
+    GetTwichStream,
+    GetTwichStreamByUserLogin,
+)
 from domain.models import TwichStream
+
+
+class GetTwichStreamHandler(IQueryHandler[GetTwichStream, TwichStreamDTO]):
+    def __init__(
+        self,
+        repository: ITwichStreamRepository,
+    ) -> None:
+        self.repository: ITwichStreamRepository = repository
+
+    async def handle(self, query: GetTwichStream) -> TwichStreamDTO:
+        stream: TwichStream = await self.repository.get_by_id(query.id)
+
+        return TwichStreamDTO(**asdict(stream, dict_factory=TwichStream.dict))
 
 
 class GetTwichStreamByUserLoginHandler(IQueryHandler[GetTwichStreamByUserLogin, TwichStreamDTO]):
