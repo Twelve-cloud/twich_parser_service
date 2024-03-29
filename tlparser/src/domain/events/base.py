@@ -4,7 +4,10 @@ base.py: File, containing base domain event.
 
 
 from abc import ABC
-from dataclasses import dataclass, field
+from dataclasses import (
+    dataclass,
+    field,
+)
 from datetime import datetime
 from uuid import UUID, uuid4
 

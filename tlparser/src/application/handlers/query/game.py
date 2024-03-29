@@ -4,7 +4,10 @@ game.py: File, containing twich game query handlers.
 
 
 from dataclasses import asdict
-from application.dto import TwichGameDTO, TwichGamesDTO
+from application.dto import (
+    TwichGameDTO,
+    TwichGamesDTO,
+)
 from application.interfaces.handler import IQueryHandler
 from application.interfaces.repository import ITwichGameRepository
 from application.queries import (

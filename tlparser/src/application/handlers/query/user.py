@@ -4,7 +4,10 @@ user.py: File, containing twich user query handlers.
 
 
 from dataclasses import asdict
-from application.dto import TwichUserDTO, TwichUsersDTO
+from application.dto import (
+    TwichUserDTO,
+    TwichUsersDTO,
+)
 from application.interfaces.handler import IQueryHandler
 from application.interfaces.repository import ITwichUserRepository
 from application.queries import (
