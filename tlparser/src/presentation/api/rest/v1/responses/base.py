@@ -4,7 +4,10 @@ base.py: File, containing base response schema.
 
 
 from typing import ClassVar
-from pydantic import BaseModel, ConfigDict
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+)
 
 
 class ResponseSchema(BaseModel):

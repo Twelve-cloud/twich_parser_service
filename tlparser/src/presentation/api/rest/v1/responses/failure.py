@@ -3,7 +3,10 @@ failure.py: File, containing failure response schema.
 """
 
 
-from typing import Optional, Sequence
+from typing import (
+    Optional,
+    Sequence,
+)
 from pydantic import Field
 from presentation.api.rest.v1.responses.base import ResponseSchema
 from presentation.api.rest.v1.schemas import JSONAPIErrorSchema
