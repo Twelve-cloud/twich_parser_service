@@ -9,7 +9,10 @@ from dataclasses import (
     field,
 )
 from datetime import datetime
-from uuid import UUID, uuid4
+from uuid import (
+    UUID,
+    uuid4,
+)
 
 
 @dataclass(frozen=True)
