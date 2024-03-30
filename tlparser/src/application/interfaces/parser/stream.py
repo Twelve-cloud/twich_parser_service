@@ -4,6 +4,7 @@ stream.py: File, containing parser interface for a twich stream.
 
 
 from abc import abstractmethod
+
 from application.interfaces.parser.base import IParser
 from domain.models import TwichStream
 

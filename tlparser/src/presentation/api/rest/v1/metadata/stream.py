@@ -4,6 +4,7 @@ stream.py: File, containing twich stream metadata.
 
 
 from typing import ClassVar
+
 from shared.utils import ReadOnlyClassProperty
 
 

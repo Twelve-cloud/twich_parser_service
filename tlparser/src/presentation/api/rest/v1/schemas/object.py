@@ -4,7 +4,9 @@ object.py: File, containing object schema.
 
 
 from typing import Optional
+
 from pydantic import Field
+
 from presentation.api.rest.v1.schemas.base import Schema
 
 

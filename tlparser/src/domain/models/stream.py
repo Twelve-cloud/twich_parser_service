@@ -4,8 +4,10 @@ stream.py: File, containing twich stream domain model.
 
 
 from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import datetime
+
 from domain.events import (
     TwichStreamCreated,
     TwichStreamDeleted,

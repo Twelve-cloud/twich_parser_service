@@ -6,6 +6,7 @@ user.py: File, containing twich user dto.
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Sequence
+
 from application.dto.base import DTO
 
 

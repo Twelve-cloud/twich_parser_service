@@ -4,6 +4,7 @@ __init__.py: File, containing other command modules to simplify import.
 
 
 from typing import TypeVar
+
 from application.commands.base import Command
 from application.commands.game import (
     DeleteTwichGame,

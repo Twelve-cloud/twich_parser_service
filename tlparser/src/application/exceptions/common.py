@@ -4,6 +4,7 @@ common.py: File, containing common application exceptions.
 
 
 from dataclasses import dataclass
+
 from application.exceptions.base import ApplicationException
 
 

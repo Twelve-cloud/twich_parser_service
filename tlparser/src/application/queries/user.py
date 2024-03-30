@@ -4,6 +4,7 @@ user.py: File, containing twich user queries.
 
 
 from dataclasses import dataclass
+
 from application.queries.base import Query
 
 

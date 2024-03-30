@@ -4,6 +4,7 @@ __init__.py: File, containing other dto modules to simplify import.
 
 
 from typing import TypeVar
+
 from application.dto.base import DTO
 from application.dto.common import ResultDTO
 from application.dto.game import (

@@ -4,6 +4,7 @@ base.py: File, containing aggregate root.
 
 
 from __future__ import annotations
+
 from abc import ABC
 from dataclasses import (
     dataclass,
@@ -13,6 +14,7 @@ from typing import (
     Any,
     Generic,
 )
+
 from domain.events import DE
 
 

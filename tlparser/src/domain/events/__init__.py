@@ -4,6 +4,7 @@ __init__.py: File, containing other domain event modules to simplify import.
 
 
 from typing import TypeVar
+
 from domain.events.base import DomainEvent
 from domain.events.game import (
     TwichGameCreated,

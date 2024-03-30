@@ -4,6 +4,7 @@ game.py: File, containing twich game commands.
 
 
 from dataclasses import dataclass
+
 from application.commands.base import Command
 
 

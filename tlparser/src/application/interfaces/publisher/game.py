@@ -4,6 +4,7 @@ game.py: File, containing publisher interface for a twich game.
 
 
 from abc import abstractmethod
+
 from application.interfaces.publisher import IPublisher
 from domain.events import (
     TwichGameCreated,

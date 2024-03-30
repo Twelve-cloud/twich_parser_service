@@ -4,8 +4,10 @@ user.py: File, containing twich user domain model.
 
 
 from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import datetime
+
 from domain.events import (
     TwichUserCreated,
     TwichUserDeleted,

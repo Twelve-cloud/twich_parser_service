@@ -4,6 +4,7 @@ game.py: File, containing twich game query handlers.
 
 
 from dataclasses import asdict
+
 from application.dto import (
     TwichGameDTO,
     TwichGamesDTO,

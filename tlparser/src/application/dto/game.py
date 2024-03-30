@@ -6,6 +6,7 @@ game.py: File, containing twich game dto.
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Sequence
+
 from application.dto.base import DTO
 
 

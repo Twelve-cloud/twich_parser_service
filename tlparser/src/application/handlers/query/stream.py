@@ -4,6 +4,7 @@ stream.py: File, containing twich stream query handlers.
 
 
 from dataclasses import asdict
+
 from application.dto import (
     TwichStreamDTO,
     TwichStreamsDTO,

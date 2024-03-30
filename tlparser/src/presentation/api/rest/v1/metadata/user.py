@@ -4,6 +4,7 @@ user.py: File, containing twich user metadata.
 
 
 from typing import ClassVar
+
 from shared.utils import ReadOnlyClassProperty
 
 

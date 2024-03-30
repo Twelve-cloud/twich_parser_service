@@ -4,6 +4,7 @@ base.py: File, containing base request schema.
 
 
 from typing import ClassVar
+
 from pydantic import (
     BaseModel,
     ConfigDict,

@@ -4,6 +4,7 @@ game.py: File, containing twich game metadata.
 
 
 from typing import ClassVar
+
 from shared.utils import ReadOnlyClassProperty
 
 

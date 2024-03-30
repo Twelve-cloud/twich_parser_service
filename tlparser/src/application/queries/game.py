@@ -4,6 +4,7 @@ game.py: File, containing twich game queries.
 
 
 from dataclasses import dataclass
+
 from application.queries.base import Query
 
 

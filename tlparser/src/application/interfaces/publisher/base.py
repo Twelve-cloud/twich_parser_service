@@ -9,6 +9,7 @@ from typing import (
     Generic,
     TypeVar,
 )
+
 from domain.events import DomainEvent
 
 

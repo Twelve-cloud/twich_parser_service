@@ -6,6 +6,7 @@ query_handler.py: File, containing query handler interface.
 from abc import ABC as Interface
 from abc import abstractmethod
 from typing import Generic
+
 from application.dto import RD
 from application.queries import Q
 
