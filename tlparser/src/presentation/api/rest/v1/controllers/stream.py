@@ -1,129 +1,293 @@
-# """
-# stream.py: File, containing endpoinds for a twich stream.
-# """
+"""
+stream.py: File, containing twich stream endpoints.
+"""
 
 
-# from typing import Annotated
-# from dependency_injector.wiring import Provide, inject
-# from fastapi import APIRouter, Depends, Path, Response, status
-# from fastapi.responses import JSONResponse
-# from application.dtos.fastapi_schemas.twich.stream_schema import TwichStreamSchema
-# from application.services.decorators import ServiceDecorator
-# from container import Container
-# from presentation.api.rest.v1.v1.metadata.twich.stream_metadata import TwichStreamMetadata
+from dataclasses import asdict
+from typing import Annotated
+
+from fastapi import (
+    APIRouter,
+    Path,
+    Request,
+    status,
+)
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+
+from application.commands import (
+    DeleteTwichStream,
+    DeleteTwichStreamByUserLogin,
+    ParseTwichStream,
+)
+from application.dto import (
+    ResultDTO,
+    TwichStreamDTO,
+    TwichStreamsDTO,
+)
+from application.interfaces.bus import (
+    ICommandBus,
+    IQueryBus,
+)
+from application.queries import (
+    GetAllTwichStreams,
+    GetTwichStream,
+    GetTwichStreamByUserLogin,
+)
+from presentation.api.rest.v1.metadata import TwichStreamMetadata
+from presentation.api.rest.v1.requests import JSONAPIPostSchema
+from presentation.api.rest.v1.responses import JSONAPISuccessResponseSchema
+from presentation.api.rest.v1.schemas import JSONAPIObjectSchema
 
 
-# # from fastapi_cache.decorator import cache
+class TwichStreamCommandController:
+    def __init__(self, command_bus: ICommandBus) -> None:
+        self.command_bus: ICommandBus = command_bus
+
+        self.router: APIRouter = APIRouter(
+            prefix='/twich',
+            tags=['twich'],
+        )
+
+        self.router.add_api_route(
+            path='/stream',
+            methods=['POST'],
+            endpoint=self.parse_stream,
+            **TwichStreamMetadata.parse_stream,
+        )
+
+        self.router.add_api_route(
+            path='/stream/{id:int}',
+            methods=['DELETE'],
+            endpoint=self.delete_stream,
+            **TwichStreamMetadata.delete_stream,
+        )
+
+        self.router.add_api_route(
+            path='/stream/{user_login:str}',
+            methods=['DELETE'],
+            endpoint=self.delete_stream_by_user_login,
+            **TwichStreamMetadata.delete_stream_by_user_login,
+        )
+
+    async def parse_stream(
+        self,
+        request: Request,
+        body: JSONAPIPostSchema,
+    ) -> JSONResponse:
+        user_login: str = body.attributes['user_login']
+
+        command: ParseTwichStream = ParseTwichStream(user_login=user_login)
+        result: ResultDTO = await self.command_bus.dispatch(command)
+
+        stream_id: int = result.data['id']
+        resource_url: str = f'{request.url_for("get_stream", id=stream_id)}'
+
+        links: dict = {
+            'self': resource_url,
+        }
+
+        response_object: JSONAPIObjectSchema = JSONAPIObjectSchema(
+            id=result.data['id'],
+            type='stream',
+            attributes={},
+            links=links,
+        )
+
+        response_meta: dict = {
+            'status': result.status,
+            'description': result.description,
+        }
+
+        response: JSONAPISuccessResponseSchema = JSONAPISuccessResponseSchema(
+            data=[response_object],
+            meta=response_meta,
+        )
+
+        headers: dict = {
+            'Location': resource_url,
+        }
+
+        return JSONResponse(
+            content=jsonable_encoder(response),
+            headers=headers,
+            status_code=status.HTTP_201_CREATED,
+        )
+
+    async def delete_stream(
+        self,
+        id: Annotated[int, Path(gt=0)],
+    ) -> JSONResponse:
+        command: DeleteTwichStream = DeleteTwichStream(id=id)
+        result: ResultDTO = await self.command_bus.dispatch(command)
+
+        response_meta: dict = {
+            'status': result.status,
+            'description': result.description,
+        }
+
+        response: JSONAPISuccessResponseSchema = JSONAPISuccessResponseSchema(
+            data=[],
+            meta=response_meta,
+        )
+
+        return JSONResponse(
+            content=jsonable_encoder(response),
+            status_code=status.HTTP_200_OK,
+        )
+
+    async def delete_stream_by_user_login(
+        self,
+        user_login: Annotated[str, Path(min_length=1, max_length=128)],
+    ) -> JSONResponse:
+        command: DeleteTwichStreamByUserLogin = DeleteTwichStreamByUserLogin(user_login=user_login)
+        result: ResultDTO = await self.command_bus.dispatch(command)
+
+        response_meta: dict = {
+            'status': result.status,
+            'description': result.description,
+        }
+
+        response: JSONAPISuccessResponseSchema = JSONAPISuccessResponseSchema(
+            data=[],
+            meta=response_meta,
+        )
+
+        return JSONResponse(
+            content=jsonable_encoder(response),
+            status_code=status.HTTP_200_OK,
+        )
 
 
-# router: APIRouter = APIRouter(
-#     prefix='/twich',
-#     tags=['twich'],
-# )
+class TwichStreamQueryController:
+    def __init__(self, query_bus: IQueryBus) -> None:
+        self.query_bus: IQueryBus = query_bus
 
+        self.router: APIRouter = APIRouter(
+            prefix='/twich',
+            tags=['twich'],
+        )
 
-# @router.get(
-#     path='/private/stream/{user_login}',
-#     status_code=status.HTTP_200_OK,
-#     **TwichStreamMetadata.private_parse_stream,
-# )
-# # @cache(60)
-# @inject
-# async def private_parse_stream(
-#     user_login: Annotated[str, Path(min_length=1, max_length=128)],
-#     service_decorator: ServiceDecorator = Depends(
-#         Provide[Container.twich_stream_w_service_decorator]
-#     ),
-# ) -> TwichStreamSchema:
-#     """
-#     private_parse_stream: Parse twich stream and return result as TwichStreamSchema.
+        self.router.add_api_route(
+            path='/stream/{id:int}',
+            methods=['GET'],
+            endpoint=self.get_stream,
+            **TwichStreamMetadata.get_stream,
+        )
 
-#     Args:
-#         user_login (str): Login of the user.
-#         service_decorator (ServiceDecorator): Twich stream service_decorator.
+        self.router.add_api_route(
+            path='/stream/{user_login:str}',
+            methods=['GET'],
+            endpoint=self.get_stream_by_user_login,
+            **TwichStreamMetadata.get_stream_by_user_login,
+        )
 
-#     Returns:
-#         TwichStreamSchema: Response as TwichStreamSchema instance.
-#     """
+        self.router.add_api_route(
+            path='/streams',
+            methods=['GET'],
+            endpoint=self.get_all_streams,
+            **TwichStreamMetadata.get_all_streams,
+        )
 
-#     return await service_decorator.private_parse_stream(user_login)
+    async def get_stream(
+        self,
+        request: Request,
+        id: Annotated[int, Path(gt=0)],
+    ) -> JSONResponse:
+        query: GetTwichStream = GetTwichStream(id=id)
+        stream: TwichStreamDTO = await self.query_bus.dispatch(query)
 
+        stream_attribtutes: dict = asdict(stream)
+        stream_id: int = stream_attribtutes.pop('id')
 
-# @router.delete(
-#     path='/stream/{user_login}',
-#     status_code=status.HTTP_204_NO_CONTENT,
-#     **TwichStreamMetadata.delete_stream_by_user_login,
-# )
-# @inject
-# async def delete_stream_by_user_login(
-#     user_login: Annotated[str, Path(min_length=1, max_length=128)],
-#     service_decorator: ServiceDecorator = Depends(
-#         Provide[Container.twich_stream_w_service_decorator]
-#     ),
-# ) -> Response:
-#     """
-#     delete_stream_by_user_login: Delete twich stream.
+        resource_url: str = f'{request.url_for("get_stream", id=stream_id)}'
 
-#     Args:
-#         user_login (str): Login of the user.
-#         service_decorator (ServiceDecorator): Twich stream service_decorator.
+        links: dict = {
+            'self': resource_url,
+        }
 
-#     Returns:
-#         Response: HTTP status code 204.
-#     """
+        response_object: JSONAPIObjectSchema = JSONAPIObjectSchema(
+            id=stream_id,
+            type='stream',
+            attributes=stream_attribtutes,
+            links=links,
+        )
 
-#     await service_decorator.delete_stream_by_user_login(user_login)
+        response: JSONAPISuccessResponseSchema = JSONAPISuccessResponseSchema(
+            data=[response_object],
+        )
 
-#     return Response(status_code=status.HTTP_204_NO_CONTENT)
+        return JSONResponse(
+            content=jsonable_encoder(response),
+            status_code=status.HTTP_200_OK,
+        )
 
+    async def get_stream_by_user_login(
+        self,
+        request: Request,
+        user_login: Annotated[str, Path(min_length=1, max_length=128)],
+    ) -> JSONResponse:
+        query: GetTwichStreamByUserLogin = GetTwichStreamByUserLogin(user_login=user_login)
+        stream: TwichStreamDTO = await self.query_bus.dispatch(query)
 
-# @router.get(
-#     path='/streams',
-#     status_code=status.HTTP_200_OK,
-#     **TwichStreamMetadata.get_all_streams,
-# )
-# # @cache(expire=60)
-# @inject
-# async def get_all_streams(
-#     service_decorator: ServiceDecorator = Depends(
-#         Provide[Container.twich_stream_r_service_decorator]
-#     ),
-# ) -> list[TwichStreamSchema]:
-#     """
-#     get_all_streams: Return all streams.
+        stream_attribtutes: dict = asdict(stream)
+        stream_id: int = stream_attribtutes.pop('id')
 
-#     Args:
-#         service_decorator (ServiceDecorator): Twich stream service_decorator.
+        resource_url: str = f'{request.url_for("get_stream", id=stream_id)}'
 
-#     Returns:
-#         list[TwichStreamSchema]: List of twich streams.
-#     """
+        links: dict = {
+            'self': resource_url,
+        }
 
-#     return await service_decorator.get_all_streams()
+        response_object: JSONAPIObjectSchema = JSONAPIObjectSchema(
+            id=stream_id,
+            type='stream',
+            attributes=stream_attribtutes,
+            links=links,
+        )
 
+        response: JSONAPISuccessResponseSchema = JSONAPISuccessResponseSchema(
+            data=[response_object],
+        )
 
-# @router.get(
-#     path='/stream/{user_login}',
-#     status_code=status.HTTP_200_OK,
-#     **TwichStreamMetadata.get_stream_by_user_login,
-# )
-# # @cache(expire=60)
-# @inject
-# async def get_stream_by_user_login(
-#     user_login: Annotated[str, Path(min_length=1, max_length=128)],
-#     service_decorator: ServiceDecorator = Depends(
-#         Provide[Container.twich_stream_r_service_decorator]
-#     ),
-# ) -> TwichStreamSchema:
-#     """
-#     get_stream_by_user_login: Return twich stream by user login.
+        return JSONResponse(
+            content=jsonable_encoder(response),
+            status_code=status.HTTP_200_OK,
+        )
 
-#     Args:
-#         user_login (str): Login of the user.
-#         service_decorator (ServiceDecorator): Twich stream service_decorator.
+    async def get_all_streams(
+        self,
+        request: Request,
+    ) -> JSONResponse:
+        query: GetAllTwichStreams = GetAllTwichStreams()
+        streams: TwichStreamsDTO = await self.query_bus.dispatch(query)
 
-#     Returns:
-#         TwichStreamSchema: TwichStreamSchema instance.
-#     """
+        response_objects: list[JSONAPIObjectSchema] = []
 
-#     return await service_decorator.get_stream_by_user_login(user_login)
+        for stream in streams.data:
+            stream_attribtutes: dict = asdict(stream)
+            stream_id: int = stream_attribtutes.pop('id')
+
+            resource_url: str = f'{request.url_for("get_stream", id=stream_id)}'
+
+            links: dict = {
+                'self': resource_url,
+            }
+
+            response_object: JSONAPIObjectSchema = JSONAPIObjectSchema(
+                id=stream_id,
+                type='stream',
+                attributes=stream_attribtutes,
+                links=links,
+            )
+
+            response_objects.append(response_object)
+
+        response: JSONAPISuccessResponseSchema = JSONAPISuccessResponseSchema(
+            data=response_objects,
+        )
+
+        return JSONResponse(
+            content=jsonable_encoder(response),
+            status_code=status.HTTP_200_OK,
+        )
