@@ -2,6 +2,7 @@
 post.py: File, containing post request schema.
 """
 
+
 from pydantic import Field
 
 from presentation.api.rest.v1.requests.base import RequestSchema
