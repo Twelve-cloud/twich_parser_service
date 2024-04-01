@@ -1,58 +1,55 @@
+# repos:
+#   - repo: local
+#     hooks:
+#       - id: parser_isort
+#         name: parser isort
+#         entry: bash -c "cd tlparser && poetry run isort --check-only ."
+#         language: system
+#         types: [python]
+#         pass_filenames: false
+
+#       - id: parser_black
+#         name: parser black
+#         entry: bash -c "cd tlparser && poetry run black --check ."
+#         language: system
+#         types: [python]
+#         pass_filenames: false
+
+#       - id: parser_flake8
+#         name: parser flake8
+#         entry: bash -c "cd tlparser && poetry run flake8 ."
+#         language: system
+#         types: [python]
+#         pass_filenames: false
+
+#       - id: parser_mypy
+#         name: parser mypy
+#         entry: bash -c "cd tlparser && poetry run mypy ."
+#         language: system
+#         types: [python]
+#         pass_filenames: false
+
 repos:
-  - repo: local
+  # - repo: https://github.com/pycqa/isort
+  #   rev: 5.12.0
+  #   hooks:
+  #     - id: isort
+  #       name: isort (python)
+
+  # - repo: https://github.com/psf/black-pre-commit-mirror
+  #   rev: 23.9.1
+  #   hooks:
+  #     - id: black
+  #       name: black (python)
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 5.0.4
     hooks:
-      - id: parser_isort
-        name: parser isort
-        entry: bash -c "cd tlparser && poetry run isort --check-only ."
-        language: system
-        types: [python]
-        pass_filenames: false
+    -   id: flake8
+        name: flake8 (python)
 
-      - id: parser_black
-        name: parser black
-        entry: bash -c "cd tlparser && poetry run black --check ."
-        language: system
-        types: [python]
-        pass_filenames: false
-
-      - id: parser_flake8
-        name: parser flake8
-        entry: bash -c "cd tlparser && poetry run flake8 ."
-        language: system
-        types: [python]
-        pass_filenames: false
-
-      - id: parser_mypy
-        name: parser mypy
-        entry: bash -c "cd tlparser && poetry run mypy ."
-        language: system
-        types: [python]
-        pass_filenames: false
-
-      # - id: parser_ut
-      #   name: parser unit tests
-      #   entry: bash -c "cd tlparser && poetry run pytest tests/unit/"
-      #   language: system
-      #   types: [python]
-      #   pass_filenames: false
-
-      # - id: parser_it
-      #   name: parser_it
-      #   entry: make parser_it
-      #   language: system
-      #   types: [python]
-      #   pass_filenames: false
-
-      # - id: parser_component
-      #   name: parser_component
-      #   entry: make parser_component
-      #   language: system
-      #   types: [python]
-      #   pass_filenames: false
-
-      # - id: e2e_tests
-      #   name: e2e tests
-      #   entry: make e2e
-      #   language: system
-      #   types: [python]
-      #   pass_filenames: false
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: 1.6.0
+  #   hooks:
+  #     - id: mypy
+  #       name: mypy (python)
