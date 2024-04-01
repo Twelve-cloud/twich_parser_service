@@ -4,12 +4,18 @@ repos:
     hooks:
       - id: isort
         name: isort (python)
+        args: [
+          --settings-file=./pyproject.toml,
+        ]
 
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 23.9.1
     hooks:
       - id: black
         name: black (python)
+        args: [
+          --config=./pyproject.toml
+        ]
 
   - repo: https://github.com/pycqa/flake8
     rev: 5.0.4
@@ -28,6 +34,10 @@ repos:
     hooks:
       - id: mypy
         name: mypy (python)
+        args: [
+          --config-file=./pyproject.toml,
+        ]
+        pass_filenames: false
         additional_dependencies: [
           pydantic==2.6.4,
           types-redis==4.6.0.11,
