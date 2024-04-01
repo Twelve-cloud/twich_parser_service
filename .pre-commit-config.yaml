@@ -18,6 +18,9 @@ repos:
       - id: check-toml
         name: check-toml
 
+      - id: check-yaml
+        name: check-yaml
+
   # formatters
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
