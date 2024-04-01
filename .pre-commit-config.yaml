@@ -1,45 +1,68 @@
 repos:
+  # general
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        name: trailing-whitespace
+
+      - id: end-of-file-fixer
+        name: end-of-file-fixer
+
+      - id: check-added-large-files
+        name: check-added-large-files
+
+      - id: check-docstring-first
+        name: check-docstring-first
+
+      - id: check-toml
+        name: check-toml
+
+  # formatters
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
       - id: isort
-        name: isort (python)
+        name: isort
         args: [
           --settings-file=./pyproject.toml,
+          --check-only,
         ]
 
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 23.9.1
     hooks:
       - id: black
-        name: black (python)
+        name: black
         args: [
-          --config=./pyproject.toml
+          --config=./pyproject.toml,
+          --check,
         ]
 
+  # linters
   - repo: https://github.com/pycqa/flake8
     rev: 5.0.4
     hooks:
       - id: flake8
-        name: flake8 (python)
+        name: flake8
         args: [
           --toml-config=./pyproject.toml,
         ]
         additional_dependencies: [
-          Flake8-pyproject==1.2.3,
+          Flake8-pyproject==1.2.3,  # allows specify --toml-config flag.
         ]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.6.0
     hooks:
       - id: mypy
-        name: mypy (python)
+        name: mypy
+        pass_filenames: false       # does not pass filenames because mypy should check all files.
         args: [
           --config-file=./pyproject.toml,
         ]
-        entry: mypy .
-        pass_filenames: false
         additional_dependencies: [
-          pydantic==2.6.4,
-          types-redis==4.6.0.11,
+          pydantic==2.6.4,          # add pydantic.mypy plagin.
+          types-redis==4.6.0.11,    # add stubs for redis.
         ]
+        entry: mypy .               # force mypy check all files (not only staged).
