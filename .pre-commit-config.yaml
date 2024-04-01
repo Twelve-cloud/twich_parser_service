@@ -37,6 +37,7 @@ repos:
         args: [
           --config-file=./pyproject.toml,
         ]
+        entry: mypy .
         pass_filenames: false
         additional_dependencies: [
           pydantic==2.6.4,
