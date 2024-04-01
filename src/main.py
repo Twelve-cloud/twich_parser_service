@@ -17,7 +17,6 @@ from shared.utils import Singleton
 
 # from presentation.api.rest.v1.routes import routers as rest_v1_routers
 
-
 from application.commands import (
     DeleteTwichGame,
     DeleteTwichGameByName,
