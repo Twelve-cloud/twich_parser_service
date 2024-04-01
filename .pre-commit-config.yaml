@@ -13,9 +13,9 @@ repos:
     hooks:
       - id: black
         name: black (python)
-        args: [
-          --config=./pyproject.toml
-        ]
+        # args: [
+        #   --config=./pyproject.toml
+        # ]
 
   - repo: https://github.com/pycqa/flake8
     rev: 5.0.4
