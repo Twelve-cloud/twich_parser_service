@@ -154,10 +154,4 @@ cython_debug/
 .vscode
 
 # Custom
-.env
-data
-env/production/*
-env/development/*
-!env/production/*example*
-!env/development/*example*
-tlparser/poetry.lock
+poetry.lock
