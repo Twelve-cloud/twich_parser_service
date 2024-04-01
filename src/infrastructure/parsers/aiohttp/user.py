@@ -5,15 +5,17 @@ user.py: File, containing parser for a twich user.
 
 from datetime import datetime
 from typing import Optional
+
 from aiohttp import ClientSession
+
 from application.exceptions import (
     ObjectNotFoundException,
     TwichGetObjectBadRequestException,
     TwichRequestUnauthorizedException,
 )
-from shared.config import settings
 from domain.models import TwichUser
 from infrastructure.parsers.aiohttp.dependencies import TwichAPIToken
+from shared.config import settings
 
 
 class TwichUserParser:

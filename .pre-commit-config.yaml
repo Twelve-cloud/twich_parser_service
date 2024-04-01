@@ -37,6 +37,7 @@ repos:
         args: [
           --config-file=./pyproject.toml,
         ]
+        exclude: "tests"
         additional_dependencies: [
           pydantic==2.6.4,
           types-redis==4.6.0.11,

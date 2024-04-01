@@ -4,7 +4,9 @@ common.py: File, containing common dependencies.
 
 
 from typing import AsyncGenerator
+
 from aiohttp import ClientSession
+
 from application.exceptions import TwichTokenNotObtainedException
 from shared.config import settings
 

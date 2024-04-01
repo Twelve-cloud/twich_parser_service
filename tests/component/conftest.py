@@ -4,8 +4,10 @@ conftest.py: File, containing some settings for component tests.
 
 
 import sys
+
 import pytest
 from httpx import AsyncClient
+
 from main import app
 
 

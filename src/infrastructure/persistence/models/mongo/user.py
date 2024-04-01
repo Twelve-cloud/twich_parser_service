@@ -4,7 +4,13 @@ user_model: File, containing twich user model for mongo.
 
 
 from datetime import datetime
-from mongoengine import DateTimeField, Document, IntField, StringField
+
+from mongoengine import (
+    DateTimeField,
+    Document,
+    IntField,
+    StringField,
+)
 
 
 class TwichUserDAO(Document):

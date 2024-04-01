@@ -4,6 +4,7 @@ test_stream_mapper.py: File, containing tests for stream mapper.
 
 
 from datetime import datetime
+
 from application.dtos.fastapi_schemas.twich.stream_schema import TwichStreamSchema
 from application.mappers.twich.stream_mapper import TwichStreamMapper
 from domain.entities.twich.stream_entity import TwichStreamEntity

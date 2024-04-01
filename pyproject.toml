@@ -92,14 +92,8 @@ disallow_untyped_defs = true
 check_untyped_defs = true
 warn_redundant_casts = true
 strict_optional = true
-exclude = '''(?x)(
-    data/$
-    | migrations/$
-    | tests/$
-)'''
-plugins = [
-    "pydantic.mypy"
-]
+exclude = ['tests']
+plugins = ['pydantic.mypy']
 
 [tool.pydantic-mypy]
 init_forbid_extra = true

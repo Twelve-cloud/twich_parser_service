@@ -4,6 +4,7 @@ producer.py, File, containing kafka producer.
 
 
 from pickle import dumps
+
 from kafka import KafkaProducer
 
 

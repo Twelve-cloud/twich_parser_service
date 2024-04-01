@@ -4,6 +4,7 @@ test_product_mapper.py: File, containing tests for product mapper.
 
 
 from datetime import datetime
+
 from application.dtos.fastapi_schemas.lamoda.product_schema import LamodaProductSchema
 from application.mappers.lamoda.product_mapper import LamodaProductMapper
 from domain.entities.lamoda.product_entity import LamodaProduct

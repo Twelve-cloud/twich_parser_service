@@ -4,6 +4,7 @@ test_game_mapper.py: File, containing tests for game mapper.
 
 
 from datetime import datetime
+
 from application.dtos.fastapi_schemas.twich.game_schema import TwichGameSchema
 from application.mappers.twich.game_mapper import TwichGameMapper
 from domain.entities.twich.game_entity import TwichGameEntity

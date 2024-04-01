@@ -4,14 +4,15 @@ stream_publisher.py: File, containing kafka publisher class for twich stream.
 
 
 from threading import Thread
-from shared.config import settings
+
+from application.interfaces.publisher import ITwichStreamPublisher
 from domain.events.stream import (
     TwichStreamCreated,
     TwichStreamDeleted,
     TwichStreamDomainEvent,
 )
-from application.interfaces.publisher import ITwichStreamPublisher
 from infrastructure.publishers.connections.kafka.producer import KafkaProducerConnection
+from shared.config import settings
 
 
 class TwichStreamKafkaPublisher(ITwichStreamPublisher):

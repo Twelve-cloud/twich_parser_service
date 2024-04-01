@@ -5,15 +5,17 @@ game.py: File, containing parser for a twich game.
 
 from datetime import datetime
 from typing import Optional
+
 from aiohttp import ClientSession
+
 from application.exceptions import (
     ObjectNotFoundException,
     TwichGetObjectBadRequestException,
     TwichRequestUnauthorizedException,
 )
-from shared.config import settings
 from domain.models import TwichGame
 from infrastructure.parsers.aiohttp.dependencies import TwichAPIToken
+from shared.config import settings
 
 
 class TwichGameParser:

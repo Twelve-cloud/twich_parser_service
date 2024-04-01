@@ -5,8 +5,6 @@ stream.py: File, containing twich stream elastic repository implementation.
 
 from typing import Collection
 
-from automapper import mapper
-
 from application.exceptions import ObjectNotFoundException
 from application.interfaces.repository import ITwichStreamRepository
 from domain.models import TwichStream
@@ -57,21 +55,23 @@ class TwichStreamElasticRepository(ITwichStreamRepository):
             for tag in stream.tags:
                 tags.append(tag['tag'])
 
-            streams.append(TwichStream(
-                id=stream.id,
-                user_id=stream.user_id,
-                user_name=stream.user_name,
-                user_login=stream.user_login,
-                game_id=stream.game_id,
-                game_name=stream.game_name,
-                language=stream.language,
-                title=stream.title,
-                tags=tags,
-                started_at=stream.started_at,
-                viewer_count=stream.viewer_count,
-                type=stream.type,
-                parsed_at=stream.parsed_at,
-            ))
+            streams.append(
+                TwichStream(
+                    id=stream.id,
+                    user_id=stream.user_id,
+                    user_name=stream.user_name,
+                    user_login=stream.user_login,
+                    game_id=stream.game_id,
+                    game_name=stream.game_name,
+                    language=stream.language,
+                    title=stream.title,
+                    tags=tags,
+                    started_at=stream.started_at,
+                    viewer_count=stream.viewer_count,
+                    type=stream.type,
+                    parsed_at=stream.parsed_at,
+                )
+            )
 
         return streams
 

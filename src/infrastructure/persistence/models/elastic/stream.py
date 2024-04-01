@@ -3,7 +3,15 @@ stream_model: File, containing twich stream model for elastic search.
 """
 
 
-from elasticsearch_dsl import Date, Document, InnerDoc, Integer, Long, Nested, Text
+from elasticsearch_dsl import (
+    Date,
+    Document,
+    InnerDoc,
+    Integer,
+    Long,
+    Nested,
+    Text,
+)
 
 
 class Tag(InnerDoc):

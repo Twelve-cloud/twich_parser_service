@@ -3,10 +3,10 @@ bus.py: File, containing in memory command bus implementation.
 """
 
 
-from application.interfaces.bus import ICommandBus
 from application.commands import Command
-from application.interfaces.handler import ICommandHandler
 from application.dto import ResultDTO
+from application.interfaces.bus import ICommandBus
+from application.interfaces.handler import ICommandHandler
 
 
 class InMemoryCommandBus(ICommandBus):

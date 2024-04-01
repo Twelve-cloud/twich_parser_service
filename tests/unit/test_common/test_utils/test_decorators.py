@@ -4,7 +4,10 @@ test_decorators.py: File, containing tests for decorators.
 
 
 import pytest
-from common.utils.decorators import ReadOnlyClassProperty, singleton
+from common.utils.decorators import (
+    ReadOnlyClassProperty,
+    singleton,
+)
 
 
 class TestSingletonDecorator:

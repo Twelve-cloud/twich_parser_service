@@ -5,15 +5,17 @@ stream.py: File, containing parser for a twich stream.
 
 from datetime import datetime
 from typing import Optional
+
 from aiohttp import ClientSession
+
 from application.exceptions import (
     ObjectNotFoundException,
     TwichGetObjectBadRequestException,
     TwichRequestUnauthorizedException,
 )
-from shared.config import settings
 from domain.models import TwichStream
 from infrastructure.parsers.aiohttp.dependencies import TwichAPIToken
+from shared.config import settings
 
 
 class TwichStreamParser:

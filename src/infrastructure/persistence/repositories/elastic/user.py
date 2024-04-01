@@ -4,7 +4,9 @@ user.py: File, containing twich user elastic repository implementation.
 
 
 from typing import Collection
+
 from automapper import mapper
+
 from application.exceptions import ObjectNotFoundException
 from application.interfaces.repository import ITwichUserRepository
 from domain.models import TwichUser

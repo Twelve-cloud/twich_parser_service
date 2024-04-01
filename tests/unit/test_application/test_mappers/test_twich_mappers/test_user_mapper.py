@@ -4,6 +4,7 @@ test_user_mapper.py: File, containing tests for user mapper.
 
 
 from datetime import datetime
+
 from application.dtos.fastapi_schemas.twich.user_schema import TwichUserSchema
 from application.mappers.twich.user_mapper import TwichUserMapper
 from domain.entities.twich.user_entity import TwichUserEntity

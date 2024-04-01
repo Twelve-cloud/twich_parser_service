@@ -3,10 +3,10 @@ bus.py: File, containing in memory query bus implementation.
 """
 
 
+from application.dto import RD
 from application.interfaces.bus import IQueryBus
 from application.interfaces.handler import IQueryHandler
 from application.queries import Query
-from application.dto import RD
 
 
 class InMemoryQueryBus(IQueryBus):

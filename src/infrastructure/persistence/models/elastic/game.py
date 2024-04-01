@@ -3,7 +3,12 @@ game_model: File, containing twich game model for elastic search.
 """
 
 
-from elasticsearch_dsl import Date, Document, Long, Text
+from elasticsearch_dsl import (
+    Date,
+    Document,
+    Long,
+    Text,
+)
 
 
 class TwichGameDAO(Document):

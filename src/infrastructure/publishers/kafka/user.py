@@ -4,14 +4,15 @@ user_publisher.py: File, containing kafka publisher class for twich user.
 
 
 from threading import Thread
-from shared.config import settings
+
+from application.interfaces.publisher import ITwichUserPublisher
 from domain.events.user import (
     TwichUserCreated,
     TwichUserDeleted,
     TwichUserDomainEvent,
 )
-from application.interfaces.publisher import ITwichUserPublisher
 from infrastructure.publishers.connections.kafka.producer import KafkaProducerConnection
+from shared.config import settings
 
 
 class TwichUserKafkaPublisher(ITwichUserPublisher):

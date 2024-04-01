@@ -7,7 +7,6 @@ import asyncio
 from pickle import loads
 from threading import Thread
 
-from automapper import mapper
 from kafka import KafkaConsumer
 
 from application.interfaces.repository import ITwichStreamRepository

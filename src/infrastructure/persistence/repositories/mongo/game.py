@@ -4,7 +4,9 @@ game.py: File, containing twich game mongo repository implementation.
 
 
 from typing import Optional
+
 from automapper import mapper
+
 from application.exceptions import ObjectNotFoundException
 from application.interfaces.repository import ITwichGameRepository
 from domain.models import TwichGame
