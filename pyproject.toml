@@ -1,3 +1,4 @@
+# dependencies
 [tool.poetry]
 name = "src"
 version = "0.1.0"
@@ -42,6 +43,8 @@ fastapi-cache2 = "0.2.1"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+
+# formatters
 [tool.isort]
 line_length = 100
 lines_before_imports = 2
@@ -74,6 +77,8 @@ exclude = '''
 )/
 '''
 
+
+# linters
 [tool.flake8]
 max-line-length = 100
 max-complexity = 18
@@ -101,6 +106,8 @@ init_forbid_extra = true
 init_typed = true
 warn_required_dynamic_aliases = true
 
+
+# tests
 [tool.pytest.ini_options]
 minversion = "7.2.0"
 testpaths = "tests"
