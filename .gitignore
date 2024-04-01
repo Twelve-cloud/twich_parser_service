@@ -150,21 +150,14 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# vscode
+.vscode
 
 # Custom
 .env
+data
+env/production/*
+env/development/*
+!env/production/*example*
+!env/development/*example*
 tlparser/poetry.lock
-tlparser/data
-tlparser/env/production/*
-tlparser/env/development/*
-tlparser/env/tests/*
-!tlparser/env/production/*example*
-!tlparser/env/development/*example*
-!tlparser/env/tests/*example*
-caller/poetry.lock
-caller/env/production/*
-caller/env/development/*
-caller/env/tests/*
-!caller/env/production/*example*
-!caller/env/development/*example*
-!caller/env/tests/*example*

@@ -11,9 +11,9 @@ services:
     environment:
       REDIS_ARGS: "--requirepass ${REDIS_PASSWORD} --user ${REDIS_USERNAME} on >${REDIS_PASSWORD} ~* &* +@all --user default off nopass -@all"
     env_file:
-      - ./tlparser/env/development/.env.dev.redis
+      - ./env/development/.env.dev.redis
     volumes:
-      - ./tlparser/data/dev/redis:/data
+      - ./data/dev/redis:/data
     healthcheck:
       test: ["CMD-SHELL", "redis-cli --user ${REDIS_USERNAME} --pass ${REDIS_PASSWORD} ping"]
       interval: 10s

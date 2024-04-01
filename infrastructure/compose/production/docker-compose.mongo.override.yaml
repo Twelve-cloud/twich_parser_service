@@ -8,9 +8,9 @@ services:
     ports:
       - 27017:${MONGO_PORT}
     env_file:
-      - ./tlparser/env/production/.env.prd.mongo
+      - ./env/production/.env.prd.mongo
     volumes:
-      - ./tlparser/data/prd/mongo:/data/db
+      - ./data/prd/mongo:/data/db
     healthcheck:
       test: ["CMD","mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -28,7 +28,7 @@ services:
     ports:
       - 8081:${MONGO_EXPRESS_PORT}
     env_file:
-      - ./tlparser/env/production/.env.prd.mongo
+      - ./env/production/.env.prd.mongo
     healthcheck:
       test: ["CMD-SHELL", "nc -z mongo-express ${MONGO_EXPRESS_PORT} || exit -1"]
       interval: 5s

@@ -10,9 +10,9 @@ services:
     ports:
       - 1337:${WEB_NGINX_PORT}
     env_file:
-    - ./tlparser/env/production/.env.prd.web
+    - ./env/production/.env.prd.web
     volumes:
-      - ./tlparser/certs/production:/etc/nginx/certs:ro/
+      - ./certs/production:/etc/nginx/certs:ro/
     healthcheck:
       test: ["CMD-SHELL", "curl -k https://localhost:${WEB_NGINX_PORT}/api/v1/docs"]
       interval: 10s
@@ -39,9 +39,9 @@ services:
     expose:
       - ${WEB_UVICORN_PORT}
     env_file:
-    - ./tlparser/env/production/.env.prd.web
+    - ./env/production/.env.prd.web
     volumes:
-      - ./tlparser/certs/production:/code/certs:ro/
+      - ./certs/production:/code/certs:ro/
     healthcheck:
       test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/api/v1/docs"]
       interval: 10s
@@ -77,7 +77,7 @@ services:
     environment:
       - SPHINX_PORT=${SPHINX_PORT}
     volumes:
-      - ./tlparser/certs/production:/etc/nginx/certs:ro/
+      - ./certs/production:/etc/nginx/certs:ro/
     healthcheck:
       test: ["CMD-SHELL", "curl -k https://localhost:${SPHINX_PORT}"]
       interval: 10s

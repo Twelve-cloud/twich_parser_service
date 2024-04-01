@@ -4,18 +4,17 @@ services:
   uvicorn:
     build:
       context: ./tlparser
-      dockerfile: ./docker/Dockerfile.uvicorn.dev
+      dockerfile: ./Dockerfile
     entrypoint:
-      - ./entrypoint-uvicorn.dev.sh
+      - ./entrypoint.sh
     hostname: uvicorn
     container_name: uvicorn
     ports:
       - 8000:${WEB_UVICORN_PORT}
     env_file:
-    - ./tlparser/env/development/.env.dev.web
+    - ./env/development/.env.dev.web
     volumes:
-      - ./tlparser/certs/development:/code/certs:ro/
-      - ./tlparser/src:/code/src/
+      - ./certs/development:/code/certs:ro/
     healthcheck:
       test: ["CMD-SHELL", "curl -k https://localhost:${WEB_UVICORN_PORT}/api/v1/docs"]
       interval: 10s
@@ -38,26 +37,4 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    restart: always
-
-  sphinx:
-    build:
-      context: ./tlparser
-      dockerfile: ./docs/nginx/Dockerfile
-    hostname: sphinx
-    container_name: sphinx
-    ports:
-      - 7777:${SPHINX_PORT}
-    environment:
-      - SPHINX_PORT=${SPHINX_PORT}
-    volumes:
-      - ./tlparser/certs/development:/etc/nginx/certs:ro/
-    healthcheck:
-      test: ["CMD-SHELL", "curl -k https://localhost:${SPHINX_PORT}"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    networks:
-      back-dev:
-        ipv4_address: 192.168.10.11
     restart: always

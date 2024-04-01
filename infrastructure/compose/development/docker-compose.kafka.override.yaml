@@ -8,7 +8,7 @@ services:
     ports:
       - 22181:${ZOOKEEPER_CLIENT_PORT}
     env_file:
-      - ./tlparser/env/development/.env.dev.kafka
+      - ./env/development/.env.dev.kafka
     healthcheck:
       test: ["CMD-SHELL", "nc -z zookeeper ${ZOOKEEPER_CLIENT_PORT} || exit -1"]
       interval: 5s
@@ -26,7 +26,7 @@ services:
     ports:
       - 29092:${KAFKA_PORT}
     env_file:
-      - ./tlparser/env/development/.env.dev.kafka
+      - ./env/development/.env.dev.kafka
     healthcheck:
       test: ["CMD-SHELL", "nc -z kafka ${KAFKA_PORT} || exit -1"]
       start_period: 15s
@@ -50,7 +50,7 @@ services:
     ports:
       - 8080:${KAFKA_UI_PORT}
     env_file:
-      - ./tlparser/env/development/.env.dev.kafka
+      - ./env/development/.env.dev.kafka
     healthcheck:
       test: ["CMD-SHELL", "nc -z kafka-ui ${KAFKA_UI_PORT} || exit -1"]
       start_period: 15s
