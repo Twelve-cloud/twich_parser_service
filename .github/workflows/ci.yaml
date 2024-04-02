@@ -7,6 +7,8 @@ on:
       - master
       - dev
 
+env:
+  POETRY_VIRTUALENVS_CREATE: 0
 
 jobs:
   cache:
@@ -28,8 +30,11 @@ jobs:
           architecture: 'x64'
           cache: 'poetry'
 
+      - name: install dependencies
+        run: poetry install --no-ansi --no-interaction --no-root
+
   lint:
-    name: run linting and formatting checks.
+    name: run linting and formatting checks
 
     needs: cache
 
@@ -47,7 +52,6 @@ jobs:
         with:
           python-version: '3.10'
           architecture: 'x64'
-          cache: 'poetry'
 
       - name: run linters
         run: poetry run pre-commit run --all-files
