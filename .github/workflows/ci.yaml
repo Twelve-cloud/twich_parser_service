@@ -10,7 +10,7 @@ on:
 
 jobs:
   cache:
-    name: cache dependencies for all jobs.
+    name: cache dependencies for all jobs
 
     runs-on: [ubuntu-latest]
 
@@ -21,6 +21,9 @@ jobs:
       - name: install poetry
         run: pipx install poetry
 
+      - name: install dependencies
+        run: poetry install --no-ansi --no-interaction --no-root
+
       - name: install python3.10
         uses: actions/setup-python@v4
         with:
@@ -28,10 +31,9 @@ jobs:
           architecture: 'x64'
           cache: 'poetry'
 
-      - name: install dependencies
-        run: poetry install --no-ansi --no-interaction --no-root
-
   lint:
+    name: run linting and formatting checks
+
     needs: cache
 
     runs-on: [ubuntu-latest]
