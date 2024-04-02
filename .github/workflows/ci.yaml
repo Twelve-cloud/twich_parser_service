@@ -28,9 +28,6 @@ jobs:
           architecture: 'x64'
           cache: 'poetry'
 
-      - name: install dependencies
-        run: poetry install --no-ansi --no-interaction --no-root
-
   lint:
     name: run linting and formatting checks
 
