@@ -31,7 +31,7 @@ jobs:
         run: poetry install --no-ansi --no-interaction --no-root
 
   lint:
-    name: run linting and formatting checks.
+    name: run linting and formatting checks
 
     needs: cache
 
