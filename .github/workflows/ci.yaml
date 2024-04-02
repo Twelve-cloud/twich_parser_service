@@ -50,6 +50,7 @@ jobs:
         with:
           python-version: '3.10'
           architecture: 'x64'
+          cache: 'poetry'
 
       - name: run linters
         run: poetry run pre-commit run --all-files
