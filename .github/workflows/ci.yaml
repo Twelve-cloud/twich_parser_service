@@ -11,7 +11,7 @@ jobs:
   cache:
     name: Cache dependencies for all jobs
 
-    runs-on: [ubuntu-latest]
+    runs-on: [ubuntu-latest, windows-latest, macos-latest]
 
     strategy:
       matrix:
@@ -39,7 +39,7 @@ jobs:
 
     needs: cache
 
-    runs-on: [ubuntu-latest]
+    runs-on: [ubuntu-latest, windows-latest, macos-latest]
 
     strategy:
       matrix:
