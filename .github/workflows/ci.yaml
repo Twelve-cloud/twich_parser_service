@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [master, dev]
+
+jobs:
+  cache:
+    name: Cache dependencies for all jobs
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.10', '3.11']
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: clone github repository
+        uses: actions/checkout@v4
+
+      - name: install poetry
+        run: pipx install poetry
+
+      - name: install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: 'x64'
+          cache: 'poetry'
+
+      - name: install dependencies
+        run: poetry install --no-ansi --no-interaction --no-root
+
+  lint:
+    name: Run linting and formatting checks
+
+    needs: cache
+
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: clone github repository
+        uses: actions/checkout@v4
+
+      - name: install poetry
+        run: pipx install poetry
+
+      - name: install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: 'x64'
+          cache: 'poetry'
+
+      - name: run linters
+        run: poetry run pre-commit run --all-files
+
+    push:
+      name: Push docker image to docker hub
+
+      needs: lint
+
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: clone github repository
+          uses: actions/checkout@v4
+
+        - name: log in to docker hub
+          uses: docker/login-action@v3
+          with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
+
+        - name: build and push docker image
+          uses: docker/build-push-action@v5
+          with:
+            context: .
+            push: true
+            tags: '${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REGISTRY }}:latest'
