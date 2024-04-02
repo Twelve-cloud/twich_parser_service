@@ -62,7 +62,7 @@ jobs:
       - name: run linters
         run: poetry run pre-commit run --all-files
 
-    push:
+    push_to_registry:
       name: Push docker image to docker hub
 
       needs: lint
