@@ -29,7 +29,7 @@ jobs:
           cache: 'poetry'
 
   lint:
-    name: run linting and formatting checks
+    name: run linting and formatting checks.
 
     needs: cache
 
