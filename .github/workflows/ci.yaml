@@ -64,12 +64,12 @@ jobs:
       - name: run linters
         run: poetry run pre-commit run --all-files
 
-    push_to_registry:
-      name: Push docker image to docker hub
+    # push_to_registry:
+    #   name: Push docker image to docker hub
 
-      needs: [lint]
+    #   needs: [lint]
 
-      runs-on: [ubuntu-latest]
+    #   runs-on: [ubuntu-latest]
 
-      steps:
-        - name:
+    #   steps:
+    #     - name:
