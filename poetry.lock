@@ -655,6 +655,7 @@ files = [
 ]
 
 [package.dependencies]
+aiohttp = {version = ">=3.8.3", markers = "python_version >= \"3.11\""}
 fastapi = "*"
 pendulum = "*"
 uvicorn = "*"
@@ -2066,5 +2067,5 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "2.0"
-python-versions = "3.10.*"
-content-hash = "72bafb36655eb3a3ce6cb7beea5f65db51cb0c9e25a0afe791c6509dd0fbd3f9"
+python-versions = "^3.10"
+content-hash = "2489ee8bbc25eee94b5e9dc10039739daed734ab2b67b9e7f7c501df1ff67370"
