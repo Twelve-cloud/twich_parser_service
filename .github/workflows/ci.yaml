@@ -7,9 +7,6 @@ on:
       - master
       - dev
 
-env:
-  POETRY_VIRTUALENVS_CREATE: 0
-
 jobs:
   cache:
     name: cache dependencies for all jobs
