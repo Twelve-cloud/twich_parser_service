@@ -8,6 +8,10 @@ on:
       - dev
 
 jobs:
+  call-cache-workflow:
+    name: Call cache workflow
+    uses: ./github/workflows/cache
+
   lint:
     name: Run linting and formatting checks
 
@@ -21,9 +25,6 @@ jobs:
     runs-on: ['${{ matrix.os }}']
 
     steps:
-      - name: Cache all dependencies
-        uses: ./github/workflows/cache
-
       - name: clone github repository
         uses: actions/checkout@v4
 
