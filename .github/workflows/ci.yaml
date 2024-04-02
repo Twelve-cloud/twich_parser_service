@@ -11,12 +11,11 @@ jobs:
   cache:
     name: Cache dependencies for all jobs
 
+    runs-on: [ubuntu-latest]
+
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.10', '3.11']
-
-    runs-on: ['${{ matrix.os }}']
 
     steps:
       - name: clone github repository
@@ -40,12 +39,11 @@ jobs:
 
     needs: cache
 
+    runs-on: [ubuntu-latest]
+
     strategy:
       matrix:
         python-version: ['3.10', '3.11']
-        os: [ubuntu-latest, windows-latest, macos-latest]
-
-    runs-on: ['${{ matrix.os }}']
 
     steps:
       - name: clone github repository
@@ -64,7 +62,7 @@ jobs:
       - name: run linters
         run: poetry run pre-commit run --all-files
 
-    # push_to_registry:
+    # deploy:
     #   name: Push docker image to docker hub
 
     #   needs: [lint]
