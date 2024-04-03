@@ -61,6 +61,12 @@ jobs:
       - name: clone github repository
         uses: actions/checkout@v4
 
+      - name: restore poetry from cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ matrix.poetry-path }}
+          key:  ${{ matrix.os }}-${{ matrix.poetry-path }}-${{ matrix.python-version }}-key
+
       - name: install python
         uses: actions/setup-python@v5
         with:
