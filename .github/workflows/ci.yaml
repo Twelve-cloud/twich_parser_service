@@ -27,7 +27,7 @@ jobs:
       #     key:  ${{ matrix.os }}-${{ matrix.poetry-path }}-${{ matrix.python-version }}-key
 
       - name: install poetry
-        run: pipx install poetry
+        run: pip install poetry
 
       - name: poetry path
         run: whereis poetry
