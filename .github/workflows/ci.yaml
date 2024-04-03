@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ matrix.poetry-path }}
-          key:  ${{ matrix.os }}-${{ matrix.poetry-path }}-cache
+          key:  ${{ matrix.os }}-${{ matrix.poetry-path }}-${{ matrix.python-version }}-key
 
       - name: install poetry
         uses: snok/install-poetry@v1
