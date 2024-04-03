@@ -1,7 +1,6 @@
 name: Cache
 
 on:
-  workflow_call:
   push:
     paths:
       - 'poetry.lock'
