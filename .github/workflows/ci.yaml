@@ -13,9 +13,14 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         #, windows-latest]
-        poetry-path: [~/.local/]
+        poetry-path: [~/.local/, ~/Library/]
         #, ~\AppData\]
         python-version: ['3.10', '3.11']
+        exclude:
+          - os: ubuntu-latest
+            poetry-path: ~/Library/
+          - os: macos-latest
+            poetry-path: ~/.local/
 
     runs-on: ${{ matrix.os }}
 
@@ -53,9 +58,15 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         #, windows-latest]
-        poetry-path: [~/.local/]
+        poetry-path: [~/.local/, ~/Library/]
         #, ~\AppData\]
         python-version: ['3.10', '3.11']
+        exclude:
+          - os: ubuntu-latest
+            poetry-path: ~/Library/
+          - os: macos-latest
+            poetry-path: ~/.local/
+
 
     runs-on: ${{ matrix.os }}
 
