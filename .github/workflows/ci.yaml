@@ -20,7 +20,7 @@ jobs:
           - os: ubuntu-latest
             poetry-path: ~\AppData\
           - os: windows-latest
-            poetry-path: ~/.local
+            poetry-path: ~/.local/
 
     runs-on: ${{ matrix.os }}
 
@@ -65,7 +65,7 @@ jobs:
           - os: ubuntu-latest
             poetry-path: ~\AppData\
           - os: windows-latest
-            poetry-path: ~/.local
+            poetry-path: ~/.local/
 
     runs-on: ${{ matrix.os }}
 
