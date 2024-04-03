@@ -21,11 +21,14 @@ jobs:
       - name: clone github repository
         uses: actions/checkout@v4
 
-      - name: cache poetry installation
-        uses: actions/cache@v4
-        with:
-          path: ~/.local
-          key:  ${{ matrix.os }}-${{ matrix.python-version }}-key
+      # - name: cache poetry installation
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.local
+      #     key:  ${{ matrix.os }}-${{ matrix.python-version }}-key
+
+      - name: install poetry
+        run: pipx install poetry
 
       - name: install poetry
         uses: snok/install-poetry@v1
@@ -68,11 +71,11 @@ jobs:
       - name: clone github repository
         uses: actions/checkout@v4
 
-      - name: restore poetry from cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.local
-          key:  ${{ matrix.os }}-${{ matrix.python-version }}-key
+      # - name: restore poetry from cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.local
+      #     key:  ${{ matrix.os }}-${{ matrix.python-version }}-key
 
       - name: install python
         uses: actions/setup-python@v5
