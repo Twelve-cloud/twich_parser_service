@@ -34,7 +34,7 @@ jobs:
         run: poetry run pre-commit run --all-files
 
   push:
-    name: Push docker image to docker hub
+    name: Push docker image to docker hub.
 
     needs: lint
 
