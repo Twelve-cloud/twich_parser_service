@@ -11,8 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        #, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ['3.10', '3.11']
 
     runs-on: ${{ matrix.os }}
@@ -24,25 +23,14 @@ jobs:
       # - name: cache poetry installation
       #   uses: actions/cache@v4
       #   with:
-      #     path: ~/.local
-      #     key:  ${{ matrix.os }}-${{ matrix.python-version }}-key
+      #     path: ${{ matrix.poetry-path }}
+      #     key:  ${{ matrix.os }}-${{ matrix.poetry-path }}-${{ matrix.python-version }}-key
 
       - name: install poetry
         run: pipx install poetry
 
-      # - name: install poetry
-      #   uses: snok/install-poetry@v1
-      #   with:
-      #     version: 1.7.1
-
-      - name: find poetry
-        run: poetry --version
-
-      - name: find poetry 2
+      - name: poetry path
         run: whereis poetry
-
-      - name: find poetry 3
-        run: poetry config --list
 
       - name: install python and cache poetry dependencies
         uses: actions/setup-python@v5
@@ -61,8 +49,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        #, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ['3.10', '3.11']
 
     runs-on: ${{ matrix.os }}
@@ -71,11 +58,11 @@ jobs:
       - name: clone github repository
         uses: actions/checkout@v4
 
-      # - name: restore poetry from cache
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ~/.local
-      #     key:  ${{ matrix.os }}-${{ matrix.python-version }}-key
+      - name: restore poetry from cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ matrix.poetry-path }}
+          key:  ${{ matrix.os }}-${{ matrix.poetry-path }}-${{ matrix.python-version }}-key
 
       - name: install python
         uses: actions/setup-python@v5
