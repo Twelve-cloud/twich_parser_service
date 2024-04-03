@@ -33,7 +33,13 @@ jobs:
           version: 1.7.1
 
       - name: find poetry
+        run: poetry --version
+
+      - name: find poetry 2
         run: whereis poetry
+
+      - name: find poetry 3
+        run: cd ~ && pwd
 
       - name: install python and cache poetry dependencies
         uses: actions/setup-python@v5
