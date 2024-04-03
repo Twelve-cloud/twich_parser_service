@@ -13,8 +13,8 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         #, macos-latest, windows-latest]
-        poetry-path: [~/.local/pypoetry]
-        # , ~/Library/Application Support/pypoetry, ~\AppData\pypoetry]
+        poetry-path: [~/.local/]
+        # , ~/Library/Application Support/, ~\AppData\]
         python-version: ['3.10', '3.11']
 
     runs-on: ${{ matrix.os }}
@@ -53,8 +53,8 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         #, macos-latest, windows-latest]
-        poetry-path: [~/.local/pypoetry]
-        # , ~/Library/Application Support/pypoetry, ~\AppData\pypoetry]
+        poetry-path: [~/.local/]
+        # , ~/Library/Application Support/, ~\AppData\]
         python-version: ['3.10', '3.11']
 
     runs-on: ${{ matrix.os }}
