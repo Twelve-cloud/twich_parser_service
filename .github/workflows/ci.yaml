@@ -16,6 +16,11 @@ jobs:
         poetry-path: [~/.local/, ~/Library/Application Support/]
         #, ~\AppData\]
         python-version: ['3.10', '3.11']
+        exclude:
+          - os: ubuntu-latest
+            poetry-path: ~/Library/Application Support/
+          - os: macos-latest
+            poetry-path: ~/.local/
 
     runs-on: ${{ matrix.os }}
 
@@ -56,6 +61,11 @@ jobs:
         poetry-path: [~/.local/, ~/Library/Application Support/]
         #, ~\AppData\]
         python-version: ['3.10', '3.11']
+        exclude:
+          - os: ubuntu-latest
+            poetry-path: ~/Library/Application Support/
+          - os: macos-latest
+            poetry-path: ~/.local/
 
     runs-on: ${{ matrix.os }}
 
