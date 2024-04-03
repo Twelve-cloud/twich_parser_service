@@ -9,28 +9,28 @@ jobs:
   cache:
     name: Cache poetry installation and dependencies for all jobs
 
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
         python-version: ['3.10', '3.11']
-
-    runs-on: ${{ matrix.os }}
 
     steps:
       - name: clone github repository
         uses: actions/checkout@v4
 
-      # - name: cache poetry installation
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ${{ matrix.poetry-path }}
-      #     key:  ${{ matrix.os }}-${{ matrix.poetry-path }}-${{ matrix.python-version }}-key
+      - name: cache poetry installation
+        id: cached-poetry
+        uses: actions/cache@v4
+        with:
+          path: ~/.local
+          key:  python${{ matrix.python-version }}-poetry1.7-key
 
       - name: install poetry
-        run: pip install poetry
-
-      - name: poetry path
-        run: whereis poetry
+        if: steps.cached-poetry.outputs.cache-hit != 'true'
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.7.1
 
       - name: install python and cache poetry dependencies
         uses: actions/setup-python@v5
@@ -47,12 +47,11 @@ jobs:
 
     needs: cache
 
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
         python-version: ['3.10', '3.11']
-
-    runs-on: ${{ matrix.os }}
 
     steps:
       - name: clone github repository
@@ -61,8 +60,8 @@ jobs:
       - name: restore poetry from cache
         uses: actions/cache@v4
         with:
-          path: ${{ matrix.poetry-path }}
-          key:  ${{ matrix.os }}-${{ matrix.poetry-path }}-${{ matrix.python-version }}-key
+          path: ~/.local
+          key:  python${{ matrix.python-version }}-poetry1.7-key
 
       - name: install python
         uses: actions/setup-python@v5
