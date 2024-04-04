@@ -19,7 +19,7 @@ jobs:
       - name: clone github repository
         uses: actions/checkout@v4
 
-      - name: cache poetry installation.
+      - name: cache poetry installation
         id: cached-poetry
         uses: actions/cache@v4
         with:
@@ -31,7 +31,7 @@ jobs:
         uses: snok/install-poetry@v1
         with:
           version: 1.7.1
-          virtualenvs-create: true
+          virtualenvs-create: false
           virtualenvs-in-project: false
           virtualenvs-path: ~/virtualenv
           installer-parallel: true
