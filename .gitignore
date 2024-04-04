@@ -152,6 +152,3 @@ cython_debug/
 
 # vscode
 .vscode
-
-# dependencies
-poetry.lock

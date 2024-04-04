@@ -31,6 +31,12 @@ repos:
       - id: poetry-check
         name: poetry-check
 
+      - id: poetry-lock
+        name: poetry-lock
+
+      - id: poetry-install
+        name: poetry-install
+
   # formatters
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
