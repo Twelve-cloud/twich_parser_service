@@ -20,28 +20,26 @@ jobs:
         python-version: ['3.10', '3.11']
 
     steps:
+      - name: clone github repository
+        uses: actions/checkout@v4
+
       - name: cache poetry installation
-        id: cached-poetry                 # need to check from another step if there is a cache hit.
+        id: cached-poetry  # need to check from another step if there is a cache hit.
         uses: actions/cache@v4
         with:
           path: ~/.local
           key:  python${{ matrix.python-version }}:poetry${{ env.POETRY_VERSION }}-key
 
       - name: install poetry
-        if: steps.cached-poetry.outputs.cache-hit != 'true'   # install only if there is not a cache hit (possible when poetry version has changed)
+        if: steps.cached-poetry.outputs.cache-hit != 'true'  # install only if there is not a cache hit (possible when poetry version has changed)
         uses: snok/install-poetry@v1
         with:
-          version: 1.7.1
+          version: ${{ env.POETRY_VERSION }}
 
-      - name: clone github repository
-        uses: actions/checkout@v4
-
-      - name: create poetry.lock file     # poetry.lock will be created in a repository
-        if: steps.cached-poetry-lock.outputs.cache-hit != 'true'
+      - name: create poetry.lock file  # poetry.lock will be created in a repository
         run: poetry lock
 
       - name: cache poetry.lock file
-        id: cached-poetry-lock
         uses: actions/cache@v4
         with:
           path: poetry.lock
@@ -59,7 +57,7 @@ jobs:
         run: poetry install --no-ansi --no-interaction --no-root
 
   lint:
-    name: Run linting and formatting checks
+    name: run linting and formatting checks
 
     needs: cache
 
@@ -77,15 +75,15 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.local
-          key:  python${{ matrix.python-version }}-poetry1.7-key
+          key:  python${{ matrix.python-version }}:poetry${{ env.POETRY_VERSION }}-key
 
-      - name: restore poetry lock
+      - name: restore poetry.lock from cache
         uses: actions/cache@v4
         with:
           path: poetry.lock
-          key:  poetry-lock
+          key:  python${{ matrix.python-version }}:poetry${{ env.POETRY_VERSION }}.lock-${{ hashFiles('poetry.lock') }}-key
 
-      - name: install python and cache poetry dependencies
+      - name: install python and restore poetry dependencies from cache
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -97,7 +95,7 @@ jobs:
         run: poetry run pre-commit run --all-files
 
   push:
-    name: Push docker image to docker hub
+    name: push docker image to docker hub
 
     needs: lint
 
