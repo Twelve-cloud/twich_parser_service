@@ -37,7 +37,10 @@ jobs:
           installer-parallel: true
 
       - name: create poetry.lock
-        run: poetry lock
+        run: poetry lock && pwd
+
+      - name: cd
+        run: cd ~/venv && ls
 
       - name: install python and cache poetry dependencies
         uses: actions/setup-python@v5
