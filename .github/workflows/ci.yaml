@@ -36,16 +36,16 @@ jobs:
       - name: clone github repository
         uses: actions/checkout@v4
 
+      - name: create poetry.lock file     # poetry.lock will be created in a repository
+        if: steps.cached-poetry-lock.outputs.cache-hit != 'true'
+        run: poetry lock
+
       - name: cache poetry.lock file
         id: cached-poetry-lock
         uses: actions/cache@v4
         with:
           path: poetry.lock
           key:  python${{ matrix.python-version }}:poetry${{ env.POETRY_VERSION }}.lock-${{ hashFiles('poetry.lock') }}-key
-
-      - name: create poetry.lock file     # poetry.lock will be created in a repository
-        if: steps.cached-poetry-lock.outputs.cache-hit != 'true'
-        run: poetry lock
 
       - name: install python and cache poetry dependencies
         uses: actions/setup-python@v5
