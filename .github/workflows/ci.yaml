@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: poetry.lock
-          key:  python${{ matrix.python-version }}:poetry${{ env.POETRY_VERSION }}.lock-${{ hashFiles(poetry.lock) }}-key
+          key:  python${{ matrix.python-version }}:poetry${{ env.POETRY_VERSION }}.lock-${{ hashFiles('poetry.lock') }}-key
 
       - name: create poetry.lock file     # poetry.lock will be created in a repository
         if: steps.cached-poetry-lock.outputs.cache-hit != 'true'
