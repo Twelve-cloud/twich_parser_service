@@ -4,3 +4,4 @@
 .venv/
 .coverage/
 .vscode/
+poetry.lock

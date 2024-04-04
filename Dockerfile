@@ -15,7 +15,7 @@ RUN apk update && \
     pip install poetry
 
 # 3 layer
-COPY ./pyproject.toml ./poetry.lock ./
+COPY ./pyproject.toml ./
 
 # 4 layer
 RUN poetry install --no-ansi --no-interaction --no-root

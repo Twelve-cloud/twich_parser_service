@@ -21,6 +21,16 @@ repos:
       - id: check-yaml
         name: check-yaml
 
+      - id: name-tests-test
+        name: name-tests-test
+
+  # poetry
+  - repo: https://github.com/python-poetry/poetry
+    rev: 1.7.1
+    hooks:
+      - id: poetry-check
+        name: poetry-check
+
   # formatters
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
