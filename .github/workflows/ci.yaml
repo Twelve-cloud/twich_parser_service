@@ -40,7 +40,7 @@ jobs:
         run: poetry lock && pwd
 
       - name: cd
-        run: cd ~/venv && ls
+        run: cd ~/venv && ls src-P1p3DoGS-py3.10
 
       - name: install python and cache poetry dependencies
         uses: actions/setup-python@v5
