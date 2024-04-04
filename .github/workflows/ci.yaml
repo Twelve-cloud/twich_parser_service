@@ -19,7 +19,7 @@ jobs:
       - name: clone github repository
         uses: actions/checkout@v4
 
-      - name: cache poetry installation
+      - name: cache poetry installation.
         id: cached-poetry
         uses: actions/cache@v4
         with:
