@@ -36,7 +36,7 @@ jobs:
         with:
           version: ${{ env.POETRY_VERSION }}
 
-      - name: install python and cache poetry dependencies
+      - name: install python and cache dependencies
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -67,7 +67,7 @@ jobs:
           path: ~/.local
           key:  python${{ matrix.python-version }}:poetry${{ env.POETRY_VERSION }}-key
 
-      - name: install python and restore poetry dependencies from cache
+      - name: install python and restore dependencies from cache
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
