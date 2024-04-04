@@ -37,7 +37,7 @@ jobs:
           installer-parallel: true
 
       - name: create poetry.lock
-        run: poetry lock && pwd
+        run: poetry lock && pwd && ls
 
       - name: cd
         run: cd ~/venv && ls src-P1p3DoGS-py3.10
