@@ -37,14 +37,7 @@ jobs:
           installer-parallel: true
 
       - name: create poetry.lock
-        run: poetry lock
-
-      - name: cache poetry.lock
-        id: cached-poetry-lock
-        uses: actions/cache@v4
-        with:
-          path: ~/.local
-          key:  python${{ matrix.python-version }}-poetry1.7-key
+        run: poetry lock && pwd
 
       - name: install python and cache poetry dependencies
         uses: actions/setup-python@v5
@@ -52,7 +45,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: 'x64'
           cache: 'poetry'
-          cache-dependency-path: ~/virtualenv/poetry.lock
+          cache-dependency-path: ~/poetry.lock
 
       - name: install dependencies
         run: poetry install --no-ansi --no-interaction --no-root
