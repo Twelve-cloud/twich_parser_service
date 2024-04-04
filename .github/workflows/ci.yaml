@@ -39,6 +39,12 @@ jobs:
       - name: create poetry.lock
         run: poetry lock
 
+      - name: cache poetry lock
+        uses: actions/cache@v4
+        with:
+          path: poetry.lock
+          key:  poetry-lock
+
       - name: install python and cache poetry dependencies
         uses: actions/setup-python@v5
         with:
@@ -70,6 +76,12 @@ jobs:
         with:
           path: ~/.local
           key:  python${{ matrix.python-version }}-poetry1.7-key
+
+      - name: restore poetry lock
+        uses: actions/cache@v4
+        with:
+          path: poetry.lock
+          key:  poetry-lock
 
       - name: install python and cache poetry dependencies
         uses: actions/setup-python@v5
