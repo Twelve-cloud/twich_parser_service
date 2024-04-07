@@ -20,8 +20,6 @@ ENV                                                                         \
     POETRY_VERSION=1.7.1                                                    \
     # make poetry create the virtual environment in the project's root.
     POETRY_VIRTUALENVS_IN_PROJECT=1                                         \
-    # make poetry do not ask any interactive question.
-    POETRY_NO_INTERACTION=1                                                 \
     # make poetry to be installed to this location.
     POETRY_HOME="/opt/poetry"                                               \
     # this is where requirements will live.
@@ -44,6 +42,7 @@ FROM python-base as builder-base
 RUN apk update                                                              \
     && apk add                                                              \
     bash                                                                    \
+    curl                                                                    \
     gcc                                                                     \
     g++                                                                     \
     musl-dev                                                                \
@@ -67,7 +66,7 @@ WORKDIR $PYSETUP_PATH
 COPY pyproject.toml poetry.lock ./
 
 # install deps ($POETRY_VIRTUALENVS_IN_PROJECT used internally).
-RUN poetry install --without dev --no-ansi --no-interaction --no-root
+RUN poetry install --without dev --no-ansi --no-root
 
 # ---------------------------------------------------------------------------
 # development stage is used during development / testing.
@@ -83,7 +82,7 @@ COPY --from=poetry-base $PYSETUP_PATH $PYSETUP_PATH
 WORKDIR $PYSETUP_PATH
 
 # install dev deps (other deps are already installed).
-RUN poetry install --no-ansi --no-interaction --no-root
+RUN poetry install --no-ansi --no-root
 
 # set working directory (will be mountpoint).
 WORKDIR /code
