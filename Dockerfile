@@ -3,19 +3,16 @@
 FROM python:3.10-alpine3.15 as python-base
 
 ENV                                                                         \
-    # python.
     # force stdout and stderr streams to be unbuffered.
     PYTHONUNBUFFERED=1                                                      \
     # prevents python from creating .pyc files.
     PYTHONDONTWRITEBYTECODE=1                                               \
-    # pip.
     # disable pip cache.
     PIP_NO_CACHE_DIR=0                                                      \
     # disable periodically checking PyPI for a new version of pip.
     PIP_DISABLE_PIP_VERSION_CHECK=1                                         \
     # set the default socket timeout.
     PIP_DEFAULT_TIMEOUT=100                                                 \
-    # poetry.
     # poetry version.
     POETRY_VERSION=1.7.1                                                    \
     # make poetry create the virtual environment in the project's root.
