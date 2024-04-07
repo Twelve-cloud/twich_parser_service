@@ -1,6 +1,0 @@
-.mypy_cache/
-.pytest_cache/
-.coverage/
-.coverage_report/
-.venv/
-.vscode/
