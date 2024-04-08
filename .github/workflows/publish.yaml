@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: [Static]
     types: [completed]
+    branches: [master]
 
 jobs:
   push:
