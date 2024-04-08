@@ -14,10 +14,10 @@ ENV                                                                         \
     # set the default socket timeout.
     PIP_DEFAULT_TIMEOUT=100                                                 \
     # poetry version.
-    POETRY_VERSION=1.7.1                                                    \
+    POETRY_VERSION=1.8.0                                                    \
     # make poetry create the virtual environment in the project's root.
     POETRY_VIRTUALENVS_IN_PROJECT=1                                         \
-    # make poetry to be installed to this location.
+    # make poetry to be installed into this location.
     POETRY_HOME="/opt/poetry"                                               \
     # this is where requirements will live.
     PYSETUP_PATH="/opt/pysetup"                                             \
@@ -63,7 +63,7 @@ WORKDIR $PYSETUP_PATH
 COPY pyproject.toml poetry.lock ./
 
 # install deps ($POETRY_VIRTUALENVS_IN_PROJECT used internally).
-RUN poetry install --without dev --no-ansi --no-root
+RUN poetry install --no-ansi --no-interaction --only main
 
 # ---------------------------------------------------------------------------
 # development stage is used during development / testing.
@@ -79,10 +79,13 @@ COPY --from=poetry-base $PYSETUP_PATH $PYSETUP_PATH
 WORKDIR $PYSETUP_PATH
 
 # install dev deps (other deps are already installed).
-RUN poetry install --no-ansi --no-root
+RUN poetry install --no-ansi --no-interaction
 
-# set working directory (will be mountpoint).
+# set working directory (will be mountpoint - src should be mounted).
 WORKDIR /code
+
+# copy entrypoint of the project to workdir.
+COPY ./entrypoint.sh ./
 
 # set entrypoint of the project.
 ENTRYPOINT ["./entrypoint.sh"]
@@ -94,14 +97,14 @@ EXPOSE 443
 # production stage is used for runtime.
 FROM builder-base as production
 
+# copy venv to production stage.
+COPY --from=poetry-base $PYSETUP_PATH $PYSETUP_PATH
+
 # create sys group named "non-root-user".
 RUN addgroup -S non-root-user
 
 # create sys user named "non-root-user" and add it to group "non-root-user".
 RUN adduser -S non-root-user non-root-user
-
-# copy venv to production stage.
-COPY --from=poetry-base $PYSETUP_PATH $PYSETUP_PATH
 
 # set working directory.
 WORKDIR /code

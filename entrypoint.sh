@@ -1,10 +1,16 @@
 #! /bin/bash
 
+# exit if any command here fails
+set -e
+
 # red color for printf
 RED="\033[0;31m"
 
 # no color for printf
 NC="\033[0m"
+
+# activate virtual environment
+source /opt/pysetup/.venv/bin/activate
 
 # change directory to src
 cd src
@@ -29,3 +35,6 @@ then
 else
     printf "${RED}Evironment is not specified.${NC}\n";
 fi
+
+# to perform signals (like SIGTERM) correctly
+exec "$@"
