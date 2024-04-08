@@ -1,0 +1,77 @@
+name: Static
+
+on:
+  push:
+  pull_request:
+    branches: [master, dev]
+
+env:
+  POETRY_VERSION: 1.8.0
+
+jobs:
+  cache:
+    name: Cache poetry installation and dependencies for all jobs
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11']
+
+    steps:
+      - name: Clone github repository
+        uses: actions/checkout@v4
+
+      - name: Cache poetry installation
+        id: cached-poetry  # need to check from another step if there is a cache hit.
+        uses: actions/cache@v4
+        with:
+          path: ~/.local
+          key:  python${{ matrix.python-version }}:poetry${{ env.POETRY_VERSION }}-key
+
+      - name: Install poetry
+        if: steps.cached-poetry.outputs.cache-hit != 'true'  # install only if there is not a cache hit (possible when poetry version has changed)
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.POETRY_VERSION }}
+
+      - name: Install python and cache dependencies
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: 'x64'
+          cache: 'poetry'
+
+      - name: Install dependencies
+        run: poetry install --no-ansi --no-interaction
+
+  lint:
+    name: Run linting and formatting checks
+
+    needs: cache
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11']
+
+    steps:
+      - name: Clone github repository
+        uses: actions/checkout@v4
+
+      - name: Restore poetry from cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.local
+          key:  python${{ matrix.python-version }}:poetry${{ env.POETRY_VERSION }}-key
+
+      - name: Install python and restore dependencies from cache
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: 'x64'
+          cache: 'poetry'
+
+      - name: Run linters
+        run: poetry run pre-commit run --all-files

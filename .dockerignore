@@ -1,0 +1,10 @@
+.mypy_cache/
+.pytest_cache/
+.coverage/
+.coverage_report/
+.venv/
+.vscode/
+.github
+.gitignore
+.pre-commit-config.yaml
+README.md
