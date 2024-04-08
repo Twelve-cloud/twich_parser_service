@@ -2,9 +2,9 @@ name: Publish
 
 on:
   workflow_run:
-    workflows: ['Static']
-    types: [completed]
+    workflows: ["Static"]
     branches: [master, dev]
+    types: [completed]
 
 jobs:
   push:
