@@ -2,7 +2,7 @@ name: Publish
 
 on:
   workflow_run:
-    workflow: ['Static']
+    workflow: [Static]
     types: [completed]
     brances: [master, dev]
 
