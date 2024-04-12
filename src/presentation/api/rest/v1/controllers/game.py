@@ -1,5 +1,5 @@
 """
-game.py: File, containing twich game endpoints.
+game.py: File, containing twich game controllers.
 """
 
 
@@ -7,7 +7,6 @@ from dataclasses import asdict
 from typing import Annotated
 
 from fastapi import (
-    APIRouter,
     Path,
     Request,
     status,
@@ -34,7 +33,6 @@ from application.queries import (
     GetTwichGame,
     GetTwichGameByName,
 )
-from presentation.api.rest.v1.metadata import TwichGameMetadata
 from presentation.api.rest.v1.requests import JSONAPIPostSchema
 from presentation.api.rest.v1.responses import JSONAPISuccessResponseSchema
 from presentation.api.rest.v1.schemas import JSONAPIObjectSchema
@@ -43,32 +41,6 @@ from presentation.api.rest.v1.schemas import JSONAPIObjectSchema
 class TwichGameCommandController:
     def __init__(self, command_bus: ICommandBus) -> None:
         self.command_bus: ICommandBus = command_bus
-
-        self.router: APIRouter = APIRouter(
-            prefix='/twich',
-            tags=['twich'],
-        )
-
-        self.router.add_api_route(
-            path='/game',
-            methods=['POST'],
-            endpoint=self.parse_game,
-            **TwichGameMetadata.parse_game,
-        )
-
-        self.router.add_api_route(
-            path='/game/{id:int}',
-            methods=['DELETE'],
-            endpoint=self.delete_game,
-            **TwichGameMetadata.delete_game,
-        )
-
-        self.router.add_api_route(
-            path='/game/{name:str}',
-            methods=['DELETE'],
-            endpoint=self.delete_game_by_name,
-            **TwichGameMetadata.delete_game_by_name,
-        )
 
     async def parse_game(
         self,
@@ -162,32 +134,6 @@ class TwichGameCommandController:
 class TwichGameQueryController:
     def __init__(self, query_bus: IQueryBus) -> None:
         self.query_bus: IQueryBus = query_bus
-
-        self.router: APIRouter = APIRouter(
-            prefix='/twich',
-            tags=['twich'],
-        )
-
-        self.router.add_api_route(
-            path='/game/{id:int}',
-            methods=['GET'],
-            endpoint=self.get_game,
-            **TwichGameMetadata.get_game,
-        )
-
-        self.router.add_api_route(
-            path='/game/{name:str}',
-            methods=['GET'],
-            endpoint=self.get_game_by_name,
-            **TwichGameMetadata.get_game_by_name,
-        )
-
-        self.router.add_api_route(
-            path='/games',
-            methods=['GET'],
-            endpoint=self.get_all_games,
-            **TwichGameMetadata.get_all_games,
-        )
 
     async def get_game(
         self,

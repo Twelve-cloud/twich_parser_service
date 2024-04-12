@@ -1,5 +1,5 @@
 """
-user.py: File, containing twich user endpoints.
+user.py: File, containing twich user controllers.
 """
 
 
@@ -7,7 +7,6 @@ from dataclasses import asdict
 from typing import Annotated
 
 from fastapi import (
-    APIRouter,
     Path,
     Request,
     status,
@@ -34,7 +33,6 @@ from application.queries import (
     GetTwichUser,
     GetTwichUserByLogin,
 )
-from presentation.api.rest.v1.metadata import TwichUserMetadata
 from presentation.api.rest.v1.requests import JSONAPIPostSchema
 from presentation.api.rest.v1.responses import JSONAPISuccessResponseSchema
 from presentation.api.rest.v1.schemas import JSONAPIObjectSchema
@@ -43,32 +41,6 @@ from presentation.api.rest.v1.schemas import JSONAPIObjectSchema
 class TwichUserCommandController:
     def __init__(self, command_bus: ICommandBus) -> None:
         self.command_bus: ICommandBus = command_bus
-
-        self.router: APIRouter = APIRouter(
-            prefix='/twich',
-            tags=['twich'],
-        )
-
-        self.router.add_api_route(
-            path='/user',
-            methods=['POST'],
-            endpoint=self.parse_user,
-            **TwichUserMetadata.parse_user,
-        )
-
-        self.router.add_api_route(
-            path='/user/{id:int}',
-            methods=['DELETE'],
-            endpoint=self.delete_user,
-            **TwichUserMetadata.delete_user,
-        )
-
-        self.router.add_api_route(
-            path='/user/{login:str}',
-            methods=['DELETE'],
-            endpoint=self.delete_user_by_login,
-            **TwichUserMetadata.delete_user_by_login,
-        )
 
     async def parse_user(
         self,
@@ -162,32 +134,6 @@ class TwichUserCommandController:
 class TwichUserQueryController:
     def __init__(self, query_bus: IQueryBus) -> None:
         self.query_bus: IQueryBus = query_bus
-
-        self.router: APIRouter = APIRouter(
-            prefix='/twich',
-            tags=['twich'],
-        )
-
-        self.router.add_api_route(
-            path='/user/{id:int}',
-            methods=['GET'],
-            endpoint=self.get_user,
-            **TwichUserMetadata.get_user,
-        )
-
-        self.router.add_api_route(
-            path='/user/{login:str}',
-            methods=['GET'],
-            endpoint=self.get_user_by_login,
-            **TwichUserMetadata.get_user_by_login,
-        )
-
-        self.router.add_api_route(
-            path='/users',
-            methods=['GET'],
-            endpoint=self.get_all_users,
-            **TwichUserMetadata.get_all_users,
-        )
 
     async def get_user(
         self,

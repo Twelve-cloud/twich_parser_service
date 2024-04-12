@@ -23,8 +23,8 @@ from presentation.api.rest.v1.schemas import JSONAPIErrorSchema
 from shared.interfaces import IExceptionHandler
 
 
-class HandleTwichTokenNotObtainedException(IExceptionHandler[TwichTokenNotObtainedException]):
-    def handle(self, exception: TwichTokenNotObtainedException) -> Any:
+class TwichTokenNotObtainedExceptionHandler(IExceptionHandler[TwichTokenNotObtainedException]):
+    async def handle(self, exception: TwichTokenNotObtainedException) -> Any:
         response_error: JSONAPIErrorSchema = JSONAPIErrorSchema(
             id=uuid4().int,
             status='Internal Server Error',
@@ -42,8 +42,10 @@ class HandleTwichTokenNotObtainedException(IExceptionHandler[TwichTokenNotObtain
         )
 
 
-class HandleTwichRequestUnauthorizedException(IExceptionHandler[TwichRequestUnauthorizedException]):
-    def handle(self, exception: TwichRequestUnauthorizedException) -> Any:
+class TwichRequestUnauthorizedExceptionHandler(
+    IExceptionHandler[TwichRequestUnauthorizedException]
+):
+    async def handle(self, exception: TwichRequestUnauthorizedException) -> Any:
         response_error: JSONAPIErrorSchema = JSONAPIErrorSchema(
             id=uuid4().int,
             status='Internal Server Error',
@@ -61,8 +63,10 @@ class HandleTwichRequestUnauthorizedException(IExceptionHandler[TwichRequestUnau
         )
 
 
-class HandleTwichGetObjectBadRequestException(IExceptionHandler[TwichGetObjectBadRequestException]):
-    def handle(self, exception: TwichGetObjectBadRequestException) -> Any:
+class TwichGetObjectBadRequestExceptionHandler(
+    IExceptionHandler[TwichGetObjectBadRequestException]
+):
+    async def handle(self, exception: TwichGetObjectBadRequestException) -> Any:
         response_error: JSONAPIErrorSchema = JSONAPIErrorSchema(
             id=uuid4().int,
             status='Internal Server Error',
@@ -80,8 +84,8 @@ class HandleTwichGetObjectBadRequestException(IExceptionHandler[TwichGetObjectBa
         )
 
 
-class HandleTwichRequestTimeoutException(IExceptionHandler[TwichRequestTimeoutException]):
-    def handle(self, exception: TwichRequestTimeoutException) -> Any:
+class TwichRequestTimeoutExceptionHandler(IExceptionHandler[TwichRequestTimeoutException]):
+    async def handle(self, exception: TwichRequestTimeoutException) -> Any:
         response_error: JSONAPIErrorSchema = JSONAPIErrorSchema(
             id=uuid4().int,
             status='Service Unavailable',
@@ -99,8 +103,8 @@ class HandleTwichRequestTimeoutException(IExceptionHandler[TwichRequestTimeoutEx
         )
 
 
-class HandleObjectNotFoundException(IExceptionHandler[ObjectNotFoundException]):
-    def handle(self, exception: ObjectNotFoundException) -> Any:
+class ObjectNotFoundExceptionHandler(IExceptionHandler[ObjectNotFoundException]):
+    async def handle(self, exception: ObjectNotFoundException) -> Any:
         response_error: JSONAPIErrorSchema = JSONAPIErrorSchema(
             id=uuid4().int,
             status='Not Found',
@@ -118,8 +122,8 @@ class HandleObjectNotFoundException(IExceptionHandler[ObjectNotFoundException]):
         )
 
 
-class HandleParserException(IExceptionHandler[ParserException]):
-    def handle(self, exception: ParserException) -> Any:
+class ParserExceptionHandler(IExceptionHandler[ParserException]):
+    async def handle(self, exception: ParserException) -> Any:
         response_error: JSONAPIErrorSchema = JSONAPIErrorSchema(
             id=uuid4().int,
             status='Internal Server Error',
