@@ -1,5 +1,5 @@
 """
-base.py: File, containing base application exception.
+application.py: File, containing application exception.
 """
 
 

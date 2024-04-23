@@ -3,13 +3,15 @@ logger.py: File, containing logger interface.
 """
 
 
-from abc import ABC as Interface
-from abc import abstractmethod
+from abc import (
+    ABC as Interface,
+    abstractmethod,
+)
 
 
 class ILogger(Interface):
     @abstractmethod
-    def _configure_logger(self, name: str) -> None:
+    def _configure_logger(self) -> None:
         raise NotImplementedError
 
     @abstractmethod

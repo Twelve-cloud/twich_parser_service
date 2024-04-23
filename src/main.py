@@ -9,7 +9,7 @@ from typing import AsyncGenerator
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from composition_root import root
+from container import RootContainer
 from metadata import ProjectMetadata
 from presentation.api.rest.v1.routes import rest_router
 from shared.config import settings
@@ -18,7 +18,9 @@ from shared.utils import Singleton
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator:
-    await root.start_dispatchers()
+    application.container.game_container.game_kafka_dispatcher()
+    application.container.stream_container.stream_kafka_dispatcher()
+    application.container.user_container.user_kafka_dispatcher()
     yield
 
 
@@ -44,6 +46,8 @@ class Application:
         )
 
         self.app.include_router(rest_router, prefix='/api')
+
+        self.container = RootContainer()
 
 
 application: Application = Application()

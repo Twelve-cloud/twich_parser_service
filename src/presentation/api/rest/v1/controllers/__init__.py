@@ -3,6 +3,10 @@ __init__.py: File, containing other controller modules to simplify import.
 """
 
 
+from presentation.api.rest.v1.controllers.decorators import (
+    ControllerDecorator,
+    ControllerExceptionHandlingDecorator,
+)
 from presentation.api.rest.v1.controllers.game import (
     TwichGameCommandController,
     TwichGameQueryController,
@@ -18,6 +22,8 @@ from presentation.api.rest.v1.controllers.user import (
 
 
 __all__: list[str] = [
+    'ControllerDecorator',
+    'ControllerExceptionHandlingDecorator',
     'TwichGameCommandController',
     'TwichGameQueryController',
     'TwichStreamCommandController',
