@@ -47,7 +47,7 @@ class Application:
 
         self.app.include_router(rest_router, prefix='/api')
 
-        self.container = RootContainer()
+        self.container: RootContainer = RootContainer()
 
 
 application: Application = Application()
