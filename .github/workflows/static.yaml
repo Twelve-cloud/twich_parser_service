@@ -40,7 +40,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: 'x64'
-          cache: 'poetry'
+          cache: 'poetry' # maybe not caching poetry.lock and remove poetry lock from git repo?
 
       - name: Install dependencies
         run: poetry install --no-ansi --no-interaction
