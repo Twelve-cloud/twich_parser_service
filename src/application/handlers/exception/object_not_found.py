@@ -13,5 +13,5 @@ class ObjectNotFoundExceptionHandler(IExceptionHandler[ObjectNotFoundException])
         self.logger: ILogger = logger
 
     async def handle(self, exception: ObjectNotFoundException) -> None:
-        self.logger.error(exception.message)
+        self.logger.info(exception.message)
         raise exception
