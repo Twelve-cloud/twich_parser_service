@@ -15,5 +15,5 @@ class TwichGetObjectBadRequestExceptionHandler(
         self.logger: ILogger = logger
 
     async def handle(self, exception: TwichGetObjectBadRequestException) -> None:
-        self.logger.error(exception.message)
+        self.logger.warning(exception.message)
         raise exception

@@ -13,5 +13,5 @@ class TwichRequestTimeoutExceptionHandler(IExceptionHandler[TwichRequestTimeoutE
         self.logger: ILogger = logger
 
     async def handle(self, exception: TwichRequestTimeoutException) -> None:
-        self.logger.error(exception.message)
+        self.logger.warning(exception.message)
         raise exception

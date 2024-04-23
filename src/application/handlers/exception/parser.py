@@ -13,5 +13,5 @@ class ParserExceptionHandler(IExceptionHandler[ParserException]):
         self.logger: ILogger = logger
 
     async def handle(self, exception: ParserException) -> None:
-        self.logger.error(exception.message)
+        self.logger.critical(exception.message)
         raise exception
