@@ -13,12 +13,13 @@ from application.exceptions import (
     TwichGetObjectBadRequestException,
     TwichRequestUnauthorizedException,
 )
+from application.interfaces.parser import ITwichStreamParser
 from domain.models import TwichStream
 from infrastructure.parsers.aiohttp.dependencies import TwichAPIToken
 from shared.config import settings
 
 
-class TwichStreamParser:
+class TwichStreamParser(ITwichStreamParser):
     def __init__(self, token: TwichAPIToken) -> None:
         self.token: TwichAPIToken = token
 

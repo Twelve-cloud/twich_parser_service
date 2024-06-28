@@ -15,11 +15,11 @@ from shared.interfaces import ILogger
 
 
 class StreamLogger(ILogger):
-    def __init__(self, name: str = 'StreamLogger') -> None:
-        self._configure_logger(name)
+    def __init__(self) -> None:
+        self._configure_logger()
 
-    def _configure_logger(self, name: str) -> None:
-        self._logger: Logger = getLogger(name)
+    def _configure_logger(self) -> None:
+        self._logger: Logger = getLogger('StreamLogger')
         self._logger.setLevel(INFO)
 
         stream_handler: StreamHandler = StreamHandler()

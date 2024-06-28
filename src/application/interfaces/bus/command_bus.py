@@ -3,8 +3,10 @@ base.py: File, containing command bus interface.
 """
 
 
-from abc import ABC as Interface
-from abc import abstractmethod
+from abc import (
+    ABC as Interface,
+    abstractmethod,
+)
 
 from application.commands import Command
 from application.dto import ResultDTO

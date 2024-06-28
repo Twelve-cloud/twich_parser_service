@@ -1,5 +1,5 @@
 """
-stream.py: File, containing twich stream endpoints.
+stream.py: File, containing twich stream controllers.
 """
 
 
@@ -7,7 +7,6 @@ from dataclasses import asdict
 from typing import Annotated
 
 from fastapi import (
-    APIRouter,
     Path,
     Request,
     status,
@@ -34,7 +33,6 @@ from application.queries import (
     GetTwichStream,
     GetTwichStreamByUserLogin,
 )
-from presentation.api.rest.v1.metadata import TwichStreamMetadata
 from presentation.api.rest.v1.requests import JSONAPIPostSchema
 from presentation.api.rest.v1.responses import JSONAPISuccessResponseSchema
 from presentation.api.rest.v1.schemas import JSONAPIObjectSchema
@@ -43,32 +41,6 @@ from presentation.api.rest.v1.schemas import JSONAPIObjectSchema
 class TwichStreamCommandController:
     def __init__(self, command_bus: ICommandBus) -> None:
         self.command_bus: ICommandBus = command_bus
-
-        self.router: APIRouter = APIRouter(
-            prefix='/twich',
-            tags=['twich'],
-        )
-
-        self.router.add_api_route(
-            path='/stream',
-            methods=['POST'],
-            endpoint=self.parse_stream,
-            **TwichStreamMetadata.parse_stream,
-        )
-
-        self.router.add_api_route(
-            path='/stream/{id:int}',
-            methods=['DELETE'],
-            endpoint=self.delete_stream,
-            **TwichStreamMetadata.delete_stream,
-        )
-
-        self.router.add_api_route(
-            path='/stream/{user_login:str}',
-            methods=['DELETE'],
-            endpoint=self.delete_stream_by_user_login,
-            **TwichStreamMetadata.delete_stream_by_user_login,
-        )
 
     async def parse_stream(
         self,
@@ -162,32 +134,6 @@ class TwichStreamCommandController:
 class TwichStreamQueryController:
     def __init__(self, query_bus: IQueryBus) -> None:
         self.query_bus: IQueryBus = query_bus
-
-        self.router: APIRouter = APIRouter(
-            prefix='/twich',
-            tags=['twich'],
-        )
-
-        self.router.add_api_route(
-            path='/stream/{id:int}',
-            methods=['GET'],
-            endpoint=self.get_stream,
-            **TwichStreamMetadata.get_stream,
-        )
-
-        self.router.add_api_route(
-            path='/stream/{user_login:str}',
-            methods=['GET'],
-            endpoint=self.get_stream_by_user_login,
-            **TwichStreamMetadata.get_stream_by_user_login,
-        )
-
-        self.router.add_api_route(
-            path='/streams',
-            methods=['GET'],
-            endpoint=self.get_all_streams,
-            **TwichStreamMetadata.get_all_streams,
-        )
 
     async def get_stream(
         self,

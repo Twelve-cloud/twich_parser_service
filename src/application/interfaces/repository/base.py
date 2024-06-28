@@ -3,8 +3,10 @@ base.py: File, containing base repository interface.
 """
 
 
-from abc import ABC as Interface
-from abc import abstractmethod
+from abc import (
+    ABC as Interface,
+    abstractmethod,
+)
 from typing import Generic
 
 from domain.models import DM

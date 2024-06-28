@@ -3,6 +3,10 @@ __init__.py: File, containing other command handler modules to simplify import.
 """
 
 
+from application.handlers.command.decorators import (
+    CommandHandlerDecorator,
+    ExceptionHandlingDecorator,
+)
 from application.handlers.command.game import (
     DeleteTwichGameByNameHandler,
     DeleteTwichGameHandler,
@@ -21,6 +25,8 @@ from application.handlers.command.user import (
 
 
 __all__: list[str] = [
+    'CommandHandlerDecorator',
+    'ExceptionHandlingDecorator',
     'DeleteTwichGameByNameHandler',
     'DeleteTwichGameHandler',
     'ParseTwichGameHandler',

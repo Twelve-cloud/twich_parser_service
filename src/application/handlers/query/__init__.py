@@ -3,6 +3,10 @@ __init__.py: File, containing other query handler modules to simplify import.
 """
 
 
+from application.handlers.query.decorators import (
+    ExceptionHandlingDecorator,
+    QueryHandlerDecorator,
+)
 from application.handlers.query.game import (
     GetAllTwichGamesHandler,
     GetTwichGameByNameHandler,
@@ -21,6 +25,8 @@ from application.handlers.query.user import (
 
 
 __all__: list[str] = [
+    'ExceptionHandlingDecorator',
+    'QueryHandlerDecorator',
     'GetAllTwichGamesHandler',
     'GetTwichGameByNameHandler',
     'GetTwichGameHandler',

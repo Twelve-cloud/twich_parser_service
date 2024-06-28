@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
 # python-base stage sets up all shared environment variables.
-FROM python:3.10-alpine3.15 as python-base
+FROM python:3.10-alpine3.20 as python-base
 
 ENV                                                                         \
     # force stdout and stderr streams to be unbuffered.
@@ -109,7 +109,7 @@ RUN adduser -S non-root-user non-root-user
 # set working directory.
 WORKDIR /code
 
-# change the ownershup of the workdir to the non-root user "non-root-user".
+# change the ownership of the workdir to the non-root user "non-root-user".
 RUN chown -R non-root-user:non-root-user /code
 
 # switch to the non-root user "non-root-user".

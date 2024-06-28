@@ -3,8 +3,8 @@ name: Publish
 on:
   workflow_run:
     workflows: [Static]
-    types: [completed]
-    branches: [master]
+    types: [completed] # run if completed
+    branches: [master, dev] # run on branch master or dev when Statis is completed on that branch
 
 jobs:
   push:
@@ -12,7 +12,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # run if completed and success
     steps:
       - name: Clone github repository
         uses: actions/checkout@v4
@@ -28,4 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: '${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REGISTRY }}:latest'
+          tags: '${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REGISTRY }}:${{ github.ref_name }}-latest'

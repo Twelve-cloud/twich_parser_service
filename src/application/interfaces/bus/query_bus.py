@@ -3,8 +3,10 @@ base.py: File, containing query bus interface.
 """
 
 
-from abc import ABC as Interface
-from abc import abstractmethod
+from abc import (
+    ABC as Interface,
+    abstractmethod,
+)
 
 from application.dto import RD
 from application.interfaces.handler import IQueryHandler
