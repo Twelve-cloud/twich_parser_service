@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ['3.10', '3.11']
+        python-version: ['3.10']
 
     steps:
       - name: Clone github repository
@@ -40,7 +40,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: 'x64'
-          cache: 'poetry' # maybe not caching poetry.lock and remove poetry lock from git repo?
+          cache: 'poetry'
 
       - name: Install dependencies
         run: poetry install --no-ansi --no-interaction
@@ -54,7 +54,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ['3.10', '3.11']
+        python-version: ['3.10']
 
     steps:
       - name: Clone github repository

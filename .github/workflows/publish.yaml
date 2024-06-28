@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: [Static]
     types: [completed] # run if completed
-    branches: [master] # run on branch master when Statis is completed on branch master
+    branches: [master, dev] # run on branch master or dev when Statis is completed on that branch
 
 jobs:
   push:
@@ -28,4 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: '${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REGISTRY }}:latest'
+          tags: '${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REGISTRY }}:${{ github.ref_name }}-latest'
