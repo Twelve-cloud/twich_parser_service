@@ -21,6 +21,12 @@ repos:
       - id: check-yaml
         name: check-yaml
 
+      - id: check-json
+        name: check-json
+
+      - id: check-xml
+        name: check-xml
+
       - id: name-tests-test
         name: name-tests-test
 

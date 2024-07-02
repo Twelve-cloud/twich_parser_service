@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: [Static]
     types: [completed] # run if completed
-    branches: [master, dev] # run on branch master or dev when Statis is completed on that branch
+    branches: [master, dev] # run on branch master or dev when Statiс is completed on that branch
 
 jobs:
   push:
