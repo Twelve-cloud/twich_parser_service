@@ -1,31 +1,22 @@
 """
-user_model: File, containing twich user model for mongo.
+user: File, containing twich user mongo dao.
 """
 
 
-from datetime import datetime
+from datetime import (
+    datetime,
+    timezone,
+)
 
 from mongoengine import (
     DateTimeField,
-    Document,
-    IntField,
     StringField,
 )
 
+from infrastructure.persistence.models.mongo.base import BaseDAO
 
-class TwichUserDAO(Document):
-    """
-    TwichUserDAO: Class, that represents twich user document in mongo database.
 
-    Args:
-        Document (_type_): Base superclass for TwichUserDAO class.
-    """
-
-    id: IntField = IntField(
-        min_value=0,
-        primary_key=True,
-    )
-
+class TwichUserDAO(BaseDAO):
     login: StringField = StringField(
         min_length=1,
         max_length=128,
@@ -66,7 +57,7 @@ class TwichUserDAO(Document):
     created_at: DateTimeField = DateTimeField()
 
     parsed_at: DateTimeField = DateTimeField(
-        default=datetime.utcnow,
+        default=datetime.now(timezone.utc),
     )
 
     meta: dict = {
@@ -76,5 +67,5 @@ class TwichUserDAO(Document):
         'index_cls': False,
         'auto_create_index': True,
         'auto_create_index_on_save': False,
-        'indexes': ['login', 'display_name'],
+        'indexes': ['login'],
     }

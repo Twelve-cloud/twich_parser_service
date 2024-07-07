@@ -1,32 +1,24 @@
 """
-stream_model: File, containing twich stream model for mongo.
+stream: File, containing twich stream mongo dao.
 """
 
 
-from datetime import datetime
+from datetime import (
+    datetime,
+    timezone,
+)
 
 from mongoengine import (
     DateTimeField,
-    Document,
     IntField,
     ListField,
     StringField,
 )
 
+from infrastructure.persistence.models.mongo.base import BaseDAO
 
-class TwichStreamDAO(Document):
-    """
-    TwichStreamDAO: Class, that represents twich stream document in mongo database.
 
-    Args:
-        Document (_type_): Base superclass for TwichStreamDAO class.
-    """
-
-    id: IntField = IntField(
-        min_value=0,
-        primary_key=True,
-    )
-
+class TwichStreamDAO(BaseDAO):
     user_id: IntField = IntField(
         min_value=0,
     )
@@ -64,7 +56,7 @@ class TwichStreamDAO(Document):
         StringField(
             min_length=1,
             max_length=128,
-        )
+        ),
     )
 
     started_at: DateTimeField = DateTimeField()
@@ -79,7 +71,7 @@ class TwichStreamDAO(Document):
     )
 
     parsed_at: DateTimeField = DateTimeField(
-        default=datetime.utcnow,
+        default=datetime.now(timezone.utc),
     )
 
     meta: dict = {
@@ -89,5 +81,5 @@ class TwichStreamDAO(Document):
         'index_cls': False,
         'auto_create_index': True,
         'auto_create_index_on_save': False,
-        'indexes': ['user_name', 'user_login', 'game_name'],
+        'indexes': ['user_login'],
     }

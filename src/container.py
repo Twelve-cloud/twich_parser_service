@@ -88,7 +88,7 @@ from infrastructure.parsers.aiohttp import (
 )
 from infrastructure.parsers.aiohttp.dependencies import get_twich_api_token
 from infrastructure.persistence.connections.elastic.database import ElasticSearchDatabase
-from infrastructure.persistence.connections.mongo.database import MongoDatabase
+from infrastructure.persistence.connections.mongo.connection import MongoDatabase
 from infrastructure.persistence.repositories.elastic.game import TwichGameElasticRepository
 from infrastructure.persistence.repositories.elastic.stream import TwichStreamElasticRepository
 from infrastructure.persistence.repositories.elastic.user import TwichUserElasticRepository

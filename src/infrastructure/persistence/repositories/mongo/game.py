@@ -10,7 +10,7 @@ from automapper import mapper
 from application.exceptions import ObjectNotFoundException
 from application.interfaces.repository import ITwichGameRepository
 from domain.models import TwichGame
-from infrastructure.persistence.connections.mongo.database import MongoDatabase
+from infrastructure.persistence.connections.mongo.connection import MongoDatabase
 from infrastructure.persistence.models.mongo.game import TwichGameDAO
 
 

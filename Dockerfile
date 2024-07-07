@@ -1,6 +1,12 @@
 # ---------------------------------------------------------------------------
-# python-base stage sets up all shared environment variables.
+# python-base stage sets up all shared env vars and change defualt shell.
 FROM python:3.10-alpine3.20 as python-base
+
+# metadata (author email).
+LABEL author.email="kana.suzucki@gmail.com"
+
+# metadata (author name).
+LABEL author.name="Twelve"
 
 ENV                                                                         \
     # force stdout and stderr streams to be unbuffered.
@@ -31,14 +37,19 @@ ENV                                                                         \
     # this is so because python will be used as $VENV_PATH/bin/python.
     PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 
+
+# update apk and install bash.
+RUN apk update && apk add bash
+
+# override default shell from sh to bash.
+SHELL ["/bin/bash", "-c"]
+
 # ---------------------------------------------------------------------------
 # builder-base stage installs all necessary core deps.
 FROM python-base as builder-base
 
 # install core deps.
-RUN apk update                                                              \
-    && apk add                                                              \
-    bash                                                                    \
+RUN apk add                                                                 \
     curl                                                                    \
     gcc                                                                     \
     g++                                                                     \
@@ -51,7 +62,7 @@ RUN apk update                                                              \
 FROM python-base as poetry-base
 
 # install curl to download poetry.
-RUN apk update && apk add curl
+RUN apk add curl
 
 # install poetry with respect $POETRY_VERSION & $POETRY_HOME.
 RUN curl -sSL https://install.python-poetry.org | python3

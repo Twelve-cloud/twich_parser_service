@@ -1,31 +1,22 @@
 """
-game_model: File, containing twich game model for mongo.
+game: File, containing twich game mongo dao.
 """
 
 
-from datetime import datetime
+from datetime import (
+    datetime,
+    timezone,
+)
 
 from mongoengine import (
     DateTimeField,
-    Document,
-    IntField,
     StringField,
 )
 
+from infrastructure.persistence.models.mongo.base import BaseDAO
 
-class TwichGameDAO(Document):
-    """
-    TwichGameDAO: Class, that represents twich game document in mongo database.
 
-    Args:
-        Document (_type_): Base superclass for TwichGameDAO class.
-    """
-
-    id: IntField = IntField(
-        min_value=0,
-        primary_key=True,
-    )
-
+class TwichGameDAO(BaseDAO):
     name: StringField = StringField(
         min_length=1,
         max_length=128,
@@ -44,7 +35,7 @@ class TwichGameDAO(Document):
     )
 
     parsed_at: DateTimeField = DateTimeField(
-        default=datetime.utcnow,
+        default=datetime.now(timezone.utc),
     )
 
     meta: dict = {
