@@ -124,12 +124,10 @@ def main():
         'port': config.get('port', 8000),
         'workers': config.get('workers', None),
         'loop': config.get('loop', 'auto'),
-        'ssl_version': config.get('ssl_version', None),
-        'ssl_ciphers': config.get('ssl_ciphers', None),
         'ssl_keyfile': config.get('ssl_keyfile', None),
         'ssl_certfile': config.get('ssl_certfile', None),
         'ssl_ca_certs': config.get('ssl_ca_certs', None),
-        'ssl_cert_reqs': config.get('ssl_cert_reqs', None),  # Note: changed '-' to '_'
+        'ssl_cert_reqs': config.get('ssl_cert_reqs', None),
         'reload': config.get('reload', False),
         'proxy_headers': config.get('proxy_headers', False),
         'log_config': logging_config,
